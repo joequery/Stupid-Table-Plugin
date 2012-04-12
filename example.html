@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>Stupid jQuery table sort</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="stupidtable.js"></script>
+    <script type="text/javascript">
+      $(function(){
+          $("table").stupidtable();
+      });
+    </script>
+    <style type="text/css">
+      tr.awesome{
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stupid jQuery table sort!</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>x</th>
+          <th>y</th>
+          <th>z</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0x</td>
+          <td>3y</td>
+          <td>3z</td>
+        </tr>
+        <tr class="awesome">
+          <td>1x</td>
+          <td>0y</td>
+          <td>0z</td>
+        </tr>
+        <tr>
+          <td>2x</td>
+          <td>2y</td>
+          <td>1z</td>
+        </tr>
+        <tr>
+          <td>3x</td>
+          <td>1y</td>
+          <td>2z</td>
+        </tr>
+      </tbody>
+
+    </table>
+  </body>
+</html>
