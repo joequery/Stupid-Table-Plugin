@@ -361,3 +361,7 @@ footer p + p {
     content: 'at http://github.com/';
   }
 }
+
+table tr th{
+  cursor: pointer;
+}
