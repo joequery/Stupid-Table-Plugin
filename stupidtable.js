@@ -23,20 +23,18 @@
         while(map.indexOf(index) != -1){
           index = sorted.indexOf(arr[i], index+1);
         }
-
         map.push(index);
       }
       return map;
     }
 
-    // Apply a sort map to the array. Alters arr
+    // Apply a sort map to the array. 
     var apply_sort_map = function(arr, map){
       var clone = arr.slice(0);
       for(var i=0; i<map.length; i++){
         newIndex = map[i];
         clone[newIndex] = arr[i];
       }
-
       return clone;
     }
 
@@ -93,7 +91,9 @@
       }
 
       var sortedTRs = apply_sort_map(trs, theMap);
-      // Get all the rows as their native html strings
+
+      // Get all the trs as html strings so we can replace the tbody
+      // with the new order.
       var newHTML = "";
       $(sortedTRs).each(function(index, e){
         // Hackish, we need the outerHTML to preserve TR styles.
