@@ -12,10 +12,18 @@
     // this result elsewhere. This returns an array of index numbers.
     // return[0] = x means "arr's 0th element is now at x"
     var sort_map =  function(arr){
-      sorted = arr.slice(0).sort(); // slice to create clone
-      map = [];
+      var sorted = arr.slice(0).sort(); // slice to create clone
+      var map = [];
       for(var i=0; i<arr.length; i++){
-        map.push(sorted.indexOf(arr[i]));
+        index = sorted.indexOf(arr[i]);
+
+        // If this index is already in the map, look for the next index.
+        // This handles the case of duplicate entries.
+        while(map.indexOf(index) != -1){
+          index = sorted.indexOf(arr[i], index+1);
+        }
+
+        map.push(index);
       }
       return map;
     }
@@ -97,3 +105,4 @@
     });
   }
  })(jQuery);
+
