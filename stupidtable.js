@@ -18,19 +18,20 @@
     // this result elsewhere. This returns an array of index numbers.
     // return[0] = x means "arr's 0th element is now at x"
     var sort_map =  function(arr, sort_function){
-      //alert(sort_function);
       var sorted = arr.slice(0).sort(sort_function); 
-      //alert(sorted.join(","));
       var map = [];
       var index = 0;
       for(var i=0; i<arr.length; i++){
         index = $.inArray(arr[i], sorted);
-        //alert(index);
 
         // If this index is already in the map, look for the next index.
         // This handles the case of duplicate entries.
-        while($.inArray(index, map) != -1){
-          index = $.inArray(index+1, sorted);
+        var tmp = index;
+        while($.inArray(tmp, map) != -1){
+          tmp = $.inArray(index+1, sorted);
+          if (tmp != -1){
+            index = tmp;
+          }
         }
         map.push(index);
       }
@@ -91,7 +92,6 @@
       if(!type){return false;}
 
       var sortMethod = sortFns[type];
-      //alert(sortMethod);
 
       // Gather the elements for this column
       column = [];
@@ -116,7 +116,6 @@
         theMap = sort_map(column, sortMethod);
       }
 
-      //alert(theMap.join(","));
       var sortedTRs = $(apply_sort_map(trs, theMap));
 
       // Replace the content of tbody with the sortedTRs. Strangely (and
