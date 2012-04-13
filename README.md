@@ -22,16 +22,19 @@ Example:
 The JS:
 
 ```
-  $(function(){
-      $("table").stupidtable({
-        "int":function(a,b){
-          return parseInt(a, 10) > parseInt(b,10);
-          },
-        "float":function(a,b){
-          return parseFloat(a) > parseFloat(b);
-        }
-      });
-  });
+$("table").stupidtable({
+  "int":function(a,b){
+    return parseInt(a, 10) - parseInt(b,10);
+    },
+  "float":function(a,b){
+    return parseFloat(a) - parseFloat(b);
+    },
+  "string":function(a,b){
+     if (a<b) return -1
+     if (a>b) return +1
+     return 0 
+    }
+});
 ```
 
 The HTML:
@@ -57,8 +60,5 @@ The HTML:
 
 For information on using functions for sorting, see [Mozilla's Docs][1]
 
-Better examples of using the sorts can be found [in the the demo][2].
-
 [0]: http://joequery.github.com/Stupid-Table-Plugin/
 [1]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort
-[2]: http://joequery.github.com/Stupid-Table-Plugin/
