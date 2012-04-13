@@ -70,7 +70,7 @@
         classes = classes.split(/\s+/);
 
         var type = classes.filter(function(x){
-          return String(x).match(/^type-/)
+          return String(x).match(/^type-/);
         });
         
         if(type.length > 0){
