@@ -362,6 +362,6 @@ footer p + p {
   }
 }
 
-table tr th{
-  cursor: pointer;
+th[class|="type"]{
+  cursor:pointer;
 }

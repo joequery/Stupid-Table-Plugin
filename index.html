@@ -10,17 +10,62 @@
     <script src="javascripts/scale.fix.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="https://raw.github.com/joequery/Stupid-Table-Plugin/master/stupidtable.js"></script>
-    <script>
-      $(function(){
-        $("table").stupidtable();
-      });
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
+    <script>
+    $(function(){
+      $("#simpleTable").stupidtable({
+        "int":function(a,b){
+          return parseInt(a, 10) > parseInt(b,10);
+          },
+        "float":function(a,b){
+          return parseFloat(a) > parseFloat(b);
+          },
+        "string":function(a,b){
+          return a > b;
+        }
+      });
+    });
+
+    $(function(){
+      $("#complexTable").stupidtable({
+        "int":function(a,b){
+          return parseInt(a, 10) > parseInt(b,10);
+          },
+        "float":function(a,b){
+          return parseFloat(a) > parseFloat(b);
+          },
+        "string":function(a,b){
+          return a > b;
+          },
+        "date":function(a,b){
+          // Get these into date objects for comparison.
+          var date_from_string = function(str){
+            var months = ["jan","feb","mar","apr","may","jun","jul",
+                          "aug","sep","oct","nov","dec"];
+            var pattern = "^([a-zA-Z]+)\\s*(\\d{0,2}),\\s*(\\d{4})$";
+            var re = new RegExp(pattern);
+            var DateParts = re.exec(str).slice(1);
+
+            var Year = DateParts[2];
+            var Month = months.indexOf(DateParts[0].toLowerCase());
+            var Day = DateParts[1];
+            return new Date(Year, Month, Day);
+          }
+
+          aDate = date_from_string(a);
+          bDate = date_from_string(b);
+            
+          return aDate > bDate;
+        }
+      });
+    });
+
+    </script>
   <body>
     <div class="wrapper">
       <header>
@@ -37,51 +82,93 @@
         <h1>Stupid jQuery Table Sort</h1>
 
 <p>This is a stupid jQuery table sorting plugin. Nothing fancy, nothing really
-impressive. Overall, stupidly simple.</p>
+impressive. Overall, stupidly simple. As long as you understand basic
+<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort">JavaScript sorting</a>, you can make this plugin do as much
+or as little as you want.</p>
 
-<p>See the example.html document to see how to implement it. All you really
-need to do differently is make sure you're using <code>&lt;thead&gt;</code> and 
-<code>&lt;tbody&gt;</code> in case you don't normally use those elements.</p>
+<p>Here's an example. Go ahead, click the headers. That will sort the 
+table by that column.  Big deal, right?</p>
 
-<p>Go ahead, click the headers. That'll sort the table by that column. 
-Big deal, right?</p>
-<table>
-      <thead>
-        <tr>
-          <th>x</th>
-          <th>y</th>
-          <th>z</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>0x</td>
-          <td>3y</td>
-          <td>3z</td>
-        </tr>
-        <tr class="awesome">
-          <td>1x</td>
-          <td>0y</td>
-          <td>0z</td>
-        </tr>
-        <tr>
-          <td>2x</td>
-          <td>2y</td>
-          <td>1z</td>
-        </tr>
-        <tr>
-          <td>3x</td>
-          <td>1y</td>
-          <td>2z</td>
-        </tr>
-        <tr>
-          <td>3x</td>
-          <td>1y</td>
-          <td>2z</td>
-        </tr>
-      </tbody>
+<table id="simpleTable">
+  <thead>
+    <tr>
+    <th class="type-int awesome">int</th>
+    <th class="type-float">float</th>
+    <th class="type-string">string</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>15</td>
+      <td>-.18</td>
+      <td>banana</td>
+    </tr>
+      <tr class="awesome">
+      <td>95</td>
+      <td>36</td>
+      <td>coke</td>
+    </tr>
+      <tr>
+      <td>2</td>
+      <td>-152.5</td>
+      <td>apple</td>
+    </tr>
+    <tr>
+      <td>-53</td>
+      <td>88.5</td>
+      <td>zebra</td>
+    </tr>
+    <tr>
+      <td>195</td>
+      <td>-858</td>
+      <td>orange</td>
+    </tr>
+  </tbody>
+</table>
 
-    </table>
+<p>The source for this example can be located <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/example.html">in the repo</a>.
+
+<p>A slightly more complex example for fun.</p>
+
+<table id="complexTable">
+  <thead>
+    <tr>
+      <th class="type-int awesome">int</th>
+      <th class="type-float">float</th>
+      <th class="type-string">string</th>
+      <th>Can't sort me!</th>
+      <th class="type-date">date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>15</td> <td>-.18</td> <td>banana</td> <td>arbitrary</td>
+      <td>Mar 15, 1986</td>
+    </tr>
+    <tr class="awesome">
+      <td>95</td> <td>36</td> <td>coke</td> <td>pointless</td>
+      <td>Feb 27, 2086</td>
+    </tr>
+    <tr>
+      <td>2</td> <td>-152.5</td> <td>apple</td> <td>silly</td>
+      <td>Aug 7, 2004</td>
+    </tr>
+    <tr>
+      <td>-53</td> <td>88.5</td> <td>zebra</td> <td>eccentric</td>
+      <td>Sep 15, 2002</td>
+    </tr>
+    <tr>
+      <td>195</td> <td>-858</td> <td>orange</td> <td>garbage</td>
+      <td>Mar 15, 1986</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The source for this more complex example can also be found <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/complex_example.html">in the repo</a>.
+
+<p>Since you're in charge of creating the sorting functions, you can have your
+data in whatever format you prefer. No need to conform to what a plugin
+expects. Just do it yourself!</p>
       </section>
     </div>
     <footer>
