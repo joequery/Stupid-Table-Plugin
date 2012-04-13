@@ -66,22 +66,22 @@
       var trs = table.find("tr").slice(1); // Don't include headers
       var i = $(this).index();
       var classes = $(this).attr("class");
+      var type = null;
       if (classes){
         classes = classes.split(/\s+/);
 
-        var type = classes.filter(function(x){
-          return String(x).match(/^type-/);
-        });
-        
-        if(type.length > 0){
-          type = type[0].split('-')[1];
+        for(var j=0; j<classes.length; j++){
+          if(classes[j].indexOf("type-") != -1){
+            type = classes[j];
+            break;
+          }
+        }
+        if(type){
+          type = type.split('-')[1];
         }
         else{
           type = "string";
         }
-      }
-      else{
-        type = null;
       }
 
       // Don't attempt to sort if no data type
