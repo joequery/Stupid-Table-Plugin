@@ -18,34 +18,9 @@
   </head>
     <script>
     $(function(){
-      $("#simpleTable").stupidtable({
-        "int":function(a,b){
-            return parseInt(a, 10) - parseInt(b,10);
-          },
-        "float":function(a,b){
-            return parseFloat(a) - parseFloat(b);
-          },
-        "string":function(a,b){
-           if (a<b) return -1
-           if (a>b) return +1
-           return 0 
-          }
-      });
-    });
+      $("#simpleTable").stupidtable();
 
-    $(function(){
       $("#complexTable").stupidtable({
-        "int":function(a,b){
-          return parseInt(a, 10) - parseInt(b,10);
-          },
-        "float":function(a,b){
-          return parseFloat(a) - parseFloat(b);
-          },
-        "string":function(a,b){
-           if (a<b) return -1
-           if (a>b) return +1
-           return 0 
-          },
         "date":function(a,b){
           // Get these into date objects for comparison.
           var date_from_string = function(str){
@@ -130,7 +105,28 @@ table by that column.  Big deal, right?</p>
   </tbody>
 </table>
 
-<p>The source for this example can be located <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/example.html">in the repo</a>.
+This is achieved with the following JS
+
+<code><pre>
+  $("#simpleTable").stupidtable();
+</pre></code>
+
+And the following HTML
+<code><pre>
+&lt;table id="simpleTable"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+    &lt;th class="type-int"&gt;int&lt;/th&gt;
+    &lt;th class="type-float"&gt;float&lt;/th&gt;
+    &lt;th class="type-string"&gt;string&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  ...
+  ... (rest of the table)
+</pre></code>
+
+<p>The full source for the example can be located <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/example.html">in the repo</a>.
 
 <p>A slightly more complex example for fun.</p>
 
@@ -168,11 +164,66 @@ table by that column.  Big deal, right?</p>
   </tbody>
 </table>
 
+<p>Most table sorting plugins try to account for a limitless number of data 
+types and their limitless ways of being presented (consider how many ways you can
+present a date!). This leads to an extremely bloated code base with a 
+significant portion of code actually used in your project. 
+This plugin avoids that issue by letting you define your own ways of 
+sorting table columns. See the 
+<a href="https://github.com/joequery/Stupid-Table-Plugin#readme">README</a> 
+for more details. </p>
+
+<p>Here's how we created a custom data type to sort dates of the form
+<code>3charMonth dd,yyyy</code> as seen above.</p>
+
+<code><pre>
+$("#complexTable").stupidtable({
+  "date":function(a,b){
+    // Get these into date objects for comparison.
+    var date_from_string = function(str){
+      var months = ["jan","feb","mar","apr","may","jun","jul",
+                    "aug","sep","oct","nov","dec"];
+      var pattern = "^([a-zA-Z]+)\\s*(\\d{0,2}),\\s*(\\d{4})$";
+      var re = new RegExp(pattern);
+      var DateParts = re.exec(str).slice(1);
+
+      var Year = DateParts[2];
+      var Month = $.inArray(DateParts[0].toLowerCase(), months);
+      var Day = DateParts[1];
+      return new Date(Year, Month, Day);
+    }
+
+    aDate = date_from_string(a);
+    bDate = date_from_string(b);
+      
+    return aDate - bDate;
+  }
+});
+</pre></code>
+
+And the following HTML
+<code><pre>
+&lt;table id="complexTable"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th class="type-int"&gt;int&lt;/th&gt;
+      &lt;th class="type-float"&gt;float&lt;/th&gt;
+      &lt;th class="type-string"&gt;string&lt;/th&gt;
+      &lt;th&gt;Can't sort me!&lt;/th&gt;
+      &lt;th class="type-date"&gt;date&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  ...
+  ... (rest of the table)
+</pre></code>
+
 <p>The source for this more complex example can also be found <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/complex_example.html">in the repo</a>.
 
-<p>Since you're in charge of creating the sorting functions, you can have your
-data in whatever format you prefer. No need to conform to what a plugin
-expects. Just do it yourself!</p>
+<p>Sometimes data is too complex to just call <code>Array.sort</code> on. 
+Creating a data type, while seemingly daunting from the example, serves
+as an effective way to let you have complete control over how you want your
+data to be sorted.</p>
       </section>
     </div>
     <footer>
