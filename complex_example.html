@@ -25,7 +25,7 @@
                 var DateParts = re.exec(str).slice(1);
 
                 var Year = DateParts[2];
-                var Month = months.indexOf(DateParts[0].toLowerCase());
+                var Month = $.inArray(DateParts[0].toLowerCase(), months);
                 var Day = DateParts[1];
                 return new Date(Year, Month, Day);
               }

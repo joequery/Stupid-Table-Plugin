@@ -22,12 +22,12 @@
       var map = [];
       var index = 0;
       for(var i=0; i<arr.length; i++){
-        index = sorted.indexOf(arr[i]);
+        index = $.inArray(arr[i], sorted);
 
         // If this index is already in the map, look for the next index.
         // This handles the case of duplicate entries.
-        while(map.indexOf(index) != -1){
-          index = sorted.indexOf(arr[i], index+1);
+        while($.inArray(index, map) != -1){
+          index = $.inArray(index+1, sorted);
         }
         map.push(index);
       }
@@ -71,7 +71,7 @@
         classes = classes.split(/\s+/);
 
         for(var j=0; j<classes.length; j++){
-          if(classes[j].indexOf("type-") != -1){
+          if(classes[j].search("type-") != -1){
             type = classes[j];
             break;
           }
