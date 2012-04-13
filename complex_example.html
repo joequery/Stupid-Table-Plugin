@@ -7,13 +7,15 @@
       $(function(){
           $("table").stupidtable({
             "int":function(a,b){
-              return parseInt(a, 10) > parseInt(b,10);
+              return parseInt(a, 10) - parseInt(b,10);
               },
             "float":function(a,b){
-              return parseFloat(a) > parseFloat(b);
+              return parseFloat(a) - parseFloat(b);
               },
             "string":function(a,b){
-              return a > b;
+               if (a<b) return -1
+               if (a>b) return +1
+               return 0 
               },
             "date":function(a,b){
               // Get these into date objects for comparison.
@@ -25,7 +27,7 @@
                 var DateParts = re.exec(str).slice(1);
 
                 var Year = DateParts[2];
-                var Month = months.indexOf(DateParts[0].toLowerCase());
+                var Month = $.inArray(DateParts[0].toLowerCase(), months);
                 var Day = DateParts[1];
                 return new Date(Year, Month, Day);
               }
@@ -33,7 +35,7 @@
               aDate = date_from_string(a);
               bDate = date_from_string(b);
                 
-              return aDate > bDate;
+              return aDate - bDate;
             }
           });
 
