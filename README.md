@@ -8,57 +8,99 @@ impressive. Overall, stupidly simple.
 
 See the example.html document to see how to implement it. 
 
-Create your own sorts
----------------------
-
-We want this plugin to remain as small as possible while giving you the
-power you need to sort almost any type of data. Thus we're leaving you,
-the developer, in charge of implementing sort functions. Sorry, this
-jQuery plugin is just too stupid! Luckily, we give you an easy means to 
-hook up your sort functions to the table.
-
-Example:
+Example Usage
+-------------
 
 The JS:
 
-```
-$("table").stupidtable({
-  "int":function(a,b){
-    return parseInt(a, 10) - parseInt(b,10);
-    },
-  "float":function(a,b){
-    return parseFloat(a) - parseFloat(b);
-    },
-  "string":function(a,b){
-     if (a<b) return -1
-     if (a>b) return +1
-     return 0 
-    }
-});
-```
+    $("table").stupidtable();
 
 The HTML:
 
-```
-<thead>
-  <tr>
-    <th class="type-int awesome">int</th>
-    <th class="type-float">float</th>
-    <th class="type-string">string</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td>15</td>
-    <td>-.18</td>
-    <td>banana</td>
-  </tr>
+    <thead>
+      <tr>
+        <th class="type-int">int</th>
+        <th class="type-float">float</th>
+        <th class="type-string">string</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>15</td>
+        <td>-.18</td>
+        <td>banana</td>
+      </tr>
+      ...
+      ...
+      ...
 
-...
+Add a class of "type-DATATYPE" to the th's to make them sortable by that data
+type. If you don't want that column to be sortable, just don't give it a 
+type-DATATYPE class.
 
-```
+Predefined data types
+---------------------
 
-For information on using functions for sorting, see [Mozilla's Docs][1]
+Our aim is to keep this plugin as lightweight as possible. Consequently, the 
+only predefined datatypes that you can pass to the th's are
+
+* int
+* float
+* string
+
+These data types will be sufficient for many simple tables. However, if you need
+different data types for sorting, you can easily create your own!
+
+Creating your own data types
+----------------------------
+
+Creating your own data type  for sorting purposes is easy as long as you are 
+comfortable using custom functions for sorting. Consult [Mozilla's Docs][1] 
+if you're not.
 
 [0]: http://joequery.github.com/Stupid-Table-Plugin/
 [1]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort
+
+Let's create an alphanum datatype for a User ID that takes strings in the 
+form "D10", "A40", and sorts them based on the number.
+
+    <thead>
+      <tr>
+        <th class="type-string">Name</th>
+        <th class="type-int">Age</th>
+        <th class="type-alphanum">UserID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Joseph McCullough</td>
+        <td>20</td>
+        <td>D10</td>
+      </tr>
+      <tr>
+        <td>Justin Edwards</td>
+        <td>29</td>
+        <td>A40</td>
+      </tr>
+      ...
+      ...
+      ...
+
+Now we need to specify how the **alphanum** type will be sorted. To do that, 
+we do the following:
+
+    $("table").stupidtable({
+      "alphanum":function(a,b){
+
+        var pattern = "^[A-Z](\\d+)$";
+        var re = new RegExp(pattern);
+
+        var aNum = re.exec(a).slice(1);
+        var bNum = re.exec(b).slice(1);
+
+        return parseInt(aNum,10) - parseInt(bNum,10);
+      }
+    });
+
+This extracts the integers from the cell and compares them in the style
+that sort functions use.
