@@ -2,14 +2,20 @@
 
 // Call on a table 
 // sortFns: Sort functions for your datatypes.
-// {"int" : function(){}, "float": function(){}}...
 (function($){
   $.fn.stupidtable = function(sortFns){
-    var table = this;
+    var table = this; sortFns = sortFns || {}
 
     // ==================================================== //
     //                  Utility functions                   //
     // ==================================================== //
+
+    // Merge sort functions with some default sort functions.
+    sortFns = $.extend({}, {
+      "int":function(a,b){ return parseInt(a, 10) - parseInt(b,10); },
+      "float":function(a,b){ return parseFloat(a) - parseFloat(b); },
+      "string":function(a,b){ if (a<b) return -1; if (a>b) return +1; return 0;}
+    }, sortFns);
 
     // Array comparison. See http://stackoverflow.com/a/8618383
     var arrays_equal = function(a,b) { return !!a && !!b && !(a<b || b<a);}
@@ -83,7 +89,6 @@
           type = "string";
         }
       }
-
       // Don't attempt to sort if no data type
       if(!type){return false;}
 
@@ -120,4 +125,3 @@
     });
   }
  })(jQuery);
-
