@@ -5,7 +5,17 @@
     <script type="text/javascript" src="stupidtable.js"></script>
     <script type="text/javascript">
       $(function(){
-          $("table").stupidtable();
+          $("table").stupidtable({
+            "int":function(a,b){
+              return parseInt(a, 10) > parseInt(b,10);
+              },
+            "float":function(a,b){
+              return parseFloat(a) > parseFloat(b);
+              },
+            "string":function(a,b){
+              return a > b;
+            }
+          });
       });
     </script>
     <style type="text/css">
@@ -19,36 +29,36 @@
     <table>
       <thead>
         <tr>
-          <th>x</th>
-          <th>y</th>
-          <th>z</th>
+          <th class="type-int awesome">int</th>
+          <th class="type-float">float</th>
+          <th class="type-string">string</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>0x</td>
-          <td>3y</td>
-          <td>3z</td>
+          <td>15</td>
+          <td>-.18</td>
+          <td>banana</td>
         </tr>
         <tr class="awesome">
-          <td>1x</td>
-          <td>0y</td>
-          <td>0z</td>
+          <td>95</td>
+          <td>36</td>
+          <td>coke</td>
         </tr>
         <tr>
-          <td>2x</td>
-          <td>2y</td>
-          <td>1z</td>
+          <td>2</td>
+          <td>-152.5</td>
+          <td>apple</td>
         </tr>
         <tr>
-          <td>3x</td>
-          <td>1y</td>
-          <td>2z</td>
+          <td>-53</td>
+          <td>88.5</td>
+          <td>zebra</td>
         </tr>
         <tr>
-          <td>3x</td>
-          <td>1y</td>
-          <td>2z</td>
+          <td>195</td>
+          <td>-858</td>
+          <td>orange</td>
         </tr>
       </tbody>
 

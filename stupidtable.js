@@ -1,18 +1,24 @@
 // Stupid jQuery table plugin.
 
 // Call on a table 
+// sortFns: Sort functions for your datatypes.
+// {"int" : function(){}, "float": function(){}}...
 (function($){
-  $.fn.stupidtable = function(x){
+  $.fn.stupidtable = function(sortFns){
     var table = this;
 
     // ==================================================== //
     //                  Utility functions                   //
     // ==================================================== //
+
+    // Array comparison. See http://stackoverflow.com/a/8618383
+    var arrays_equal = function(a,b) { return !!a && !!b && !(a<b || b<a);}
+    
     // Return the resulting indexes of a sort so we can apply
     // this result elsewhere. This returns an array of index numbers.
     // return[0] = x means "arr's 0th element is now at x"
-    var sort_map =  function(arr){
-      var sorted = arr.slice(0).sort(); // slice to create clone
+    var sort_map =  function(arr, sort_function){
+      var sorted = arr.slice(0).sort(sort_function); 
       var map = [];
       var index = 0;
       for(var i=0; i<arr.length; i++){
@@ -40,22 +46,15 @@
 
     // Returns true if array is sorted, false otherwise.
     // Checks for both ascending and descending
-    var is_sorted_array = function(arr){
-      var isAscending = true;
-      var isDescending = true;
-      for(var i=0; i<arr.length-1; i++){
-        if(arr[i+1] > arr[i]){
-          isAscending = false;
-          break;
-        }
-      }
+    var is_sorted_array = function(arr, sort_function){
+      var clone;
+      clone = arr.slice(0);
+      var isAscending = arrays_equal(arr, clone.sort(sort_function));
 
-      for(var i=arr.length-1; i>0; i--){
-        if(arr[i-1] > arr[i]){
-          isDescending = false;
-          break;
-        }
-      }
+      // Reset the clone but in reverse this time
+      clone = arr.slice(0).reverse();
+      var isDescending = arrays_equal(arr, clone.sort(sort_function));
+
       return (isAscending || isDescending);
     }
 
@@ -66,11 +65,34 @@
     table.delegate("th", "click", function(){
       var trs = table.find("tr").slice(1); // Don't include headers
       var i = $(this).index();
+      var classes = $(this).attr("class");
+      if (classes){
+        classes = classes.split(/\s+/);
+
+        var type = classes.filter(function(x){
+          return String(x).match(/^type-/)
+        });
+        
+        if(type.length > 0){
+          type = type[0].split('-')[1];
+        }
+        else{
+          type = "string";
+        }
+      }
+      else{
+        type = null;
+      }
+
+      // Don't attempt to sort if no data type
+      if(!type){return false;}
+
+      var sortMethod = sortFns[type];
 
       // Gather the elements for this column
       column = [];
 
-      // Push the text in this column to column[] for string comparison.
+      // Push the text in this column to column[] for comparison.
       trs.each(function(index,tr){
         var e = $(tr).children().eq(i);
         column.push(e.text());
@@ -78,7 +100,7 @@
 
       // If the column is already sorted, just reverse the order. The sort
       // map is just reversing the indexes.
-      if(is_sorted_array(column)){
+      if(is_sorted_array(column, sortMethod)){
         column.reverse();
         var theMap = [];
         for(var i=column.length-1; i>=0; i--){
@@ -87,7 +109,7 @@
       }
       else{
         // Get a sort map and apply to all rows
-        theMap = sort_map(column);
+        theMap = sort_map(column, sortMethod);
       }
 
       var sortedTRs = apply_sort_map(trs, theMap);
