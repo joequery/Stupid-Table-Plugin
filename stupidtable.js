@@ -26,12 +26,8 @@
 
         // If this index is already in the map, look for the next index.
         // This handles the case of duplicate entries.
-        var tmp = index;
-        while($.inArray(tmp, map) != -1){
-          tmp = $.inArray(index+1, sorted);
-          if (tmp != -1){
-            index = tmp;
-          }
+        while($.inArray(index, map) != -1){
+          index++;
         }
         map.push(index);
       }
@@ -124,3 +120,4 @@
     });
   }
  })(jQuery);
+
