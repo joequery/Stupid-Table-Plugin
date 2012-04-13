@@ -20,6 +20,7 @@ hook up your sort functions to the table.
 Example:
 
 The JS:
+
 ```
   $(function(){
       $("table").stupidtable({
