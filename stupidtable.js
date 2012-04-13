@@ -112,20 +112,11 @@
         theMap = sort_map(column, sortMethod);
       }
 
-      var sortedTRs = apply_sort_map(trs, theMap);
+      var sortedTRs = $(apply_sort_map(trs, theMap));
 
-      // Get all the trs as html strings so we can replace the tbody
-      // with the new order.
-      var newHTML = "";
-      $(sortedTRs).each(function(index, e){
-        // Hackish, we need the outerHTML to preserve TR styles.
-        // See here for more details: http://stackoverflow.com/a/4741203
-        newHTML += $(e).clone().wrap('<div>').parent().html();
-      });
-      
-      // Replace the table body html with the new html
-      table.find("tbody").html(newHTML);
+      // Replace the content of tbody with the sortedTRs. Strangely (and
+      // conveniently!) enough, .append accomplishes this for us.
+      table.find("tbody").append(sortedTRs);
     });
   }
  })(jQuery);
-
