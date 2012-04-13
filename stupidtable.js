@@ -18,16 +18,19 @@
     // this result elsewhere. This returns an array of index numbers.
     // return[0] = x means "arr's 0th element is now at x"
     var sort_map =  function(arr, sort_function){
+      //alert(sort_function);
       var sorted = arr.slice(0).sort(sort_function); 
+      //alert(sorted.join(","));
       var map = [];
       var index = 0;
       for(var i=0; i<arr.length; i++){
-        index = sorted.indexOf(arr[i]);
+        index = $.inArray(arr[i], sorted);
+        //alert(index);
 
         // If this index is already in the map, look for the next index.
         // This handles the case of duplicate entries.
-        while(map.indexOf(index) != -1){
-          index = sorted.indexOf(arr[i], index+1);
+        while($.inArray(index, map) != -1){
+          index = $.inArray(index+1, sorted);
         }
         map.push(index);
       }
@@ -66,28 +69,29 @@
       var trs = table.find("tr").slice(1); // Don't include headers
       var i = $(this).index();
       var classes = $(this).attr("class");
+      var type = null;
       if (classes){
         classes = classes.split(/\s+/);
 
-        var type = classes.filter(function(x){
-          return String(x).match(/^type-/);
-        });
-        
-        if(type.length > 0){
-          type = type[0].split('-')[1];
+        for(var j=0; j<classes.length; j++){
+          if(classes[j].search("type-") != -1){
+            type = classes[j];
+            break;
+          }
+        }
+        if(type){
+          type = type.split('-')[1];
         }
         else{
           type = "string";
         }
-      }
-      else{
-        type = null;
       }
 
       // Don't attempt to sort if no data type
       if(!type){return false;}
 
       var sortMethod = sortFns[type];
+      //alert(sortMethod);
 
       // Gather the elements for this column
       column = [];
@@ -112,6 +116,7 @@
         theMap = sort_map(column, sortMethod);
       }
 
+      //alert(theMap.join(","));
       var sortedTRs = $(apply_sort_map(trs, theMap));
 
       // Replace the content of tbody with the sortedTRs. Strangely (and
