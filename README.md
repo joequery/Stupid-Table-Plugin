@@ -4,7 +4,7 @@ Stupid jQuery Table Sort
 This is a stupid jQuery table sorting plugin. Nothing fancy, nothing really
 impressive. Overall, stupidly simple.
 
-[View the demo here](http://joequery.github.com/Stupid-Table-Plugin/)
+[View the demo here][0]
 
 See the example.html document to see how to implement it. 
 
@@ -12,12 +12,12 @@ Create your own sorts
 ---------------------
 
 We want this plugin to remain as small as possible while giving you the
-power you need to sort **any** type of data. Consequently, we're leaving you,
-the developer, in charge of implementing sort functions. This Stupid jQuery 
-Table plugin lets you easily do that. Just add a class of "type-DATATYPE" to
-the th of the proper column, and add a function to the plugin call.
+power you need to sort almost any type of data. Thus we're leaving you,
+the developer, in charge of implementing sort functions. Sorry, this
+jQuery plugin is just too stupid! Luckily, we give you an easy means to 
+hook up your sort functions to the table.
 
-Example usage:
+Example:
 
 The JS:
 ```
@@ -53,3 +53,11 @@ The HTML:
 ...
 
 ```
+
+For information on using functions for sorting, see [Mozilla's Docs][1]
+
+Better examples of using the sorts can be found [in the the demo][2].
+
+[0]: http://joequery.github.com/Stupid-Table-Plugin/
+[1]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort
+[2]: http://joequery.github.com/Stupid-Table-Plugin/
