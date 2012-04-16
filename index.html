@@ -26,7 +26,7 @@
           var date_from_string = function(str){
             var months = ["jan","feb","mar","apr","may","jun","jul",
                           "aug","sep","oct","nov","dec"];
-            var pattern = "^([a-zA-Z]+)\\s*(\\d{0,2}),\\s*(\\d{4})$";
+            var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
             var re = new RegExp(pattern);
             var DateParts = re.exec(str).slice(1);
 
@@ -151,7 +151,7 @@ And the following HTML
     </tr>
     <tr>
       <td>2</td> <td>-152.5</td> <td>apple</td> <td>silly</td>
-      <td>Aug 7, 2004</td>
+      <td>Aug 07, 2004</td>
     </tr>
     <tr>
       <td>-53</td> <td>88.5</td> <td>zebra</td> <td>eccentric</td>
@@ -185,7 +185,7 @@ $("#complexTable").stupidtable({
     var date_from_string = function(str){
       var months = ["jan","feb","mar","apr","may","jun","jul",
                     "aug","sep","oct","nov","dec"];
-      var pattern = "^([a-zA-Z]+)\\s*(\\d{0,2}),\\s*(\\d{4})$";
+      var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
       var re = new RegExp(pattern);
       var DateParts = re.exec(str).slice(1);
 
