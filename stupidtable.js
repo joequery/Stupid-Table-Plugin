@@ -4,7 +4,7 @@
 // sortFns: Sort functions for your datatypes.
 (function($){
   $.fn.stupidtable = function(sortFns){
-    var table = this; sortFns = sortFns || {}
+    var table = this; sortFns = sortFns || {};
 
     // ==================================================== //
     //                  Utility functions                   //
