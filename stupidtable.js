@@ -53,15 +53,12 @@
     // Returns true if array is sorted, false otherwise.
     // Checks for both ascending and descending
     var is_sorted_array = function(arr, sort_function){
-      var clone;
-      clone = arr.slice(0);
-      var isAscending = arrays_equal(arr, clone.sort(sort_function));
+      var clone = arr.slice(0);
+      var reversed = arr.slice(0).reverse();
+      var sorted = arr.slice(0).sort(sort_function);
 
-      // Reset the clone but in reverse this time
-      clone = arr.slice(0).reverse();
-      var isDescending = arrays_equal(arr, clone.sort(sort_function));
-
-      return (isAscending || isDescending);
+      // Check if the array is sorted in either direction.
+      return arrays_equal(clone, sorted) || arrays_equal(reversed, sorted);
     }
 
     // ==================================================== //
