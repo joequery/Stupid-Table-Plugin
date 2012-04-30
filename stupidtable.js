@@ -97,7 +97,10 @@
       // Push the text in this column to column[] for comparison.
       trs.each(function(index,tr){
         var e = $(tr).children().eq(i);
-        column.push(e.text());
+        var order_by = $(e).attr('data-order-by');
+        if (order_by == undefined)
+            order_by = e.text();
+	      column.push(order_by);
       });
 
       // If the column is already sorted, just reverse the order. The sort
