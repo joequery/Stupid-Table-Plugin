@@ -227,21 +227,21 @@ Creating a data type, while seemingly daunting from the example, serves
 as an effective way to let you have complete control over how you want your
 data to be sorted.</p>
 
-<h2>data-sort-by</h2>
+<h2>data-order-by</h2>
 <p>
 If you have data in both a machine-readable form and Human-readable form, you
-can provide the machine readable value to the  <code>data-sort-by</code> 
+can provide the machine readable value to the  <code>data-order-by</code> 
 attribute to table cells, and the plugin will sort by the value of that attribute
 while the Human-readable representation of the data will be displayed. For
 example, consider a to-do list table with a "Due Date" column.
 You can have nice, Human-readable due dates such as "A week from today" if you
-specify a data-sort-by attribute of a timestamp.
+specify a data-order-by attribute of a timestamp.
 
 <code><pre>
 &lt;th class="type-int"&gt;Due Date&lt;/th&gt;
 ...
 ...
-&lt;td data-sort-by="1335798463"&gt;A week from today&lt;/td&gt;
+&lt;td data-order-by="1335798463"&gt;A week from today&lt;/td&gt;
 </pre></code>
 
 
