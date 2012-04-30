@@ -104,3 +104,24 @@ we do the following:
 
 This extracts the integers from the cell and compares them in the style
 that sort functions use.
+
+Data with multiple representations/predefined order
+---------------------------------------------------
+
+Often we find two distinct ways of offering data: In a machine friendly way,
+and a Human-friendly way. A clear example is a Timestamp. Additionally, 
+arbitrary data values may already have a predefined sort order. In either case, 
+it's to our advantage to have a way to store the "sortable data" while letting 
+the viewer see the Human-friendly representation of that data. While the
+purpose of the custom sort methods is to take data and make it sortable 
+(machine friendly), sometimes this is too hard or too expensive, computationally
+speaking. 
+
+To solve this problem, you can specify a ```data-order-by``` attribute to 
+table cells, and the attribute value will be the basis of the sort as opposed
+to the text value of the table cell. See the complex_example.html file, where
+we sort a column of letters based not on their alphabetical order, but by their
+frequency in the English language. You'll still need to specify a sort type
+or come up with your own custom sort function, but the presence of the
+```data-order-by``` attribute tells the plugin to use the value of the 
+attribute as the basis of the sort.

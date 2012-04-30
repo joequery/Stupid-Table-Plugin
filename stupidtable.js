@@ -94,10 +94,12 @@
       // Gather the elements for this column
       column = [];
 
-      // Push the text in this column to column[] for comparison.
+      // Push either the value of the 'data-order-by' attribute if specified
+      // or just the text() value in this column to column[] for comparison.
       trs.each(function(index,tr){
         var e = $(tr).children().eq(i);
-        column.push(e.text());
+        var order_by = e.attr('data-order-by') || e.text();
+	      column.push(order_by);
       });
 
       // If the column is already sorted, just reverse the order. The sort
