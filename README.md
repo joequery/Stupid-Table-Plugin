@@ -128,3 +128,9 @@ frequency in the English language. You'll still need to specify a sort type
 or come up with your own custom sort function, but the presence of the
 ```data-order-by``` attribute tells the plugin to use the value of the 
 attribute as the basis of the sort.
+
+License
+-------
+
+The Stupid jQuery Plugin is licensed under the MIT license. See the LICENSE 
+file for full details.
