@@ -66,7 +66,7 @@
     // ==================================================== //
     // Do sorting when THs are clicked
     table.delegate("th", "click", function(){
-      var trs = table.find("tr").slice(1); // Don't include headers
+      var trs = table.find("tbody tr");
       var i = $(this).index();
       var classes = $(this).attr("class");
       var type = null;
