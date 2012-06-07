@@ -16,23 +16,26 @@ The JS:
     $("table").stupidtable();
 
 The HTML:
+  
+    <table>
+      <thead>
+        <tr>
+          <th class="type-int">int</th>
+          <th class="type-float">float</th>
+          <th class="type-string">string</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>15</td>
+          <td>-.18</td>
+          <td>banana</td>
+        </tr>
+        ...
+        ...
+        ...
 
-    <thead>
-      <tr>
-        <th class="type-int">int</th>
-        <th class="type-float">float</th>
-        <th class="type-string">string</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>15</td>
-        <td>-.18</td>
-        <td>banana</td>
-      </tr>
-      ...
-      ...
-      ...
+The thead and tbody tags must be used.  
 
 Add a class of "type-DATATYPE" to the th's to make them sortable by that data
 type. If you don't want that column to be sortable, just don't give it a 
