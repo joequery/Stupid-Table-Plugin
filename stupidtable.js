@@ -3,8 +3,8 @@
 // Call on a table 
 // sortFns: Sort functions for your datatypes.
 (function($){
-  $.fn.stupidtable = function(sortFns){
-    var table = this; sortFns = sortFns || {};
+  $.fn.stupidtable = function(sortFns, listeners){
+    var table = this; sortFns = sortFns || {}, listeners = listeners || {};
 
     // ==================================================== //
     //                  Utility functions                   //
@@ -14,7 +14,7 @@
     sortFns = $.extend({}, {
       "int":function(a,b){ return parseInt(a, 10) - parseInt(b,10); },
       "float":function(a,b){ return parseFloat(a) - parseFloat(b); },
-      "string":function(a,b){ if (a<b) return -1; if (a>b) return +1; return 0;}
+      "string":function(a,b){ if (a.toLowerCase()<b.toLowerCase()) return -1; if (a.toLowerCase()>b.toLowerCase()) return +1; return 0;}
     }, sortFns);
 
     // Array comparison. See http://stackoverflow.com/a/8618383
@@ -52,13 +52,19 @@
 
     // Returns true if array is sorted, false otherwise.
     // Checks for both ascending and descending
-    var is_sorted_array = function(arr, sort_function){
+    var get_array_sort = function(arr, sort_function, direction){
       var clone = arr.slice(0);
       var reversed = arr.slice(0).reverse();
       var sorted = arr.slice(0).sort(sort_function);
 
-      // Check if the array is sorted in either direction.
-      return arrays_equal(clone, sorted) || arrays_equal(reversed, sorted);
+      if (arrays_equal(clone, sorted)) {
+        return '1'
+      } else if (arrays_equal(reversed, sorted)) {
+        return '-1'
+      }
+      else {
+        return 0;
+      }
     }
 
     // ==================================================== //
@@ -104,16 +110,19 @@
 
       // If the column is already sorted, just reverse the order. The sort
       // map is just reversing the indexes.
-      if(is_sorted_array(column, sortMethod)){
+      var currentDirection = get_array_sort(column, sortMethod);
+      if(currentDirection == 1){
         column.reverse();
         var theMap = [];
         for(var i=column.length-1; i>=0; i--){
           theMap.push(i);
         }
+        currentDirection = -1;
       }
       else{
         // Get a sort map and apply to all rows
         theMap = sort_map(column, sortMethod);
+        currentDirection = 1;
       }
 
       var sortedTRs = $(apply_sort_map(trs, theMap));
@@ -121,6 +130,10 @@
       // Replace the content of tbody with the sortedTRs. Strangely (and
       // conveniently!) enough, .append accomplishes this for us.
       table.find("tbody").append(sortedTRs);
+
+      if (listeners.sort) {
+        listeners.sort($(this), i, currentDirection);
+      }
     });
   }
  })(jQuery);
