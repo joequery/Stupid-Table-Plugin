@@ -82,45 +82,41 @@
         if(type){
           type = type.split('-')[1];
         }
+      }
+      if(type){
+        var sortMethod = sortFns[type];
+
+        // Gather the elements for this column
+        column = [];
+
+        // Push either the value of the 'data-order-by' attribute if specified
+        // or just the text() value in this column to column[] for comparison.
+        trs.each(function(index,tr){
+          var e = $(tr).children().eq(i);
+          var order_by = e.attr('data-order-by') || e.text();
+          column.push(order_by);
+        });
+
+        // If the column is already sorted, just reverse the order. The sort
+        // map is just reversing the indexes.
+        if(is_sorted_array(column, sortMethod)){
+          column.reverse();
+          var theMap = [];
+          for(var i=column.length-1; i>=0; i--){
+            theMap.push(i);
+          }
+        }
         else{
-          type = "string";
+          // Get a sort map and apply to all rows
+          theMap = sort_map(column, sortMethod);
         }
+
+        var sortedTRs = $(apply_sort_map(trs, theMap));
+
+        // Replace the content of tbody with the sortedTRs. Strangely (and
+        // conveniently!) enough, .append accomplishes this for us.
+        table.find("tbody").append(sortedTRs);
       }
-      // Don't attempt to sort if no data type
-      if(!type){return false;}
-
-      var sortMethod = sortFns[type];
-
-      // Gather the elements for this column
-      column = [];
-
-      // Push either the value of the 'data-order-by' attribute if specified
-      // or just the text() value in this column to column[] for comparison.
-      trs.each(function(index,tr){
-        var e = $(tr).children().eq(i);
-        var order_by = e.attr('data-order-by') || e.text();
-	      column.push(order_by);
-      });
-
-      // If the column is already sorted, just reverse the order. The sort
-      // map is just reversing the indexes.
-      if(is_sorted_array(column, sortMethod)){
-        column.reverse();
-        var theMap = [];
-        for(var i=column.length-1; i>=0; i--){
-          theMap.push(i);
-        }
-      }
-      else{
-        // Get a sort map and apply to all rows
-        theMap = sort_map(column, sortMethod);
-      }
-
-      var sortedTRs = $(apply_sort_map(trs, theMap));
-
-      // Replace the content of tbody with the sortedTRs. Strangely (and
-      // conveniently!) enough, .append accomplishes this for us.
-      table.find("tbody").append(sortedTRs);
     });
   }
  })(jQuery);
