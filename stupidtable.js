@@ -68,22 +68,10 @@
       // Do sorting when THs are clicked
       table.on("click", "th", function(){
         var trs = table.children("tbody").children("tr");
-        var i = $(this).index();
-        var classes = $(this).attr("class");
-        var type = null;
-        if (classes){
-          classes = classes.split(/\s+/);
-
-          for(var j=0; j<classes.length; j++){
-            if(classes[j].search("type-") != -1){
-              type = classes[j];
-              break;
-            }
-          }
-          if(type){
-            type = type.split('-')[1];
-          }
-        }
+        var $this = $(this);
+        var i = $this.index();
+        var type = $this.data('sort') || 'string';
+        
         if(type){
           var sortMethod = sortFns[type];
 
@@ -94,7 +82,7 @@
           // or just the text() value in this column to column[] for comparison.
           trs.each(function(index,tr){
             var e = $(tr).children().eq(i);
-            var order_by = e.attr('data-order-by') || e.text();
+            var order_by = e.data('sort-value') || e.text();
             column.push(order_by);
           });
 
