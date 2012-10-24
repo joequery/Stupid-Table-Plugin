@@ -100,7 +100,8 @@
 
           // If the column is already sorted, just reverse the order. The sort
           // map is just reversing the indexes.
-          if(is_sorted_array(column, sortMethod)){
+          var sorted = is_sorted_array(column, sortMethod);
+          if(sorted){
             column.reverse();
             var theMap = [];
             for(var i=column.length-1; i>=0; i--){
@@ -117,6 +118,7 @@
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
           table.children("tbody").append(sortedTRs);
+          table.trigger("aftertablesort", {column : i, reverse : sorted})
         }
       });
     });
