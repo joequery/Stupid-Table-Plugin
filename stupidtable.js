@@ -67,7 +67,11 @@
     // Do sorting when THs are clicked
     table.delegate("th", "click", function(){
       var trs = table.find("tbody tr");
-      var i = $(this).index();
+      var i = 0;
+      table.find('tr th:lt(' + $(this).index() + ')').each(function () {
+        var cols = $(this).attr('colspan');
+        i += (typeof cols !== "undefined") ? +cols : 1;
+      });
       var classes = $(this).attr("class");
       var type = null;
       if (classes){
