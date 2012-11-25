@@ -2,7 +2,7 @@
   <head>
     <title>Stupid jQuery table sort</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="stupidtable.min.js?dev"></script>
+    <script type="text/javascript" src="stupidtable.js?dev"></script>
     <script type="text/javascript">
       $(function(){
           $("table").stupidtable({
@@ -14,16 +14,16 @@
                 var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
                 var re = new RegExp(pattern);
                 var DateParts = re.exec(str).slice(1);
-          
+
                 var Year = DateParts[2];
                 var Month = $.inArray(DateParts[0].toLowerCase(), months);
                 var Day = DateParts[1];
                 return new Date(Year, Month, Day);
               }
-          
+
               aDate = date_from_string(a);
               bDate = date_from_string(b);
-                
+
               return aDate - bDate;
             }
           });
@@ -36,25 +36,29 @@
       });
     </script>
     <style type="text/css">
+      th, td {
+        padding: 3px;
+        border: 1px solid #999;
+      }
       tr.awesome{
         color: red;
       }
-      th[class|="type"]{
+      th[data-sort]{
         cursor:pointer;
       }
     </style>
   </head>
   <body>
     <h1>Stupid jQuery table sort!</h1>
-    <table border="1">
+    <table>
       <thead>
         <tr>
-          <th class="type-int awesome">int</th>
-          <th class="type-float">float</th>
-          <th class="type-string">string</th>
+          <th data-sort="int" class="awesome">int</th>
+          <th data-sort="float">float</th>
+          <th data-sort="string">string</th>
           <th>Can't sort me!</th>
-          <th class="type-date">date</th>
-          <th class="type-int">Letter frequency</th>
+          <th data-sort="date">date</th>
+          <th data-sort="int">Letter frequency</th>
         </tr>
       </thead>
       <tbody>

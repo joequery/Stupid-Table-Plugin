@@ -2,17 +2,21 @@
   <head>
     <title>Stupid jQuery table sort</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="stupidtable.min.js?dev"></script>
+    <script type="text/javascript" src="stupidtable.js?dev"></script>
     <script type="text/javascript">
       $(function(){
           $("table").stupidtable();
       });
     </script>
     <style type="text/css">
+      th, td {
+        padding: 3px;
+        border: 1px solid #999;
+      }
       tr.awesome{
         color: red;
       }
-      th[class|="type"]{
+      th[data-sort]{
         cursor:pointer;
       }
     </style>
@@ -20,12 +24,12 @@
   </head>
   <body>
     <h1>Stupid jQuery table sort!</h1>
-    <table border="1">
+    <table>
       <thead>
         <tr>
-          <th class="type-int awesome">int</th>
-          <th class="type-float">float</th>
-          <th class="type-string">string</th>
+          <th data-sort="int" class="awesome">int</th>
+          <th data-sort="float">float</th>
+          <th data-sort="string">string</th>
         </tr>
       </thead>
       <tbody>

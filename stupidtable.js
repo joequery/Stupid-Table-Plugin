@@ -1,6 +1,6 @@
 // Stupid jQuery table plugin.
 
-// Call on a table 
+// Call on a table
 // sortFns: Sort functions for your datatypes.
 (function($){
   $.fn.stupidtable = function(sortFns){
@@ -25,7 +25,7 @@
       // this result elsewhere. This returns an array of index numbers.
       // return[0] = x means "arr's 0th element is now at x"
       var sort_map =  function(arr, sort_function){
-        var sorted = arr.slice(0).sort(sort_function); 
+        var sorted = arr.slice(0).sort(sort_function);
         var map = [];
         var index = 0;
         for(var i=0; i<arr.length; i++){
@@ -41,7 +41,7 @@
         return map;
       }
 
-      // Apply a sort map to the array. 
+      // Apply a sort map to the array.
       var apply_sort_map = function(arr, map){
         var clone = arr.slice(0);
         for(var i=0; i<map.length; i++){
@@ -70,8 +70,9 @@
         var trs = table.children("tbody").children("tr");
         var $this = $(this);
         var i = $this.index();
-        var type = $this.data('sort') || 'string';
-        
+        // Prevent sorting if no type defined
+        var type = $this.data('sort') || null;
+
         if(type){
           var sortMethod = sortFns[type];
 
