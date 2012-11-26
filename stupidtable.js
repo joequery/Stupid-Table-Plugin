@@ -5,7 +5,8 @@
 (function($){
   $.fn.stupidtable = function(sortFns){
     return this.each(function () {
-      var table = $(this); sortFns = sortFns || {};
+      var table = $(this);
+      sortFns = sortFns || {};
 
       // ==================================================== //
       //                  Utility functions                   //
@@ -107,7 +108,13 @@
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
           table.children("tbody").append(sortedTRs);
-          table.trigger("aftertablesort", {column: th_index, reverse: sorted})
+
+          // Trigger `aftertablesort` event that calling scripts can hook into;
+          // pass parameters for column sorted and sorting direction
+          // TODO: remove `data-sort-dir` when sorting different column
+          var sort_dir = $this.data('sort-dir') === 'asc' ? 'desc' : 'asc';
+          $this.data('sort-dir', sort_dir);
+          table.trigger("aftertablesort", {column: th_index, direction: sort_dir})
         }
       });
     });
