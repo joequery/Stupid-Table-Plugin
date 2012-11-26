@@ -1,11 +1,12 @@
 // Stupid jQuery table plugin.
 
-// Call on a table 
+// Call on a table
 // sortFns: Sort functions for your datatypes.
 (function($){
   $.fn.stupidtable = function(sortFns){
     return this.each(function () {
-      var table = $(this); sortFns = sortFns || {};
+      var table = $(this);
+      sortFns = sortFns || {};
 
       // ==================================================== //
       //                  Utility functions                   //
@@ -25,7 +26,7 @@
       // this result elsewhere. This returns an array of index numbers.
       // return[0] = x means "arr's 0th element is now at x"
       var sort_map =  function(arr, sort_function){
-        var sorted = arr.slice(0).sort(sort_function); 
+        var sorted = arr.slice(0).sort(sort_function);
         var map = [];
         var index = 0;
         for(var i=0; i<arr.length; i++){
@@ -41,7 +42,7 @@
         return map;
       }
 
-      // Apply a sort map to the array. 
+      // Apply a sort map to the array.
       var apply_sort_map = function(arr, map){
         var clone = arr.slice(0);
         for(var i=0; i<map.length; i++){
@@ -69,9 +70,10 @@
       table.on("click", "th", function(){
         var trs = table.children("tbody").children("tr");
         var $this = $(this);
-        var i = $this.index();
-        var type = $this.data('sort') || 'string';
-        
+        var th_index = $this.index();
+        // Prevent sorting if no type defined
+        var type = $this.data('sort') || null;
+
         if(type){
           var sortMethod = sortFns[type];
 
@@ -81,7 +83,7 @@
           // Push either the value of the 'data-order-by' attribute if specified
           // or just the text() value in this column to column[] for comparison.
           trs.each(function(index,tr){
-            var e = $(tr).children().eq(i);
+            var e = $(tr).children().eq(th_index);
             var order_by = e.data('sort-value') || e.text();
             column.push(order_by);
           });
@@ -106,7 +108,13 @@
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
           table.children("tbody").append(sortedTRs);
-          table.trigger("aftertablesort", {column : i, reverse : sorted})
+
+          // Trigger `aftertablesort` event that calling scripts can hook into;
+          // pass parameters for column sorted and sorting direction
+          // TODO: remove `data-sort-dir` when sorting different column
+          var sort_dir = $this.data('sort-dir') === 'asc' ? 'desc' : 'asc';
+          $this.data('sort-dir', sort_dir);
+          table.trigger("aftertablesort", {column: th_index, direction: sort_dir})
         }
       });
     });
