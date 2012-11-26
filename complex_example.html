@@ -2,7 +2,7 @@
   <head>
     <title>Stupid jQuery table sort</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="stupidtable.min.js?dev"></script>
+    <script type="text/javascript" src="stupidtable.js?dev"></script>
     <script type="text/javascript">
       $(function(){
           $("table").stupidtable({
@@ -14,16 +14,16 @@
                 var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
                 var re = new RegExp(pattern);
                 var DateParts = re.exec(str).slice(1);
-          
+
                 var Year = DateParts[2];
                 var Month = $.inArray(DateParts[0].toLowerCase(), months);
                 var Day = DateParts[1];
                 return new Date(Year, Month, Day);
               }
-          
+
               aDate = date_from_string(a);
               bDate = date_from_string(b);
-                
+
               return aDate - bDate;
             }
           });
@@ -36,48 +36,52 @@
       });
     </script>
     <style type="text/css">
+      th, td {
+        padding: 3px;
+        border: 1px solid #999;
+      }
       tr.awesome{
         color: red;
       }
-      th[class|="type"]{
+      th[data-sort]{
         cursor:pointer;
       }
     </style>
   </head>
   <body>
     <h1>Stupid jQuery table sort!</h1>
-    <table border="1">
+    <table>
       <thead>
         <tr>
-          <th class="type-int awesome">int</th>
-          <th class="type-float">float</th>
-          <th class="type-string">string</th>
+          <th data-sort="int" class="awesome">int</th>
+          <th data-sort="float">float</th>
+          <th data-sort="string">string</th>
           <th>Can't sort me!</th>
-          <th class="type-date">date</th>
-          <th class="type-int">Letter frequency</th>
+          <th data-sort="date">date</th>
+          <th data-sort="int">Letter frequency</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>15</td> <td>-.18</td> <td>banana</td> <td>arbitrary</td>
-          <td>Mar 15, 1986</td><td data-order-by="2">T</td>
+          <td>Mar 15, 1986</td><td data-sort-value="2">T</td>
         </tr>
         <tr class="awesome">
           <td>95</td> <td>36</td> <td></td> <td>pointless</td>
-          <td>Feb 27, 2086</td> <td data-order-by="1">E</td>
+          <td>Feb 27, 2086</td> <td data-sort-value="1">E</td>
         </tr>
         <tr>
           <td>2</td> <td>-152.5</td> <td></td> <td>silly</td>
-          <td>Aug 07, 2004</td><td data-order-by="3">A</td>
+          <td>Aug 07, 2004</td><td data-sort-value="3">A</td>
         </tr>
         <tr>
           <td>-53</td> <td>88.5</td> <td></td> <td>eccentric</td>
-          <td>Sep 15, 2002</td><td data-order-by="5">I</td>
+          <td>Sep 15, 2002</td><td data-sort-value="5">I</td>
 
         </tr>
         <tr>
           <td>195</td> <td>-858</td> <td>orange</td> <td>garbage</td>
-          <td>Mar 15, 1986</td><td data-order-by="4">O</td>
+          <td>Mar 15, 1986</td><td data-sort-value="4">O</td>
         </tr>
       </tbody>
 

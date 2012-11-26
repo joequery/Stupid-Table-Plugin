@@ -5,7 +5,12 @@
     <script type="text/javascript" src="stupidtable.js?dev"></script>
     <script type="text/javascript">
       $(function(){
-          $("table").stupidtable();
+          var $table = $("table"),
+          $th = $table.find("th");
+          $table.stupidtable().bind('aftertablesort', function (event, data) {
+		      $th.find(".arrow").remove();
+		      $th.eq(data.column).append('<span class="arrow">' + (data.direction === "asc" ? "&uarr;" : "&darr;") + '</span>');
+          });
       });
     </script>
     <style type="text/css">
@@ -24,6 +29,7 @@
   </head>
   <body>
     <h1>Stupid jQuery table sort!</h1>
+    <p>Event <code>aftertablesort</code> is triggered every time the table is sorted. It can be used for post processing. Click on a heading to see it in action.</p>
     <table>
       <thead>
         <tr>
