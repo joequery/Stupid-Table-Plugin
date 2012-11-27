@@ -72,7 +72,7 @@
         var $this = $(this);
         var th_index = $this.index();
         // Prevent sorting if no type defined
-        var type = $this.data('sort') || null;
+        var type = $this.data("sort") || null;
 
         if(type){
           var sortMethod = sortFns[type];
@@ -80,13 +80,17 @@
           // Gather the elements for this column
           column = [];
 
-          // Push either the value of the 'data-order-by' attribute if specified
+          // Push either the value of the `data-order-by` attribute if specified
           // or just the text() value in this column to column[] for comparison.
           trs.each(function(index,tr){
             var e = $(tr).children().eq(th_index);
-            var order_by = e.data('sort-value') || e.text();
+            var order_by = e.data("sort-value") || e.text();
             column.push(order_by);
           });
+
+          // Determine (and reverse) sorting direction, default `asc`
+          var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
+          $this.siblings("th").data("sort-dir", null)
 
           // If the column is already sorted, just reverse the order. The sort
           // map is just reversing the indexes.
@@ -101,7 +105,12 @@
           else{
             // Get a sort map and apply to all rows
             theMap = sort_map(column, sortMethod);
+            // Since we (usually) sort ascending first, override above sorting direction
+            sort_dir = "asc";
           }
+
+          // Set sorting direction here
+          $this.data("sort-dir", sort_dir);
 
           var sortedTRs = $(apply_sort_map(trs, theMap));
 
@@ -110,10 +119,7 @@
           table.children("tbody").append(sortedTRs);
 
           // Trigger `aftertablesort` event that calling scripts can hook into;
-          // pass parameters for column sorted and sorting direction
-          // TODO: remove `data-sort-dir` when sorting different column
-          var sort_dir = $this.data('sort-dir') === 'asc' ? 'desc' : 'asc';
-          $this.data('sort-dir', sort_dir);
+          // pass parameters for sorted column index and sorting direction
           table.trigger("aftertablesort", {column: th_index, direction: sort_dir})
         }
       });
