@@ -5,27 +5,40 @@
     <script type="text/javascript" src="stupidtable.js?dev"></script>
     <script type="text/javascript">
       $(function(){
-          $("table").stupidtable({
+          // Helper function to convert a string of the form "Mar 15, 1987" into
+          // a Date object. 
+          var date_from_string = function(str){
+            var months = ["jan","feb","mar","apr","may","jun","jul",
+                          "aug","sep","oct","nov","dec"];
+            var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
+            var re = new RegExp(pattern);
+            var DateParts = re.exec(str).slice(1);
+
+            var Year = DateParts[2];
+            var Month = $.inArray(DateParts[0].toLowerCase(), months);
+            var Day = DateParts[1];
+            return new Date(Year, Month, Day);
+          }
+
+          var table = $("table").stupidtable({
             "date":function(a,b){
               // Get these into date objects for comparison.
-              var date_from_string = function(str){
-                var months = ["jan","feb","mar","apr","may","jun","jul",
-                              "aug","sep","oct","nov","dec"];
-                var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
-                var re = new RegExp(pattern);
-                var DateParts = re.exec(str).slice(1);
-
-                var Year = DateParts[2];
-                var Month = $.inArray(DateParts[0].toLowerCase(), months);
-                var Day = DateParts[1];
-                return new Date(Year, Month, Day);
-              }
 
               aDate = date_from_string(a);
               bDate = date_from_string(b);
 
               return aDate - bDate;
             }
+          });
+
+          table.bind('aftertablesort', function (event, data) {
+            // data.column - the index of the column sorted after a click
+            // data.direction - the sorting direction (either asc or desc)
+
+            var th = $(this).find("th");
+            th.find(".arrow").remove();
+            var arrow = data.direction === "asc" ? "&uarr;" : "&darr;";
+            th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
           });
 
           $("tr").slice(1).click(function(){
@@ -75,7 +88,7 @@
           <td>Aug 07, 2004</td><td data-sort-value="3">A</td>
         </tr>
         <tr>
-          <td>-53</td> <td>88.5</td> <td></td> <td>eccentric</td>
+          <td>-53</td> <td>88.5</td> <td>hello</td> <td>eccentric</td>
           <td>Sep 15, 2002</td><td data-sort-value="5">I</td>
 
         </tr>

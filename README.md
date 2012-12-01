@@ -124,7 +124,7 @@ bind on 'aftertablesort'.
         console.log("The column index: " + data.column);
     });
 
-See the callback_example.html file.
+See the complex_example.html file.
 
 
 Data with multiple representations/predefined order
