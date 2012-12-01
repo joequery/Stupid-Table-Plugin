@@ -362,6 +362,6 @@ footer p + p {
   }
 }
 
-th[class|="type"]{
+th[data-sort]{
   cursor:pointer;
 }
