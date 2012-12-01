@@ -125,10 +125,7 @@ To solve this problem, you can specify a `data-sort-value` attribute to
 table cells, and the attribute value will be the basis of the sort as opposed
 to the text value of the table cell. See the complex_example.html file, where
 we sort a column of letters based not on their alphabetical order, but by their
-frequency in the English language. You'll still need to specify a sort type
-or come up with your own custom sort function, but the presence of the
-`data-sort-value` attribute tells the plugin to use the value of the
-attribute as the basis of the sort.
+frequency in the English language. 
 
 License
 -------
