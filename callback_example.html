@@ -5,11 +5,15 @@
     <script type="text/javascript" src="stupidtable.js?dev"></script>
     <script type="text/javascript">
       $(function(){
-          var $table = $("table"),
-          $th = $table.find("th");
-          $table.stupidtable().bind('aftertablesort', function (event, data) {
-		      $th.find(".arrow").remove();
-		      $th.eq(data.column).append('<span class="arrow">' + (data.direction === "asc" ? "&uarr;" : "&darr;") + '</span>');
+          var table = $("table").stupidtable();
+          table.bind('aftertablesort', function (event, data) {
+              // data.column - the index of the column sorted after a click
+              // data.direction - the sorting direction (either asc or desc)
+
+              var th = $(this).find("th");
+              th.find(".arrow").remove();
+              var arrow = data.direction === "asc" ? "&uarr;" : "&darr;";
+              th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
           });
       });
     </script>
