@@ -72,48 +72,49 @@
         var $this = $(this);
         var th_index = $this.index();
         // Prevent sorting if no type defined
-        var type = $this.data('sort') || null;
+        var type = $this.data("sort") || null;
 
-        if(type){
+        if (type) {
           var sortMethod = sortFns[type];
 
           // Gather the elements for this column
-          column = [];
+          var column = [];
 
-          // Push either the value of the 'data-order-by' attribute if specified
+          // Push either the value of the `data-order-by` attribute if specified
           // or just the text() value in this column to column[] for comparison.
           trs.each(function(index,tr){
             var e = $(tr).children().eq(th_index);
-            var order_by = e.data('sort-value') || e.text();
+            var order_by = e.data("sort-value") || e.text();
             column.push(order_by);
           });
 
           // If the column is already sorted, just reverse the order. The sort
           // map is just reversing the indexes.
+          var theMap = [];
           var sorted = is_sorted_array(column, sortMethod);
-          if(sorted){
+          if (sorted && $this.data("sort-dir") !== null) {
             column.reverse();
-            var theMap = [];
-            for(var i=column.length-1; i>=0; i--){
+            for (var i = column.length-1; i >= 0; i--) {
               theMap.push(i);
             }
           }
-          else{
-            // Get a sort map and apply to all rows
+          else {
             theMap = sort_map(column, sortMethod);
           }
 
-          var sortedTRs = $(apply_sort_map(trs, theMap));
+          // Determine (and/or reverse) sorting direction, default `asc`
+          var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
+          // Reset siblings
+          $this.siblings("th").data("sort-dir", null);
+          $this.data("sort-dir", sort_dir);
 
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
+          var sortedTRs = $(apply_sort_map(trs, theMap));
           table.children("tbody").append(sortedTRs);
 
           // Trigger `aftertablesort` event that calling scripts can hook into;
-          // pass parameters for column sorted and sorting direction
-          // TODO: remove `data-sort-dir` when sorting different column
-          var sort_dir = $this.data('sort-dir') === 'asc' ? 'desc' : 'asc';
-          $this.data('sort-dir', sort_dir);
+          // pass parameters for sorted column index and sorting direction
           table.trigger("aftertablesort", {column: th_index, direction: sort_dir})
         }
       });
