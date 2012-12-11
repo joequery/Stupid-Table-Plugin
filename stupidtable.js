@@ -70,7 +70,13 @@
       table.on("click", "th", function(){
         var trs = table.children("tbody").children("tr");
         var $this = $(this);
-        var th_index = $this.index();
+        var th_index = 0;
+
+        table.find('th').slice(0, $this.index()).each(function () {
+          var cols = $(this).attr('colspan') || 1;
+          th_index += parseInt(cols);
+        });
+
         // Prevent sorting if no type defined
         var type = $this.data("sort") || null;
 
