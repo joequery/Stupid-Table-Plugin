@@ -108,6 +108,24 @@ we do the following:
 This extracts the integers from the cell and compares them in the style
 that sort functions use.
 
+Callbacks
+---------
+
+To execute a callback function after a table column has been sorted, you can
+bind on 'aftertablesort'.
+
+    var table = $("table").stupidtable();
+    table.bind('aftertablesort', function (event, data) {
+        // data.column - the index of the column sorted after a click
+        // data.direction - the sorting direction (either asc or desc)
+        // $(this) - this table object
+
+        console.log("The sorting direction: " + data.direction);
+        console.log("The column index: " + data.column);
+    });
+
+See the complex_example.html file.
+
 
 Data with multiple representations/predefined order
 ---------------------------------------------------
