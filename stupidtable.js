@@ -88,34 +88,29 @@
             column.push(order_by);
           });
 
-          // Determine (and reverse) sorting direction, default `asc`
-          var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
-          $this.siblings("th").data("sort-dir", null)
-
           // If the column is already sorted, just reverse the order. The sort
           // map is just reversing the indexes.
-          var sorted = is_sorted_array(column, sortMethod);
           var theMap = [];
-          if (sorted) {
+          var sorted = is_sorted_array(column, sortMethod);
+          if (sorted && $this.data("sort-dir") !== null) {
             column.reverse();
-            for (var i=column.length-1; i>=0; i--) {
+            for (var i = column.length-1; i >= 0; i--) {
               theMap.push(i);
             }
           }
           else {
-            // Get a sort map and apply to all rows
             theMap = sort_map(column, sortMethod);
-            // Since we (usually) sort ascending first, override above sorting direction
-            sort_dir = "asc";
           }
 
-          // Set sorting direction here
+          // Determine (and/or reverse) sorting direction, default `asc`
+          var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
+          // Reset siblings
+          $this.siblings("th").data("sort-dir", null);
           $this.data("sort-dir", sort_dir);
-
-          var sortedTRs = $(apply_sort_map(trs, theMap));
 
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
+          var sortedTRs = $(apply_sort_map(trs, theMap));
           table.children("tbody").append(sortedTRs);
 
           // Trigger `aftertablesort` event that calling scripts can hook into;
