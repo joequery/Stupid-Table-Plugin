@@ -74,11 +74,11 @@
         // Prevent sorting if no type defined
         var type = $this.data("sort") || null;
 
-        if(type){
+        if (type) {
           var sortMethod = sortFns[type];
 
           // Gather the elements for this column
-          column = [];
+          var column = [];
 
           // Push either the value of the `data-order-by` attribute if specified
           // or just the text() value in this column to column[] for comparison.
@@ -95,14 +95,14 @@
           // If the column is already sorted, just reverse the order. The sort
           // map is just reversing the indexes.
           var sorted = is_sorted_array(column, sortMethod);
-          if(sorted){
+          var theMap = [];
+          if (sorted) {
             column.reverse();
-            var theMap = [];
-            for(var i=column.length-1; i>=0; i--){
+            for (var i=column.length-1; i>=0; i--) {
               theMap.push(i);
             }
           }
-          else{
+          else {
             // Get a sort map and apply to all rows
             theMap = sort_map(column, sortMethod);
             // Since we (usually) sort ascending first, override above sorting direction
