@@ -5,7 +5,7 @@
 (function($){
   $.fn.stupidtable = function(sortFns){
     return this.each(function () {
-      var table = $(this);
+      var $table = $(this);
       sortFns = sortFns || {};
 
       // ==================================================== //
@@ -67,12 +67,12 @@
       //                  Begin execution!                    //
       // ==================================================== //
       // Do sorting when THs are clicked
-      table.on("click", "th", function(){
-        var trs = table.children("tbody").children("tr");
+      $table.on("click", "th", function(){
+        var trs = $table.children("tbody").children("tr");
         var $this = $(this);
         var th_index = 0;
 
-        table.find('th').slice(0, $this.index()).each(function () {
+        $table.find('th').slice(0, $this.index()).each(function () {
           var cols = $(this).attr('colspan') || 1;
           th_index += parseInt(cols);
         });
@@ -111,17 +111,17 @@
           // Determine (and/or reverse) sorting direction, default `asc`
           var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
           // Reset siblings
-          $this.siblings("th").data("sort-dir", null);
-          $this.data("sort-dir", sort_dir);
+          $table.find("th").data("sort-dir", null).removeClass("desc asc");
+          $this.data("sort-dir", sort_dir).addClass(sort_dir);
 
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
           var sortedTRs = $(apply_sort_map(trs, theMap));
-          table.children("tbody").append(sortedTRs);
+          $table.children("tbody").append(sortedTRs);
 
           // Trigger `aftertablesort` event that calling scripts can hook into;
           // pass parameters for sorted column index and sorting direction
-          table.trigger("aftertablesort", {column: th_index, direction: sort_dir})
+          $table.trigger("aftertablesort", {column: th_index, direction: sort_dir})
         }
       });
     });
