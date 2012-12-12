@@ -31,10 +31,13 @@
             }
           });
 
-          table.bind('aftertablesort', function (event, data) {
+          table.bind('beforetablesort', function (event, data) {
             // data.column - the index of the column sorted after a click
             // data.direction - the sorting direction (either asc or desc)
+            $("#msg").text("Sorting index " + data.column)
+          });
 
+          table.bind('aftertablesort', function (event, data) {
             var th = $(this).find("th");
             th.find(".arrow").remove();
             var arrow = data.direction === "asc" ? "&uarr;" : "&darr;";
@@ -63,6 +66,7 @@
   </head>
   <body>
     <h1>Stupid jQuery table sort!</h1>
+    <div id="msg"></div>
     <table>
       <thead>
         <tr>
