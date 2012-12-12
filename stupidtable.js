@@ -111,8 +111,8 @@
           // Determine (and/or reverse) sorting direction, default `asc`
           var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
           // Reset siblings
-          $table.find("th").data("sort-dir", null).removeClass("desc asc");
-          $this.data("sort-dir", sort_dir).addClass(sort_dir);
+          $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
+          $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
 
           // Trigger `beforetablesort` event that calling scripts can hook into;
           // pass parameters for sorted column index and sorting direction
