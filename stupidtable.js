@@ -114,13 +114,16 @@
           $table.find("th").data("sort-dir", null).removeClass("desc asc");
           $this.data("sort-dir", sort_dir).addClass(sort_dir);
 
+          // Trigger `beforetablesort` event that calling scripts can hook into;
+          // pass parameters for sorted column index and sorting direction
+          $table.trigger("beforetablesort", {column: th_index, direction: sort_dir})
+
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
           var sortedTRs = $(apply_sort_map(trs, theMap));
           $table.children("tbody").append(sortedTRs);
 
-          // Trigger `aftertablesort` event that calling scripts can hook into;
-          // pass parameters for sorted column index and sorting direction
+          // Trigger `aftertablesort` event. Similar to `beforetablesort`
           $table.trigger("aftertablesort", {column: th_index, direction: sort_dir})
         }
       });
