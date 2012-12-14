@@ -112,7 +112,7 @@ Callbacks
 ---------
 
 To execute a callback function after a table column has been sorted, you can
-bind on 'aftertablesort'.
+bind on `aftertablesort`.
 
     var table = $("table").stupidtable();
     table.bind('aftertablesort', function (event, data) {
@@ -124,7 +124,12 @@ bind on 'aftertablesort'.
         console.log("The column index: " + data.column);
     });
 
+Similarly, to execute a callback before a table column has been sorted, you can
+bind on `beforetablesort`.
+
 See the complex_example.html file.
+
+
 
 
 Data with multiple representations/predefined order
