@@ -246,8 +246,9 @@ data to be sorted.</p>
 <h2>Callbacks</h2>
 
 <p>The complex table above uses a custom callback to add an arrow to the table
-headers after the table is sorted. To use a callback, bind on the
-'aftertablesort' event. Here's how the arrow effect was achieved:
+headers after the table is sorted. To execute a callback after the table is
+sorted, bind on the 'aftertablesort' event. Here's how the arrow effect was
+achieved:
 
 <code><pre>
 var table = $("#complexTable").stupidtable({
@@ -264,6 +265,9 @@ table.bind('aftertablesort', function (event, data) {
     th.eq(data.column).append('&lt;span class="arrow"&gt;' + arrow +'&lt;/span&gt;');
 });
 </pre></code>
+
+<p>Similarly, you can also bind on 'beforetablesort' to execute a callback 
+before the sort actually takes place when a column is clicked.</p>
 
 <p>Refer to <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/complex_example.html">complex_example.html</a> 
 in the repo.</p>
