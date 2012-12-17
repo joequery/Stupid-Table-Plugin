@@ -20,7 +20,7 @@
       }, sortFns);
 
       // Array comparison. See http://stackoverflow.com/a/8618383
-      var arrays_equal = function(a,b) { return !!a && !!b && !(a<b || b<a);}
+      var arrays_equal = function(a,b) { return !!a && !!b && !(a<b || b<a);};
 
       // Return the resulting indexes of a sort so we can apply
       // this result elsewhere. This returns an array of index numbers.
@@ -40,17 +40,18 @@
           map.push(index);
         }
         return map;
-      }
+      };
 
       // Apply a sort map to the array.
       var apply_sort_map = function(arr, map){
-        var clone = arr.slice(0);
+        var clone = arr.slice(0),
+            newIndex = 0;
         for(var i=0; i<map.length; i++){
           newIndex = map[i];
           clone[newIndex] = arr[i];
         }
         return clone;
-      }
+      };
 
       // Returns true if array is sorted, false otherwise.
       // Checks for both ascending and descending
@@ -61,7 +62,7 @@
 
         // Check if the array is sorted in either direction.
         return arrays_equal(clone, sorted) || arrays_equal(reversed, sorted);
-      }
+      };
 
       // ==================================================== //
       //                  Begin execution!                    //
@@ -74,7 +75,7 @@
 
         $table.find('th').slice(0, $this.index()).each(function () {
           var cols = $(this).attr('colspan') || 1;
-          th_index += parseInt(cols);
+          th_index += parseInt(cols,10);
         });
 
         // Prevent sorting if no type defined
@@ -117,7 +118,7 @@
 
           // Trigger `beforetablesort` event that calling scripts can hook into;
           // pass parameters for sorted column index and sorting direction
-          $table.trigger("beforetablesort", {column: th_index, direction: sort_dir})
+          $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
 
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
@@ -125,9 +126,9 @@
           $table.children("tbody").append(sortedTRs);
 
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
-          $table.trigger("aftertablesort", {column: th_index, direction: sort_dir})
+          $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
         }
       });
     });
-  }
+  };
  })(jQuery);
