@@ -89,8 +89,9 @@
           // Push either the value of the `data-order-by` attribute if specified
           // or just the text() value in this column to column[] for comparison.
           trs.each(function(index,tr){
-            var e = $(tr).children().eq(th_index);
-            var order_by = e.data("sort-value") || e.text();
+            var $e = $(tr).children().eq(th_index);
+            var sort_val = $e.data("sort-value");
+            var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
             column.push(order_by);
           });
 
