@@ -80,12 +80,23 @@
 
         // Prevent sorting if no type defined
         var type = $this.data("sort") || null;
+        if (type === null) {
+          return;
+        }
 
-        if (type) {
-          var sortMethod = sortFns[type];
+        // Determine (and/or reverse) sorting direction, default `asc`
+        var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
 
+        // Trigger `beforetablesort` event that calling scripts can hook into;
+        // pass parameters for sorted column index and sorting direction
+        $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
+
+        // Run sorting asynchronously on a timout to force browser redraw after
+        // `beforetablesort` callback. Also avoids locking up the browser too much.
+        setTimeout(function() {
           // Gather the elements for this column
           var column = [];
+          var sortMethod = sortFns[type];
 
           // Push either the value of the `data-order-by` attribute if specified
           // or just the text() value in this column to column[] for comparison.
@@ -110,15 +121,9 @@
             theMap = sort_map(column, sortMethod);
           }
 
-          // Determine (and/or reverse) sorting direction, default `asc`
-          var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
           // Reset siblings
           $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
           $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
-
-          // Trigger `beforetablesort` event that calling scripts can hook into;
-          // pass parameters for sorted column index and sorting direction
-          $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
 
           // Replace the content of tbody with the sortedTRs. Strangely (and
           // conveniently!) enough, .append accomplishes this for us.
@@ -127,8 +132,9 @@
 
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
           $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
-        }
+
+        }, 10);
       });
     });
   };
- })(jQuery);
+})(jQuery);
