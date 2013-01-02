@@ -30,12 +30,16 @@
         });
 
         table.bind('beforetablesort', function (event, data) {
-          // data.column - the index of the column sorted after a click
-          // data.direction - the sorting direction (either asc or desc)
-          $("#msg").text("Sorting index " + data.column)
+          // Apply a "disabled" look to the table while sorting
+          $("#msg").text("Sorting...");
+          $("table").css({opacity: 0.5});
         });
 
         table.bind('aftertablesort', function (event, data) {
+          // Reset loading message
+          $("#msg").html("&nbsp;");
+          $("table").css({opacity: 1});
+
           var th = $(this).find("th");
           th.find(".arrow").remove();
           var arrow = data.direction === "asc" ? "&uarr;" : "&darr;";
@@ -62,11 +66,12 @@
     th[data-sort]{
       cursor:pointer;
     }
-    tr.awesome{
-      color: red;
-    }
 
     /* just some random additional styles for a more real-world situation */
+    #msg {
+      color: #0a0;
+      text-align: center;
+    }
     td.name {
       font-weight: bold;
     }
