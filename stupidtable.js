@@ -25,8 +25,11 @@
       // Return the resulting indexes of a sort so we can apply
       // this result elsewhere. This returns an array of index numbers.
       // return[0] = x means "arr's 0th element is now at x"
-      var sort_map =  function(arr, sort_function){
+      var sort_map =  function(arr, sort_function, direction){
         var sorted = arr.slice(0).sort(sort_function);
+        if(direction === "desc") {
+          sorted.reverse();
+        }
         var map = [];
         var index = 0;
         for(var i=0; i<arr.length; i++){
@@ -83,9 +86,22 @@
         if (type === null) {
           return;
         }
+        // Get the default sort order from the TH
+        var default_sort = $this.data("default-sort") || "asc";
 
         // Determine (and/or reverse) sorting direction, default `asc`
-        var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
+        var sort_dir;
+        switch ($this.data("sort-dir")) {
+          case "asc":
+            sort_dir = "desc";
+            break;
+          case "desc":
+            sort_dir = "asc";
+            break;
+          default:
+            sort_dir = default_sort;
+            break;
+        }
 
         // Trigger `beforetablesort` event that calling scripts can hook into;
         // pass parameters for sorted column index and sorting direction
@@ -118,7 +134,7 @@
             }
           }
           else {
-            theMap = sort_map(column, sortMethod);
+            theMap = sort_map(column, sortMethod, sort_dir);
           }
 
           // Reset siblings
