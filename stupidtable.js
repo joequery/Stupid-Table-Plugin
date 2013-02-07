@@ -111,7 +111,7 @@
           // map is just reversing the indexes.
           var theMap = [];
           var sorted = is_sorted_array(column, sortMethod);
-          if (sorted && $this.data("sort-dir") !== null) {
+          if (sorted && $this.data("sort-dir")) {
             column.reverse();
             for (var i = column.length-1; i >= 0; i--) {
               theMap.push(i);
