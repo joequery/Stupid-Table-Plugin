@@ -3,6 +3,7 @@
 // Call on a table
 // sortFns: Sort functions for your datatypes.
 (function($){
+
   $.fn.stupidtable = function(sortFns){
     return this.each(function () {
       var $table = $(this);
@@ -67,11 +68,13 @@
       // ==================================================== //
       //                  Begin execution!                    //
       // ==================================================== //
+
       // Do sorting when THs are clicked
       $table.on("click", "th", function(){
         var trs = $table.children("tbody").children("tr");
         var $this = $(this);
         var th_index = 0;
+        var dir = $.fn.stupidtable.dir;
 
         $table.find('th').slice(0, $this.index()).each(function () {
           var cols = $(this).attr('colspan') || 1;
@@ -85,7 +88,7 @@
         }
 
         // Determine (and/or reverse) sorting direction, default `asc`
-        var sort_dir = $this.data("sort-dir") === "asc" ? "desc" : "asc";
+        var sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
 
         // Trigger `beforetablesort` event that calling scripts can hook into;
         // pass parameters for sorted column index and sorting direction
@@ -132,9 +135,12 @@
 
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
           $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
-
         }, 10);
       });
     });
   };
+
+  // Enum containing sorting directions
+  $.fn.stupidtable.dir = { ASC: "asc", DESC: "desc" };
+
 })(jQuery);

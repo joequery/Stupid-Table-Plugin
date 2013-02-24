@@ -41,7 +41,9 @@
       table.bind('aftertablesort', function (event, data) {
         var th = $(this).find("th");
         th.find(".arrow").remove();
-        var arrow = data.direction === "asc" ? "&uarr;" : "&darr;";
+        var dir = $.fn.stupidtable.dir;
+
+        var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
         th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
       });
 
@@ -76,7 +78,7 @@
 
   <h1>Stupid jQuery table sort! (complex example)</h1>
 
-  <div id="msg">&nbsp;</div>
+  <p id="msg">&nbsp;</p>
 
   <table>
     <thead>
