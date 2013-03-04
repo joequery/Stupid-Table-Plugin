@@ -59,13 +59,13 @@
         "moveBlanksDesc": moveBlanksDesc,
       });
 
-      table.bind('beforetablesort', function (event, data) {
+      table.on("beforetablesort", function (event, data) {
         // data.column - the index of the column sorted after a click
         // data.direction - the sorting direction (either asc or desc)
         $("#msg").text("Sorting index " + data.column)
       });
 
-      table.bind('aftertablesort', function (event, data) {
+      table.on("aftertablesort", function (event, data) {
         var th = $(this).find("th");
         th.find(".arrow").remove();
         var dir = $.fn.stupidtable.dir;

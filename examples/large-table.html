@@ -29,14 +29,14 @@
           }
         });
 
-        table.bind('beforetablesort', function (event, data) {
+        table.on("beforetablesort", function (event, data) {
           // Apply a "disabled" look to the table while sorting.
-          // Using addClass for 'testing' as it takes slightly longer to render.
+          // Using addClass for "testing" as it takes slightly longer to render.
           $("#msg").text("Sorting...");
           $("table").addClass("disabled");
         });
 
-        table.bind('aftertablesort', function (event, data) {
+        table.on("aftertablesort", function (event, data) {
           // Reset loading message.
           $("#msg").html("&nbsp;");
           $("table").removeClass("disabled");
