@@ -2,9 +2,9 @@
 <html>
 <head>
   <title>Stupid jQuery table sort (large table example)</title>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="stupidtable.js?dev"></script>
-  <script type="text/javascript">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../stupidtable.js?dev"></script>
+  <script>
     $(function(){
         // Helper function to convert a string of the form "Mar 15, 1987" into a Date object.
         var date_from_string = function(str) {
@@ -29,14 +29,14 @@
           }
         });
 
-        table.bind('beforetablesort', function (event, data) {
+        table.on("beforetablesort", function (event, data) {
           // Apply a "disabled" look to the table while sorting.
-          // Using addClass for 'testing' as it takes slightly longer to render.
+          // Using addClass for "testing" as it takes slightly longer to render.
           $("#msg").text("Sorting...");
           $("table").addClass("disabled");
         });
 
-        table.bind('aftertablesort', function (event, data) {
+        table.on("aftertablesort", function (event, data) {
           // Reset loading message.
           $("#msg").html("&nbsp;");
           $("table").removeClass("disabled");
@@ -97,7 +97,9 @@
 
 <body>
 
-  <h1>jQuery Stupid Table - large table example</h1>
+  <h1>Stupid jQuery table sort! (large table example)</h1>
+
+  <p>This is a large table of over 500 rows to show the plugin can handle large data sets with ease. It includes a mix of styling to mimic a more realistic website scenario. It also provides a better example of the <code>beforetablesort</code> callback by styling the table to appear <q>disabled</q> during sorting.</p>
 
   <p id="msg">&nbsp;</p>
 
