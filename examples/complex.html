@@ -2,9 +2,9 @@
 <html>
 <head>
   <title>Stupid jQuery table sort (complex example)</title>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="stupidtable.js?dev"></script>
-  <script type="text/javascript">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../stupidtable.js?dev"></script>
+  <script>
     $(function(){
       // Helper function to convert a string of the form "Mar 15, 1987" into
       // a Date object.
@@ -59,13 +59,13 @@
         "moveBlanksDesc": moveBlanksDesc,
       });
 
-      table.bind('beforetablesort', function (event, data) {
+      table.on("beforetablesort", function (event, data) {
         // data.column - the index of the column sorted after a click
         // data.direction - the sorting direction (either asc or desc)
         $("#msg").text("Sorting index " + data.column)
       });
 
-      table.bind('aftertablesort', function (event, data) {
+      table.on("aftertablesort", function (event, data) {
         var th = $(this).find("th");
         th.find(".arrow").remove();
         var dir = $.fn.stupidtable.dir;
@@ -98,6 +98,9 @@
     tr.awesome{
       color: red;
     }
+    #msg {
+      color: green;
+    }
   </style>
 </head>
 
@@ -105,12 +108,14 @@
 
   <h1>Stupid jQuery table sort! (complex example)</h1>
 
+  <p>This example showcases several of the more advanced features, including specifying sort values, custom data types and callbacks. View the source of this file or see the <a href="http://joequery.github.com/Stupid-Table-Plugin/">documentation</a> for more details on how to implement them.</p>
+
   <p id="msg">&nbsp;</p>
 
   <table>
     <thead>
       <tr>
-        <th data-sort="int" class="awesome">int</th>
+        <th data-sort="int">int</th>
         <th data-sort="int">int</th>
         <th data-sort="float">float</th>
         <th data-sort="moveBlanks" data-sort-desc="moveBlanksDesc">string</th>
