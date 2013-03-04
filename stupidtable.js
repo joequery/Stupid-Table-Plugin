@@ -93,6 +93,8 @@
         // Trigger `beforetablesort` event that calling scripts can hook into;
         // pass parameters for sorted column index and sorting direction
         $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
+        // More reliable method of forcing a redraw
+        $table.css("display");
 
         // Run sorting asynchronously on a timout to force browser redraw after
         // `beforetablesort` callback. Also avoids locking up the browser too much.
@@ -135,6 +137,8 @@
 
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
           $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
+          // More reliable method of forcing a redraw
+          $table.css("display");
         }, 10);
       });
     });

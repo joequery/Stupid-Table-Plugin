@@ -30,15 +30,16 @@
         });
 
         table.bind('beforetablesort', function (event, data) {
-          // Apply a "disabled" look to the table while sorting
+          // Apply a "disabled" look to the table while sorting.
+          // Using addClass for 'testing' as it takes slightly longer to render.
           $("#msg").text("Sorting...");
-          $("table").css({opacity: 0.5});
+          $("table").addClass("disabled");
         });
 
         table.bind('aftertablesort', function (event, data) {
-          // Reset loading message
+          // Reset loading message.
           $("#msg").html("&nbsp;");
-          $("table").css({opacity: 1});
+          $("table").removeClass("disabled");
 
           var th = $(this).find("th");
           th.find(".arrow").remove();
@@ -87,6 +88,9 @@
     }
     tr:nth-child(odd) > td {
       background-color: #ffffff;
+    }
+    .disabled {
+      opacity: 0.5;
     }
   </style>
 </head>
