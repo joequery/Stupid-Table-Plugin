@@ -26,19 +26,26 @@
       // Return the resulting indexes of a sort so we can apply
       // this result elsewhere. This returns an array of index numbers.
       // return[0] = x means "arr's 0th element is now at x"
-      var sort_map =  function(arr, sort_function){
-        var sorted = arr.slice(0).sort(sort_function);
+      var sort_map =  function(arr, sort_function, reverse_column){
         var map = [];
         var index = 0;
-        for(var i=0; i<arr.length; i++){
-          index = $.inArray(arr[i], sorted);
+        if (reverse_column) {
+            for (var i = arr.length-1; i >= 0; i--) {
+                      map.push(i);
+            }
+        }
+        else{
+            var sorted = arr.slice(0).sort(sort_function);
+            for(var i=0; i<arr.length; i++){
+              index = $.inArray(arr[i], sorted);
 
-          // If this index is already in the map, look for the next index.
-          // This handles the case of duplicate entries.
-          while($.inArray(index, map) != -1){
-            index++;
-          }
-          map.push(index);
+              // If this index is already in the map, look for the next index.
+              // This handles the case of duplicate entries.
+              while($.inArray(index, map) != -1){
+                index++;
+              }
+              map.push(index);
+            }
         }
         return map;
       };
@@ -52,17 +59,6 @@
           clone[newIndex] = arr[i];
         }
         return clone;
-      };
-
-      // Returns true if array is sorted, false otherwise.
-      // Checks for both ascending and descending
-      var is_sorted_array = function(arr, sort_function){
-        var clone = arr.slice(0);
-        var reversed = arr.slice(0).reverse();
-        var sorted = arr.slice(0).sort(sort_function);
-
-        // Check if the array is sorted in either direction.
-        return arrays_equal(clone, sorted) || arrays_equal(reversed, sorted);
       };
 
       // ==================================================== //
@@ -81,14 +77,20 @@
           th_index += parseInt(cols,10);
         });
 
+        // Determine (and/or reverse) sorting direction, default `asc`
+        var sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
+
+        // Choose appropriate sorting function. If we're sorting descending, check
+        // for a `data-sort-desc` attribute.
+        if ( sort_dir == dir.DESC )
+          var type = $this.data("sort-desc") || $this.data("sort") || null;
+        else
+          var type = $this.data("sort") || null;
+
         // Prevent sorting if no type defined
-        var type = $this.data("sort") || null;
         if (type === null) {
           return;
         }
-
-        // Determine (and/or reverse) sorting direction, default `asc`
-        var sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
 
         // Trigger `beforetablesort` event that calling scripts can hook into;
         // pass parameters for sorted column index and sorting direction
@@ -112,19 +114,11 @@
             column.push(order_by);
           });
 
-          // If the column is already sorted, just reverse the order. The sort
-          // map is just reversing the indexes.
-          var theMap = [];
-          var sorted = is_sorted_array(column, sortMethod);
-          if (sorted && $this.data("sort-dir")) {
-            column.reverse();
-            for (var i = column.length-1; i >= 0; i--) {
-              theMap.push(i);
-            }
-          }
-          else {
-            theMap = sort_map(column, sortMethod);
-          }
+          // Create the sort map. This column having a sort-dir implies it was
+          // the last column sorted. As long as no data-sort-desc is specified, 
+          // we're free to just reverse the column.
+          var reverse_column = !!$this.data("sort-dir") && !$this.data("sort-desc");
+          var theMap = sort_map(column, sortMethod, reverse_column);
 
           // Reset siblings
           $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
