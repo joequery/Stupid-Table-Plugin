@@ -16,7 +16,7 @@
       sortFns = $.extend({}, {
         "int":function(a,b){ return parseInt(a, 10) - parseInt(b,10); },
         "float":function(a,b){ return parseFloat(a) - parseFloat(b); },
-        "string":function(a,b){ if (a<b) return -1; if (a>b) return +1; return 0;}
+        "string": function (a, b) { if (a.toLowerCase() < b.toLowerCase()) return -1; if (a.toLowerCase() > b.toLowerCase()) return +1; return 0; }
       }, sortFns);
 
       // Array comparison. See http://stackoverflow.com/a/8618383
