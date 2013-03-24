@@ -15,9 +15,17 @@
 
       // Merge sort functions with some default sort functions.
       sortFns = $.extend({}, {
-        "int":function(a,b){ return parseInt(a, 10) - parseInt(b,10); },
-        "float":function(a,b){ return parseFloat(a) - parseFloat(b); },
-        "string":function(a,b){ if (a<b) return -1; if (a>b) return +1; return 0;}
+        "int": function(a, b){
+          return parseInt(a, 10) - parseInt(b,10);
+        },
+        "float": function(a, b){
+          return parseFloat(a) - parseFloat(b);
+        },
+        "string": function(a, b){
+          if (a < b) return -1;
+          if (a > b) return +1;
+          return 0;
+        }
       }, sortFns);
 
       // Array comparison. See http://stackoverflow.com/a/8618383
@@ -115,7 +123,7 @@
           });
 
           // Create the sort map. This column having a sort-dir implies it was
-          // the last column sorted. As long as no data-sort-desc is specified, 
+          // the last column sorted. As long as no data-sort-desc is specified,
           // we're free to just reverse the column.
           var reverse_column = !!$this.data("sort-dir") && !$this.data("sort-desc");
           var theMap = sort_map(column, sortMethod, reverse_column);
