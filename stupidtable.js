@@ -2,10 +2,10 @@
 
 // Call on a table
 // sortFns: Sort functions for your datatypes.
-(function($){
+(function($) {
 
-  $.fn.stupidtable = function(sortFns){
-    return this.each(function () {
+  $.fn.stupidtable = function(sortFns) {
+    return this.each(function() {
       var $table = $(this);
       sortFns = sortFns || {};
 
@@ -15,54 +15,51 @@
 
       // Merge sort functions with some default sort functions.
       sortFns = $.extend({}, {
-        "int": function(a, b){
-          return parseInt(a, 10) - parseInt(b,10);
+        "int": function(a, b) {
+          return parseInt(a, 10) - parseInt(b, 10);
         },
-        "float": function(a, b){
+        "float": function(a, b) {
           return parseFloat(a) - parseFloat(b);
         },
-        "string": function(a, b){
+        "string": function(a, b) {
           if (a < b) return -1;
           if (a > b) return +1;
           return 0;
         }
       }, sortFns);
 
-      // Array comparison. See http://stackoverflow.com/a/8618383
-      var arrays_equal = function(a,b) { return !!a && !!b && !(a<b || b<a);};
-
       // Return the resulting indexes of a sort so we can apply
       // this result elsewhere. This returns an array of index numbers.
       // return[0] = x means "arr's 0th element is now at x"
-      var sort_map =  function(arr, sort_function, reverse_column){
+      var sort_map = function(arr, sort_function, reverse_column) {
         var map = [];
         var index = 0;
         if (reverse_column) {
-            for (var i = arr.length-1; i >= 0; i--) {
-                      map.push(i);
-            }
+          for (var i = arr.length-1; i >= 0; i--) {
+            map.push(i);
+          }
         }
-        else{
-            var sorted = arr.slice(0).sort(sort_function);
-            for(var i=0; i<arr.length; i++){
-              index = $.inArray(arr[i], sorted);
+        else {
+          var sorted = arr.slice(0).sort(sort_function);
+          for (var i=0; i<arr.length; i++) {
+            index = $.inArray(arr[i], sorted);
 
-              // If this index is already in the map, look for the next index.
-              // This handles the case of duplicate entries.
-              while($.inArray(index, map) != -1){
-                index++;
-              }
-              map.push(index);
+            // If this index is already in the map, look for the next index.
+            // This handles the case of duplicate entries.
+            while ($.inArray(index, map) != -1) {
+              index++;
             }
+            map.push(index);
+          }
         }
         return map;
       };
 
       // Apply a sort map to the array.
-      var apply_sort_map = function(arr, map){
+      var apply_sort_map = function(arr, map) {
         var clone = arr.slice(0),
             newIndex = 0;
-        for(var i=0; i<map.length; i++){
+        for (var i=0; i<map.length; i++) {
           newIndex = map[i];
           clone[newIndex] = arr[i];
         }
@@ -74,14 +71,14 @@
       // ==================================================== //
 
       // Do sorting when THs are clicked
-      $table.on("click", "th", function(){
+      $table.on("click", "th", function() {
         var trs = $table.children("tbody").children("tr");
         var $this = $(this);
         var th_index = 0;
         var dir = $.fn.stupidtable.dir;
 
-        $table.find('th').slice(0, $this.index()).each(function () {
-          var cols = $(this).attr('colspan') || 1;
+        $table.find("th").slice(0, $this.index()).each(function() {
+          var cols = $(this).attr("colspan") || 1;
           th_index += parseInt(cols,10);
         });
 
@@ -115,7 +112,7 @@
 
           // Push either the value of the `data-order-by` attribute if specified
           // or just the text() value in this column to column[] for comparison.
-          trs.each(function(index,tr){
+          trs.each(function(index,tr) {
             var $e = $(tr).children().eq(th_index);
             var sort_val = $e.data("sort-value");
             var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
@@ -147,6 +144,6 @@
   };
 
   // Enum containing sorting directions
-  $.fn.stupidtable.dir = { ASC: "asc", DESC: "desc" };
+  $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
 
 })(jQuery);
