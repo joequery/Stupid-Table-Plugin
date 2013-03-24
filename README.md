@@ -49,9 +49,10 @@ Predefined data types
 Our aim is to keep this plugin as lightweight as possible. Consequently, the
 only predefined datatypes that you can pass to the th elements are
 
-* int
-* float
-* string
+* `int`
+* `float`
+* `string` (case-sensitive)
+* `string-ins` (case-insensitive)
 
 These data types will be sufficient for many simple tables. However, if you need
 different data types for sorting, you can easily create your own!
@@ -108,6 +109,7 @@ we do the following:
 This extracts the integers from the cell and compares them in the style
 that sort functions use.
 
+
 Callbacks
 ---------
 
@@ -130,8 +132,6 @@ bind on `beforetablesort`.
 See the complex_example.html file.
 
 
-
-
 Data with multiple representations/predefined order
 ---------------------------------------------------
 
@@ -152,6 +152,7 @@ frequency in the English language. You'll still need to specify a sort type
 or come up with your own custom sort function, but the presence of the
 `data-sort-value` attribute tells the plugin to use the value of the
 attribute as the basis of the sort.
+
 
 License
 -------
