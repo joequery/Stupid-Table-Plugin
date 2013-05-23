@@ -84,7 +84,7 @@
         var th_index = 0;
         var dir = $.fn.stupidtable.dir;
 
-        $table.find("th").slice(0, $this.index()).each(function() {
+        $this.parents("tr").find("th").slice(0, $this.index()).each(function() {
           var cols = $(this).attr("colspan") || 1;
           th_index += parseInt(cols,10);
         });
