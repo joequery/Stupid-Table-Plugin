@@ -79,7 +79,33 @@ As long as you understand basic
 <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort">JavaScript sorting</a>, you can make this plugin do as much
 or as little as you want.</p>
 
-<p>Here's an example. Click a header to sort the table by that column.</p>
+<h2>Table of Contents</h2>
+<ul>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#basic-usage">Basic usage</a></li>
+    <li><a href="#custom-sorts">Custom sorts</a></li>
+    <li><a href="#machine-friendly">Machine-friendly sort values vs
+        Human-friendly Display values</a></li>
+    <li><a href="#callbacks">Callbacks</a></li>
+    <li><a href="#examples">More examples</a></li>
+</ul>
+
+
+<h2 id="philosophy">Philosophy</h2>
+<p>Most table sorting plugins try to account for a limitless number of data
+types and their limitless ways of being presented. This leads to an extremely
+bloated code base with only a tiny portion of the code ever used by your
+project. <p>
+
+<p>This plugin avoids that issue by letting you define your own ways of sorting
+table columns. The plugin internally recognizes "int", "string", "string-ins"
+(case-insensitive) and "float",
+so simple data tables will take very little effort on your part. 
+See the <a href="https://github.com/joequery/Stupid-Table-Plugin#readme">README</a>
+for more details. </p>
+
+<h2 id="basic-usage">Basic usage</h2>
+<p>Here's a simple example. Click a header to sort the table by that column.</p>
 
 <table id="simpleTable">
   <thead>
@@ -139,14 +165,15 @@ And the following HTML
   ... (rest of the table)
 </pre></code>
 
-<p>The full source for the example can be located <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/example.html">in the repo</a>.
+<h2 id="custom-sorts">Custom sorts</h2>
 
-<p>A slightly more complex example for fun.</p>
+<p>Here is a slightly more complex table, which implements a custom sort on the Date
+column.</p>
 
  <table id="complexTable">
       <thead>
         <tr>
-          <th data-sort="int" class="awesome">int</th>
+          <th data-sort="int">int</th>
           <th data-sort="float">float</th>
           <th data-sort="string">string</th>
           <th>Can't sort me!</th>
@@ -159,7 +186,7 @@ And the following HTML
           <td>15</td> <td>-.18</td> <td>banana</td> <td>arbitrary</td>
           <td>Mar 15, 1986</td><td data-sort-value="1">E</td>
         </tr>
-        <tr class="awesome">
+        <tr>
           <td>95</td> <td>36</td> <td></td> <td>pointless</td>
           <td>Feb 27, 2086</td><td data-sort-value="2">T</td>
         </tr>
@@ -180,20 +207,10 @@ And the following HTML
 
     </table>
 
-<p>Most table sorting plugins try to account for a limitless number of data
-types and their limitless ways of being presented. This leads to an extremely
-bloated code base with only a tiny portion of the code ever used by your
-project. <p>
-
-<p>This plugin avoids that issue by letting you define your own ways of sorting
-table columns. The plugin internally recognizes "int", "string", and "float",
-so simple data tables will take very little effort on your part. 
-See the <a href="https://github.com/joequery/Stupid-Table-Plugin#readme">README</a>
-for more details. </p>
-
-<p>Here's how we created a custom data type to sort dates in the format seen in
+<p>Here's how we created a sort function to sort dates in the format seen in
 the example above.</p>
 
+JS
 <code><pre>
 var date_from_string = function(str){
     var months = ["jan","feb","mar","apr","may","jun","jul",
@@ -219,12 +236,12 @@ var table = $("#complexTable").stupidtable({
 });
 </pre></code>
 
-And the following HTML
+HTML
 <code><pre>
 &lt;table id="complexTable"&gt;
   &lt;thead&gt;
     &lt;tr&gt;
-      &lt;th data-sort="int" class="awesome"&gt;int&lt;/th&gt;
+      &lt;th data-sort="int" &gt;int&lt;/th&gt;
       &lt;th data-sort="float"&gt;float&lt;/th&gt;
       &lt;th data-sort="string"&gt;string&lt;/th&gt;
       &lt;th&gt;Can't sort me!&lt;/th&gt;
@@ -236,14 +253,47 @@ And the following HTML
   ... (rest of the table)
 </pre></code>
 
-<p>The source for this example can also be found <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/complex_example.html">in the repo</a>.
+<h2 id="machine-friendly">Machine-friendly sort values vs Human-friendly display values</h2>
 
-<p>Sometimes data is too complex to just call <code>Array.sort</code> on. 
-Creating a data type, while seemingly daunting from the example, serves
-as an effective way to let you have complete control over how you want your
-data to be sorted.</p>
+<p>However, we can sometimes avoid the need for a custom sort by providing a
+machine-friendly sort value to the Stupid Table while displaying a
+human-friendly form of the sort value to the user.</p>
 
-<h2>Callbacks</h2>
+<p>
+Consider the Date custom sort we built above: If a server-side process generates
+the table, the process probably uses some <code>strftime()</code> function to
+get dates to appear that way. This means we should also have access to the
+timestamp. It is <em>much</em> easier to perform an integer sort on the
+timestamp as opposed to parsing the date string out into the components
+necessary for the <code>Date()</code> JavaScript constructor!  </p>
+
+<p>
+Using <code>data-sort-value="myvalue"</code> on a table cell 
+<a href="https://github.com/joequery/Stupid-Table-Plugin/blob/05bb4664f010b2b4cb98fc1032a80990ffb746da/stupidtable.js#L124-L125"> tells Stupid Table</a>
+to use "myvalue" as the basis of the sort instead of the contents of the cell.
+So to apply our example, we should 
+
+<ol>
+    <li>Tell Stupid Table the Date column will be an integer type</li>
+    <li>Pass the timestamp of the date to <code>data-sort-value</code> on the
+    table cell</li>
+    <li>Pass the formatted date into the contents of the table cell</li>
+</ol>
+
+The end result looks like
+</p>
+
+<code><pre>
+&lt;th data-sort="int"&gt;Date&lt;/th&gt;
+...
+...
+&lt;td data-sort-value="1335798463"&gt;Apr 30, 2012&lt;/td&gt;
+</pre></code>
+
+
+</p>
+
+<h2 id="callbacks">Callbacks</h2>
 
 <p>The complex table above uses a custom callback to add an arrow to the table
 headers after the table is sorted. To execute a callback after the table is
@@ -269,27 +319,21 @@ table.bind('aftertablesort', function (event, data) {
 <p>Similarly, you can also bind on 'beforetablesort' to execute a callback 
 before the sort actually takes place when a column is clicked.</p>
 
-<p>Refer to <a href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/complex_example.html">complex_example.html</a> 
-in the repo.</p>
-
-<h2>data-sort-value</h2>
-<p>
-If you have data in both a machine friendly form and human friendly form, you
-can provide the machine friendly value to <code>data-sort-value</code> 
-on table cells. The plugin will sort by the value provided but display the
-human friendly form to the user.  For example, consider a to-do list table with
-a "Due Date" column.  You can have nice, human friendly due dates such as "A
-week from today" if you specify a data-sort-value attribute of a timestamp.
-
-<code><pre>
-&lt;th data-sort="int"&gt;Due Date&lt;/th&gt;
-...
-...
-&lt;td data-sort-value="1335798463"&gt;A week from today&lt;/td&gt;
-</pre></code>
-
-
-</p>
+<h2 id="examples">More examples</h2>
+<ul>
+    <li>A basic table: (<a
+        href="http://rawgithub.com/joequery/Stupid-Table-Plugin/master/examples/basic.html">demo</a>, <a
+        href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/examples/basic.html">source</a>)</li>
+    <li>A complex table: (<a
+        href="http://rawgithub.com/joequery/Stupid-Table-Plugin/master/examples/complex.html">demo</a>, <a
+        href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/examples/complex.html">source</a>)</li>
+    <li>A table using colspans: (<a
+        href="http://rawgithub.com/joequery/Stupid-Table-Plugin/master/examples/colspan.html">demo</a>, <a
+        href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/examples/colspan.html">source</a>)</li>
+    <li>A very large table: (<a
+        href="http://rawgithub.com/joequery/Stupid-Table-Plugin/master/examples/large-table.html">demo</a>, <a
+        href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/examples/large-table.html">source</a>)</li>
+</ul>
 
       </section>
     </div>
