@@ -14,26 +14,7 @@
       // ==================================================== //
 
       // Merge sort functions with some default sort functions.
-      sortFns = $.extend({}, {
-        "int": function(a, b) {
-          return parseInt(a, 10) - parseInt(b, 10);
-        },
-        "float": function(a, b) {
-          return parseFloat(a) - parseFloat(b);
-        },
-        "string": function(a, b) {
-          if (a < b) return -1;
-          if (a > b) return +1;
-          return 0;
-        },
-        "string-ins": function(a, b) {
-          a = a.toLowerCase();
-          b = b.toLowerCase();
-          if (a < b) return -1;
-          if (a > b) return +1;
-          return 0;
-        }
-      }, sortFns);
+      sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
 
       // Return the resulting indexes of a sort so we can apply
       // this result elsewhere. This returns an array of index numbers.
@@ -152,5 +133,26 @@
 
   // Enum containing sorting directions
   $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
+
+  $.fn.stupidtable.default_sort_fns = {
+    "int": function(a, b) {
+      return parseInt(a, 10) - parseInt(b, 10);
+    },
+    "float": function(a, b) {
+      return parseFloat(a) - parseFloat(b);
+    },
+    "string": function(a, b) {
+      if (a < b) return -1;
+      if (a > b) return +1;
+      return 0;
+    },
+    "string-ins": function(a, b) {
+      a = a.toLowerCase();
+      b = b.toLowerCase();
+      if (a < b) return -1;
+      if (a > b) return +1;
+      return 0;
+    }
+  };
 
 })(jQuery);
