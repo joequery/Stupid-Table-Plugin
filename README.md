@@ -14,27 +14,27 @@ Example Usage
 
 The JS:
 
-    $("table").stupidtable();
+		$("table").stupidtable();
 
 The HTML:
 
-    <table>
-      <thead>
-        <tr>
-          <th data-sort="int">int</th>
-          <th data-sort="float">float</th>
-          <th data-sort="string">string</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>15</td>
-          <td>-.18</td>
-          <td>banana</td>
-        </tr>
-        ...
-        ...
-        ...
+		<table>
+			<thead>
+				<tr>
+					<th data-sort="int">int</th>
+					<th data-sort="float">float</th>
+					<th data-sort="string">string</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>15</td>
+					<td>-.18</td>
+					<td>banana</td>
+				</tr>
+				...
+				...
+				...
 
 The thead and tbody tags must be used.
 
@@ -68,43 +68,43 @@ if you're not.
 Let's create an alphanum datatype for a User ID that takes strings in the
 form "D10", "A40", and sorts them based on the number.
 
-    <thead>
-      <tr>
-        <th data-sort="string">Name</th>
-        <th data-sort="int">Age</th>
-        <th data-sort="alphanum">UserID</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Joseph McCullough</td>
-        <td>20</td>
-        <td>D10</td>
-      </tr>
-      <tr>
-        <td>Justin Edwards</td>
-        <td>29</td>
-        <td>A40</td>
-      </tr>
-      ...
-      ...
-      ...
+		<thead>
+			<tr>
+				<th data-sort="string">Name</th>
+				<th data-sort="int">Age</th>
+				<th data-sort="alphanum">UserID</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Joseph McCullough</td>
+				<td>20</td>
+				<td>D10</td>
+			</tr>
+			<tr>
+				<td>Justin Edwards</td>
+				<td>29</td>
+				<td>A40</td>
+			</tr>
+			...
+			...
+			...
 
 Now we need to specify how the **alphanum** type will be sorted. To do that,
 we do the following:
 
-    $("table").stupidtable({
-      "alphanum":function(a,b){
+		$("table").stupidtable({
+			"alphanum":function(a,b){
 
-        var pattern = "^[A-Z](\\d+)$";
-        var re = new RegExp(pattern);
+				var pattern = "^[A-Z](\\d+)$";
+				var re = new RegExp(pattern);
 
-        var aNum = re.exec(a).slice(1);
-        var bNum = re.exec(b).slice(1);
+				var aNum = re.exec(a).slice(1);
+				var bNum = re.exec(b).slice(1);
 
-        return parseInt(aNum,10) - parseInt(bNum,10);
-      }
-    });
+				return parseInt(aNum,10) - parseInt(bNum,10);
+			}
+		});
 
 This extracts the integers from the cell and compares them in the style
 that sort functions use.
@@ -116,20 +116,50 @@ Callbacks
 To execute a callback function after a table column has been sorted, you can
 bind on `aftertablesort`.
 
-    var table = $("table").stupidtable();
-    table.bind('aftertablesort', function (event, data) {
-        // data.column - the index of the column sorted after a click
-        // data.direction - the sorting direction (either asc or desc)
-        // $(this) - this table object
+		var table = $("table").stupidtable();
+		table.bind('aftertablesort', function (event, data) {
+				// data.column - the index of the column sorted after a click
+				// data.direction - the sorting direction (either asc or desc)
+				// $(this) - this table object
 
-        console.log("The sorting direction: " + data.direction);
-        console.log("The column index: " + data.column);
-    });
+				console.log("The sorting direction: " + data.direction);
+				console.log("The column index: " + data.column);
+		});
 
 Similarly, to execute a callback before a table column has been sorted, you can
 bind on `beforetablesort`.
 
 See the complex_example.html file.
+
+
+Default sort
+------------
+
+Sometimes, you'll want to set a default sort for your table (for example, when you want to remember the last user session sort).
+
+You just need to add an `data-default-sort-th="id_of_the_th"` attribute to the table.
+
+For example, the following code will sort the table by Email ASC:
+
+		<table data-default-sort-th="email">
+			<thead>
+				<th data-sort="string">Name</th>
+				<th id="email" data-sort="string" data-sort-dir="desc">Email</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Joseph McCullough</td>
+					<td>joseph@mail.com</td>
+				</tr>
+				<tr>
+					<td>Justin Edwards</td>
+					<td>justin@mail.com</td>
+				</tr>
+				...
+				...
+				...
+			</tbody>
+		</table>
 
 
 Data with multiple representations/predefined order

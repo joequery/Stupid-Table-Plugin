@@ -7,6 +7,11 @@
   $.fn.stupidtable = function(sortFns) {
     return this.each(function() {
       var $table = $(this);
+
+      // Fetch the th which must be sort by default
+      var default_sort_th = $table.data('default-sort-th');
+      var default_th = default_sort_th ? $table.find('th#' + default_sort_th ) : null;
+
       sortFns = sortFns || {};
 
       // ==================================================== //
@@ -54,14 +59,10 @@
         return clone;
       };
 
-      // ==================================================== //
-      //                  Begin execution!                    //
-      // ==================================================== //
-
-      // Do sorting when THs are clicked
-      $table.on("click", "th", function() {
+      // Sort table
+      var sort_table = function(clicked_th) {
         var trs = $table.children("tbody").children("tr");
-        var $this = $(this);
+        var $this = clicked_th;
         var th_index = 0;
         var dir = $.fn.stupidtable.dir;
 
@@ -127,7 +128,20 @@
           // More reliable method of forcing a redraw
           $table.css("display");
         }, 10);
+      }
+
+      // ==================================================== //
+      //                  Begin execution!                    //
+      // ==================================================== //
+
+      // Do sorting when THs are clicked
+      $table.on("click", "th", function () {
+        sort_table( $(this) );
       });
+
+      // Apply default sort
+      if ( default_th && default_th.length == 1 )
+        sort_table( default_th );
     });
   };
 
