@@ -133,12 +133,14 @@ Sometimes, you'll want to set a default sort for your table (for example, when y
 
 You just need to add an `data-default-sort-th="id_of_the_th"` attribute to the table.
 
+You can also use an `data-default-sort-dir` attribute to define the default sort ('asc' or 'desc') which will be applied to the column.
+
 For example, the following code will sort the table by Email ASC:
 
-		<table data-default-sort-th="email">
+		<table data-default-sort-th="email" data-default-sort-dir="desc">
 			<thead>
 				<th data-sort="string">Name</th>
-				<th id="email" data-sort="string" data-sort-dir="desc">Email</th>
+				<th id="email" data-sort="string">Email</th>
 			</thead>
 			<tbody>
 				<tr>

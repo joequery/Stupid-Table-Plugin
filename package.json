@@ -1,12 +1,11 @@
 {
 	"name"				: "Stupid-Table-Plugin",
 	"version"			: "0.1.0",
-	"author"			: "Cylix <simon.ninon@gmail.com>",
 	"description"	: "a simple table sorter plugin",
 	
 	"repository"	: {
 		"type"			: "git",
-		"url"				: "https://github.com/Cylix/Stupid-Table-Plugin"
+		"url"				: "https://github.com/joequery/Stupid-Table-Plugin"
 	},
 	
 	"keywords": [
