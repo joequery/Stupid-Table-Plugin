@@ -19,7 +19,8 @@
 	
 	"devDependencies": {
 		"grunt"									: "*",
-		"grunt-contrib-uglify"	: "*"
+		"grunt-contrib-uglify"	: "*",
+		"grunt-contrib-coffee"	: "*"
 	},
 	
 	"license": "MIT"
