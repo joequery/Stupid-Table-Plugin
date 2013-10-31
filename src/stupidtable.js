@@ -38,7 +38,7 @@
           }
           return clone;
         };
-        sort_table = function(clicked_th) {
+        sort_table = function(clicked_th, initial_sort) {
           var $this, dir, sort_dir, th_index, trs, type;
           trs = $table.children("tbody").children("tr");
           $this = clicked_th;
@@ -49,7 +49,11 @@
             cols = $(this).attr("colspan") || 1;
             return th_index += parseInt(cols, 10);
           });
-          sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
+          if (initial_sort) {
+            sort_dir = $table.data('default-sort-dir') || dir.ASC;
+          } else {
+            sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
+          }
           if (sort_dir === dir.DESC) {
             type = $this.data("sort-desc") || $this.data("sort") || null;
           } else {
@@ -74,11 +78,15 @@
               order_by = typeof sort_val !== "undefined" ? sort_val : $e.text();
               return column.push(order_by);
             });
-            reverse_column = !!$this.data("sort-dir") && !$this.data("sort-desc");
+            reverse_column = !!$this.data("sort-dir") && !$this.data("sort-desc") && !initial_sort;
             theMap = sort_map(column, sortMethod, reverse_column);
             $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
             $this.data("sort-dir", sort_dir).addClass("sorting-" + sort_dir);
             sortedTRs = $(apply_sort_map(trs, theMap));
+            if (initial_sort && sort_dir === 'desc') {
+              sortedTRs = sortedTRs.toArray().reverse();
+              sortedTRs = $(sortedTRs);
+            }
             $table.children("tbody").append(sortedTRs);
             $table.trigger("aftertablesort", {
               column: th_index,
@@ -88,10 +96,10 @@
           }, 10);
         };
         $table.on("click", "th", function() {
-          return sort_table($(this));
+          return sort_table($(this), false);
         });
         if (default_th && default_th.length === 1) {
-          return sort_table(default_th);
+          return sort_table(default_th, true);
         }
       });
     };

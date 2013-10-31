@@ -51,7 +51,7 @@ $ ->
 				return clone
 
 			# Sort table
-			sort_table = (clicked_th) ->
+			sort_table = (clicked_th, initial_sort) ->
 				trs = $table.children("tbody").children "tr"
 				$this = clicked_th
 				th_index = 0
@@ -62,7 +62,10 @@ $ ->
 					th_index += parseInt cols, 10
 
 				# Determine (and/or reverse) sorting direction, default `asc`
-				sort_dir = if $this.data("sort-dir") == dir.ASC then dir.DESC else dir.ASC;
+				if initial_sort
+					sort_dir = $table.data('default-sort-dir') || dir.ASC
+				else
+					sort_dir = if $this.data("sort-dir") == dir.ASC then dir.DESC else dir.ASC
 
 				# Choose appropriate sorting function. If we're sorting descending, check
 				# for a `data-sort-desc` attribute.
@@ -99,7 +102,7 @@ $ ->
 					# Create the sort map. This column having a sort-dir implies it was
 					# the last column sorted. As long as no data-sort-desc is specified,
 					# we're free to just reverse the column.
-					reverse_column = !!$this.data("sort-dir") && !$this.data("sort-desc")
+					reverse_column = !!$this.data("sort-dir") && !$this.data("sort-desc") && !initial_sort
 					theMap = sort_map(column, sortMethod, reverse_column)
 
 					# Reset siblings
@@ -109,6 +112,9 @@ $ ->
 					# Replace the content of tbody with the sortedTRs. Strangely (and
 					# conveniently!) enough, .append accomplishes this for us.
 					sortedTRs = $(apply_sort_map trs, theMap)
+					if initial_sort && sort_dir == 'desc'
+						sortedTRs = sortedTRs.toArray().reverse()
+						sortedTRs = $(sortedTRs)
 					$table.children("tbody").append sortedTRs
 
 					# Trigger `aftertablesort` event. Similar to `beforetablesort`
@@ -122,11 +128,11 @@ $ ->
 			# ==================================================== #
 
 			# Do sorting when THs are clicked
-			$table.on "click", "th",  -> sort_table $(this)
+			$table.on "click", "th",  -> sort_table $(this), false
 
 			# Apply default sort
 			if ( default_th && default_th.length == 1 )
-				sort_table default_th
+				sort_table default_th, true
 
 	# Enum containing sorting directions
 	$.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"}

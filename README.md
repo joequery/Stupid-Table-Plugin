@@ -177,6 +177,16 @@ or come up with your own custom sort function, but the presence of the
 attribute as the basis of the sort.
 
 
+## Contributing
+
+* Fork this repo
+* Install NPM (node package manager)
+* Run `npm install` (install devDependencies)
+* Add your features
+* Run `grunt` (this will build sources)
+* Pull request
+
+
 ## License
 
 The Stupid jQuery Plugin is licensed under the MIT license. See the LICENSE
