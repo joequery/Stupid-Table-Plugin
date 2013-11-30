@@ -279,4 +279,36 @@ asyncTest("custom sort functions", function(){
 
 });
 
+asyncTest("default sort direction - DESC", function(){
+    var FLOAT_COLUMN = 1;
+    var $table = $("#complex-table");
+    var $table_cols = $table.find("th");
+
+    $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'desc');
+    $table.stupidtable();
+    $table_cols.eq(FLOAT_COLUMN).click();
+
+    test_table_state(function(){
+        var expected = ["88.5", "36", "-.18", "-152.5", "-858"];
+        var vals = get_column_elements($table, FLOAT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("default sort direction - ASC", function(){
+    var FLOAT_COLUMN = 1;
+    var $table = $("#complex-table");
+    var $table_cols = $table.find("th");
+
+    $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'asc');
+    $table.stupidtable();
+    $table_cols.eq(FLOAT_COLUMN).click();
+
+    test_table_state(function(){
+        var expected = ["-858", "-152.5", "-.18", "36", "88.5"];
+        var vals = get_column_elements($table, FLOAT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
 }); //jQuery
