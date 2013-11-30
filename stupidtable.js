@@ -112,10 +112,9 @@
           $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
           $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
 
-          // Replace the content of tbody with the sortedTRs. Strangely (and
-          // conveniently!) enough, .append accomplishes this for us.
           var sortedTRs = $(apply_sort_map(trs, theMap));
-          $table.children("tbody").append(sortedTRs);
+          $table.children("tbody").remove();
+          $table.append("<tbody />").append(sortedTRs);
 
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
           $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
