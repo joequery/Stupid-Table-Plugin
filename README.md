@@ -160,6 +160,10 @@ License
 The Stupid jQuery Plugin is licensed under the MIT license. See the LICENSE
 file for full details.
 
+Tests
+-----
+
+Visit `tests/test.html` in your browser to run the QUnit tests.
 
 
 [0]: http://joequery.github.com/Stupid-Table-Plugin/
