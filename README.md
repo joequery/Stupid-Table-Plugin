@@ -109,6 +109,13 @@ we do the following:
 This extracts the integers from the cell and compares them in the style
 that sort functions use.
 
+Default sorting direction
+-------------------------
+
+By default, columns will sort ascending. You can specify a column to sort "ASC"
+or "DESC" first.
+
+    <th data-sort="float" data-sort-default="desc">float</th>
 
 Callbacks
 ---------
