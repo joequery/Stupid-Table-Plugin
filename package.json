@@ -1,0 +1,26 @@
+{
+	"name"				: "Stupid-Table-Plugin",
+	"version"			: "0.1.0",
+	"description"	: "a simple table sorter plugin",
+	
+	"repository"	: {
+		"type"			: "git",
+		"url"				: "https://github.com/joequery/Stupid-Table-Plugin"
+	},
+	
+	"keywords": [
+		"html"	,
+		"table"	,
+		"sorter",
+		"jquery",
+		"plugin"
+	],
+	
+	"devDependencies": {
+		"grunt"									: "*",
+		"grunt-contrib-uglify"	: "*",
+		"grunt-contrib-coffee"	: "*"
+	},
+	
+	"license": "MIT"
+}

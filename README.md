@@ -1,5 +1,4 @@
-Stupid jQuery Table Sort
-========================
+# Stupid jQuery Table Sort
 
 This is a stupid jQuery table sorting plugin. Nothing fancy, nothing really
 impressive. Overall, stupidly simple.
@@ -9,32 +8,31 @@ impressive. Overall, stupidly simple.
 See the example.html document to see how to implement it.
 
 
-Example Usage
--------------
+## Example Usage
 
 The JS:
 
-    $("table").stupidtable();
+		$("table").stupidtable();
 
 The HTML:
 
-    <table>
-      <thead>
-        <tr>
-          <th data-sort="int">int</th>
-          <th data-sort="float">float</th>
-          <th data-sort="string">string</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>15</td>
-          <td>-.18</td>
-          <td>banana</td>
-        </tr>
-        ...
-        ...
-        ...
+		<table>
+			<thead>
+				<tr>
+					<th data-sort="int">int</th>
+					<th data-sort="float">float</th>
+					<th data-sort="string">string</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>15</td>
+					<td>-.18</td>
+					<td>banana</td>
+				</tr>
+				...
+				...
+				...
 
 The thead and tbody tags must be used.
 
@@ -43,8 +41,7 @@ by that data type. If you don't want that column to be sortable, just omit the
 `data-sort` attribute.
 
 
-Predefined data types
----------------------
+## Predefined data types
 
 Our aim is to keep this plugin as lightweight as possible. Consequently, the
 only predefined datatypes that you can pass to the th elements are
@@ -58,8 +55,7 @@ These data types will be sufficient for many simple tables. However, if you need
 different data types for sorting, you can easily create your own!
 
 
-Creating your own data types
-----------------------------
+## Creating your own data types
 
 Creating your own data type  for sorting purposes is easy as long as you are
 comfortable using custom functions for sorting. Consult [Mozilla's Docs][1]
@@ -68,63 +64,62 @@ if you're not.
 Let's create an alphanum datatype for a User ID that takes strings in the
 form "D10", "A40", and sorts them based on the number.
 
-    <thead>
-      <tr>
-        <th data-sort="string">Name</th>
-        <th data-sort="int">Age</th>
-        <th data-sort="alphanum">UserID</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Joseph McCullough</td>
-        <td>20</td>
-        <td>D10</td>
-      </tr>
-      <tr>
-        <td>Justin Edwards</td>
-        <td>29</td>
-        <td>A40</td>
-      </tr>
-      ...
-      ...
-      ...
+		<thead>
+			<tr>
+				<th data-sort="string">Name</th>
+				<th data-sort="int">Age</th>
+				<th data-sort="alphanum">UserID</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Joseph McCullough</td>
+				<td>20</td>
+				<td>D10</td>
+			</tr>
+			<tr>
+				<td>Justin Edwards</td>
+				<td>29</td>
+				<td>A40</td>
+			</tr>
+			...
+			...
+			...
 
 Now we need to specify how the **alphanum** type will be sorted. To do that,
 we do the following:
 
-    $("table").stupidtable({
-      "alphanum":function(a,b){
+		$("table").stupidtable({
+			"alphanum":function(a,b){
 
-        var pattern = "^[A-Z](\\d+)$";
-        var re = new RegExp(pattern);
+				var pattern = "^[A-Z](\\d+)$";
+				var re = new RegExp(pattern);
 
-        var aNum = re.exec(a).slice(1);
-        var bNum = re.exec(b).slice(1);
+				var aNum = re.exec(a).slice(1);
+				var bNum = re.exec(b).slice(1);
 
-        return parseInt(aNum,10) - parseInt(bNum,10);
-      }
-    });
+				return parseInt(aNum,10) - parseInt(bNum,10);
+			}
+		});
 
 This extracts the integers from the cell and compares them in the style
 that sort functions use.
 
 
-Callbacks
----------
+## Callbacks
 
 To execute a callback function after a table column has been sorted, you can
 bind on `aftertablesort`.
 
-    var table = $("table").stupidtable();
-    table.bind('aftertablesort', function (event, data) {
-        // data.column - the index of the column sorted after a click
-        // data.direction - the sorting direction (either asc or desc)
-        // $(this) - this table object
+		var table = $("table").stupidtable();
+		table.bind('aftertablesort', function (event, data) {
+				// data.column - the index of the column sorted after a click
+				// data.direction - the sorting direction (either asc or desc)
+				// $(this) - this table object
 
-        console.log("The sorting direction: " + data.direction);
-        console.log("The column index: " + data.column);
-    });
+				console.log("The sorting direction: " + data.direction);
+				console.log("The column index: " + data.column);
+		});
 
 Similarly, to execute a callback before a table column has been sorted, you can
 bind on `beforetablesort`.
@@ -132,8 +127,38 @@ bind on `beforetablesort`.
 See the complex_example.html file.
 
 
-Data with multiple representations/predefined order
----------------------------------------------------
+## Default sort
+
+Sometimes, you'll want to set a default sort for your table (for example, when you want to remember the last user session sort).
+
+You just need to add an `data-default-sort-th="id_of_the_th"` attribute to the table.
+
+You can also use an `data-default-sort-dir` attribute to define the default sort ('asc' or 'desc') which will be applied to the column.
+
+For example, the following code will sort the table by Email ASC:
+
+		<table data-default-sort-th="email" data-default-sort-dir="desc">
+			<thead>
+				<th data-sort="string">Name</th>
+				<th id="email" data-sort="string">Email</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Joseph McCullough</td>
+					<td>joseph@mail.com</td>
+				</tr>
+				<tr>
+					<td>Justin Edwards</td>
+					<td>justin@mail.com</td>
+				</tr>
+				...
+				...
+				...
+			</tbody>
+		</table>
+
+
+## Data with multiple representations/predefined order
 
 Often we find two distinct ways of offering data: In a machine friendly way,
 and a Human-friendly way. A clear example is a Timestamp. Additionally,
@@ -154,8 +179,17 @@ or come up with your own custom sort function, but the presence of the
 attribute as the basis of the sort.
 
 
-License
--------
+## Contributing
+
+* Fork this repo
+* Install NPM (node package manager)
+* Run `npm install` (install devDependencies)
+* Add your features
+* Run `grunt` (this will build sources)
+* Pull request
+
+
+## License
 
 The Stupid jQuery Plugin is licensed under the MIT license. See the LICENSE
 file for full details.
