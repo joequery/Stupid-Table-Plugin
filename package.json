@@ -1,0 +1,10 @@
+{
+  "name": "stupid-table-plugin",
+  "version": "0.1.0",
+  "description": "This is a stupid jQuery table sorting plugin. Nothing fancy, nothing really impressive. Overall, stupidly simple.",
+  "author": {
+    "name": "Joseph McCullough",
+    "url": "http://joequery.me"
+  },
+  "license": "MIT"
+}

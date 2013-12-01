@@ -54,7 +54,6 @@
 
       // Do sorting when THs are clicked
       $table.on("click", "th", function() {
-        var trs = $table.children("tbody").children("tr");
         var $this = $(this);
         var th_index = 0;
         var dir = $.fn.stupidtable.dir;
@@ -89,6 +88,7 @@
           // Gather the elements for this column
           var column = [];
           var sortMethod = sortFns[type];
+          var trs = $table.children("tbody").children("tr");
 
           // Push either the value of the `data-order-by` attribute if specified
           // or just the text() value in this column to column[] for comparison.
