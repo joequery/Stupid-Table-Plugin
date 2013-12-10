@@ -1,0 +1,16 @@
+{
+  "name": "stupidtable",
+  "repo": "joequery/Stupid-Table-Plugin",
+  "version": "2.0.3",
+  "description": "stupidtable",
+  "keywords": [
+    "table",
+    "sort",
+    "jquery"
+  ],
+  "main": "stupidtable.js",
+  "scripts": [
+    "stupidtable.js"
+  ],
+  "license": "MIT"
+}
