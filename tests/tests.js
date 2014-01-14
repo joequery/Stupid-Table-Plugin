@@ -262,8 +262,8 @@ asyncTest("custom sort functions", function(){
     $table.stupidtable({
         "date":function(a,b){
             // Get these into date objects for comparison.
-            aDate = date_from_string(a);
-            bDate = date_from_string(b);
+            var aDate = date_from_string(a);
+            var bDate = date_from_string(b);
 
             return aDate - bDate;
         }
