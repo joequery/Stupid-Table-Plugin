@@ -55,7 +55,7 @@
       // ==================================================== //
 
       // Do sorting when THs are clicked
-      $table.on("click", "th", function() {
+      $table.on("click.stupidtable", "th", function() {
         var trs = $table.children("tbody").children("tr");
         var $this = $(this);
         var th_index = 0;
