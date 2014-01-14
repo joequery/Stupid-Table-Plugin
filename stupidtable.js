@@ -20,10 +20,11 @@
       // this result elsewhere. This returns an array of index numbers.
       // return[0] = x means "arr's 0th element is now at x"
       var sort_map = function(arr, sort_function) {
-        var map = [];
-        var index = 0;
-        var sorted = arr.slice(0).sort(sort_function);
-        for (var i=0; i<arr.length; i++) {
+        var map = [],
+            index = 0,
+            sorted = arr.slice(0).sort(sort_function),
+            arr_length = arr.length;
+        for (var i=0; i<arr_length; i++) {
             index = $.inArray(arr[i], sorted);
 
             // If this index is already in the map, look for the next index.
@@ -40,8 +41,9 @@
       // Apply a sort map to the array.
       var apply_sort_map = function(arr, map) {
         var clone = arr.slice(0),
-            newIndex = 0;
-        for (var i=0; i<map.length; i++) {
+            newIndex = 0,
+            map_length = map.length;
+        for (var i=0; i<map_length; i++) {
           newIndex = map[i];
           clone[newIndex] = arr[i];
         }
