@@ -115,9 +115,10 @@
           $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
 
           var sortedTRs = $(apply_sort_map(trs, theMap));
+          var tbodyClasses = $table.children("tbody").attr("class");
           $table.children("tbody").remove();
-          $table.append("<tbody />").append(sortedTRs);
-
+          $table.append("<tbody />").append(sortedTRs).children("tbody").attr("class", tbodyClasses);
+          
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
           $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
           // More reliable method of forcing a redraw
