@@ -9,46 +9,9 @@
       var $table = $(this);
       sortFns = sortFns || {};
 
-      // ==================================================== //
-      //                  Utility functions                   //
-      // ==================================================== //
-
       // Merge sort functions with some default sort functions.
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
 
-      // Return the resulting indexes of a sort so we can apply
-      // this result elsewhere. This returns an array of index numbers.
-      // return[0] = x means "arr's 0th element is now at x"
-      var sort_map = function(arr, sort_function) {
-        var map = [],
-            index = 0,
-            sorted = arr.slice(0).sort(sort_function),
-            arr_length = arr.length;
-        for (var i=0; i<arr_length; i++) {
-            index = $.inArray(arr[i], sorted);
-
-            // If this index is already in the map, look for the next index.
-            // This handles the case of duplicate entries.
-            while ($.inArray(index, map) != -1) {
-                index++;
-            }
-            map.push(index);
-        }
-
-        return map;
-      };
-
-      // Apply a sort map to the array.
-      var apply_sort_map = function(arr, map) {
-        var clone = arr.slice(0),
-            newIndex = 0,
-            map_length = map.length;
-        for (var i=0; i<map_length; i++) {
-          newIndex = map[i];
-          clone[newIndex] = arr[i];
-        }
-        return clone;
-      };
 
       // ==================================================== //
       //                  Begin execution!                    //
@@ -71,7 +34,7 @@
         if ($this.data("sort-dir"))
            sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
 
-        // Choose appropriate sorting function. 
+        // Choose appropriate sorting function.
         var type = $this.data("sort") || null;
 
         // Prevent sorting if no type defined
@@ -92,31 +55,28 @@
           var column = [];
           var sortMethod = sortFns[type];
 
-          // Push either the value of the `data-order-by` attribute if specified
-          // or just the text() value in this column to column[] for comparison.
+          // Extract the data for the column that needs to be sorted and pair it up
+          // with the TR itself into a tuple
           trs.each(function(index,tr) {
             var $e = $(tr).children().eq(th_index);
             var sort_val = $e.data("sort-value");
             var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
-            column.push(order_by);
+            column.push([order_by, tr]);
           });
 
-          // Create the sort map. This column having a sort-dir implies it was
-          // the last column sorted. As long as no data-sort-desc is specified,
-          // we're free to just reverse the column.
-          var theMap;
-          if (sort_dir == dir.ASC)
-            theMap = sort_map(column, sortMethod);
-          else
-            theMap = sort_map(column, function(a, b) { return -sortMethod(a, b); });
+          // Sort by the data-order-by value
+          column.sort(function(a, b) { return sortMethod(a[0], b[0]); });
+          if (sort_dir != dir.ASC)
+            column.reverse();
+
+          // Replace the content of tbody with the sorted rows. Strangely (and
+          // conveniently!) enough, .append accomplishes this for us.
+          trs = $.map(column, function(kv) { return kv[1]; });
+          $table.children("tbody").append(trs);
 
           // Reset siblings
           $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
           $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
-
-          var sortedTRs = $(apply_sort_map(trs, theMap));
-          $table.children("tbody").remove();
-          $table.append("<tbody />").append(sortedTRs);
 
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
           $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
