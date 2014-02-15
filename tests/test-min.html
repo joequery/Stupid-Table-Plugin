@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Stupid-Table Tests</title>
+    <link rel="stylesheet" href="qunit.css">
+
+    <!--
+    WOW, Javascript dependencies galore. And people do this normally!
+    --!>
+    <script src="jquery.js"></script>
+    <script src="underscore.js"></script>
+    <script src="../stupidtable.min.js"></script>
+    <script src="qunit.js"></script>
+    <script src="tests.js"></script>
+
+    <style type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 5px 10px;
+        border: 1px solid #999;
+    }
+    th {
+        background-color: #eee;
+    }
+    th[data-sort]{
+        cursor:pointer;
+    }
+    </style>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">
+
+    <div class="tablewrap">
+        <table id="basic-table">
+            <thead>
+                <tr>
+                    <th data-sort="int">int</th>
+                    <th data-sort="float">float</th>
+                    <th data-sort="string">string</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>15</td>
+                    <td>-.18</td>
+                    <td>banana</td>
+                </tr>
+                <tr class="awesome">
+                    <td>95</td>
+                    <td>36</td>
+                    <td>coke</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>-152.5</td>
+                    <td>apple</td>
+                </tr>
+                <tr>
+                    <td>-53</td>
+                    <td>88.5</td>
+                    <td>zebra</td>
+                </tr>
+                <tr>
+                    <td>195</td>
+                    <td>-858</td>
+                    <td>orange</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tablewrap">
+        <table id="complex-table">
+            <thead>
+                <tr>
+                    <th data-sort="int">int</th>
+                    <th data-sort="float">float</th>
+                    <th data-sort="string-ins">case</th>
+                    <th>Can't sort me!</th>
+                    <th data-sort="date">date</th>
+                    <th data-sort="int">Letter frequency</th>
+                </tr>
+            </thead>
+            <tbody class="some-tbody-class" style="border: 2px;">
+                <tr>
+                    <td>15</td>
+                    <td>-.18</td>
+                    <td>Homer</td>
+                    <td>arbitrary</td>
+                    <td>Sep 15, 2002</td>
+                    <td data-sort-value="0">E</td>
+                </tr>
+                <tr class="awesome">
+                    <td>95</td>
+                    <td>36</td>
+                    <td>purple</td>
+                    <td>pointless</td>
+                    <td>Aug 07, 2004</td>
+                    <td data-sort-value="1">T</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>-152.5</td>
+                    <td>is</td>
+                    <td>silly</td>
+                    <td>Mar 15, 1986</td>
+                    <td data-sort-value="2">A</td>
+                </tr>
+                <tr>
+                    <td>-53</td>
+                    <td>88.5</td>
+                    <td>a</td>
+                    <td>eccentric</td>
+                    <td>Feb 27, 2086</td>
+                    <td data-sort-value="3">O</td>
+                </tr>
+                <tr>
+                    <td>195</td>
+                    <td>-858</td>
+                    <td>fruit</td>
+                    <td>garbage</td>
+                    <td>Mar 15, 1986</td>
+                    <td data-sort-value="4">I</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div><!--qunit-fixture-->
+</body>
+</html>
