@@ -19,7 +19,6 @@
 
       // Do sorting when THs are clicked
       $table.on("click.stupidtable", "th", function() {
-        var trs = $table.children("tbody").children("tr");
         var $this = $(this);
         var th_index = 0;
         var dir = $.fn.stupidtable.dir;
@@ -54,6 +53,7 @@
           // Gather the elements for this column
           var column = [];
           var sortMethod = sortFns[type];
+          var trs = $table.children("tbody").children("tr");
 
           // Extract the data for the column that needs to be sorted and pair it up
           // with the TR itself into a tuple
