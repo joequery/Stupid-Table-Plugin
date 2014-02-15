@@ -13,6 +13,27 @@
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
 
 
+      // Generates a lookup table for actual TD index from row and index of THs
+      var column_lookup = {}
+      var rowspan_lookup = {}
+      $table.find('thead > tr').each(function (row) {
+        var col = 0;
+        $(this).find('th').each(function (item) {
+          var cols = $(this).attr('colspan') || 1;
+          var rows = $(this).attr('rowspan') || 1;
+          // Check for rowspans that impact this row
+          while (rowspan_lookup[col] > 0) {
+            --rowspan_lookup[col];
+            ++col;
+          }
+          // Keep track of rowspans that impact future rows
+          if (rows > 1) {rowspan_lookup[col] = parseInt(rows,10) - 1;}
+          column_lookup[row + ',' + item] = col;
+          col += parseInt(cols,10);
+		});
+	});
+
+
       // ==================================================== //
       //                  Begin execution!                    //
       // ==================================================== //
@@ -20,13 +41,8 @@
       // Do sorting when THs are clicked
       $table.on("click.stupidtable", "th", function() {
         var $this = $(this);
-        var th_index = 0;
+        var th_index = column_lookup[$this.parent().index() + ',' + $this.index()];
         var dir = $.fn.stupidtable.dir;
-
-        $table.find("th").slice(0, $this.index()).each(function() {
-          var cols = $(this).attr("colspan") || 1;
-          th_index += parseInt(cols,10);
-        });
 
         // Determine (and/or reverse) sorting direction, default `asc`
         var sort_dir = $this.data("sort-default") || dir.ASC;

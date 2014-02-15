@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stupid jQuery table sort (rowspan test)</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../stupidtable.js?dev"></script>
+  <script>
+    $(function(){
+        $("table").stupidtable();
+    });
+  </script>
+  <style type="text/css">
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px 10px;
+      border: 1px solid #999;
+    }
+    th {
+      background-color: #eee;
+    }
+    th[data-sort]{
+      cursor:pointer;
+    }
+    tr.awesome{
+      color: red;
+    }
+  </style>
+  </style>
+</head>
+
+<body>
+
+  <h1>Stupid jQuery table sort! (rowspan test)</h1>
+
+  <p>Tables using rowspans with colspans are handled just fine.</p>
+
+  <table id="stupid">
+    <thead>
+      <tr>
+        <th rowspan=2 data-sort="int">int</th>
+        <th colspan=2>no sort</th>
+        <th data-sort="string">string</th>
+      </tr>
+      <tr>
+        <th data-sort="float">float</th>
+        <th rowspan=2 colspan=2 data-sort="float">time</th>
+      </tr>
+      <tr>
+        <th colspan=2>no sort</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>15</td>
+        <td>-.18</td>
+        <td data-sort-value="22">10:00p</td>
+        <td>banana</td>
+      </tr>
+      <tr>
+        <td>95</td>
+        <td>36</td>
+        <td data-sort-value="21">9:00p</td>
+        <td>coke</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>-152.5</td>
+        <td data-sort-value="11">11:00a</td>
+        <td>apple</td>
+      </tr>
+      <tr>
+        <td>-53</td>
+        <td>88.5</td>
+        <td data-sort-value="11">11:00a</td>
+        <td>zebra</td>
+      </tr>
+      <tr>
+        <td>195</td>
+        <td>-858</td>
+        <td data-sort-value="19">7:00p</td>
+        <td>orange</td>
+      </tr>
+      <tr>
+        <td>122</td>
+        <td>58.9</td>
+        <td data-sort-value="20">8:00p</td>
+        <td>turnip</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
