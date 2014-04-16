@@ -18,12 +18,12 @@
       // ==================================================== //
 
       // Do sorting when THs are clicked
-      $table.on("click.stupidtable", "th", function() {
+      $table.on("click.stupidtable", "thead th", function() {
         var $this = $(this);
         var th_index = 0;
         var dir = $.fn.stupidtable.dir;
 
-        $table.find("th").slice(0, $this.index()).each(function() {
+        $table.find("thead th").slice(0, $this.index()).each(function() {
           var cols = $(this).attr("colspan") || 1;
           th_index += parseInt(cols,10);
         });
@@ -75,7 +75,7 @@
           $table.children("tbody").append(trs);
 
           // Reset siblings
-          $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
+          $table.find("thead th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
           $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
 
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
