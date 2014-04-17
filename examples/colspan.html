@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>Stupid jQuery table sort (colspan test)</title>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="../stupidtable.js?dev"></script>
@@ -26,6 +27,14 @@
     tr.awesome{
       color: red;
     }
+    td.arrow {
+      width: 7px;
+      padding: 0;
+    }
+    td.arrow::before {
+        content: '→';
+        font-size: 10px;
+    }
   </style>
   </style>
 </head>
@@ -42,6 +51,9 @@
         <th data-sort="string">Letter</td>
         <th colspan="2" data-sort="string">colspan=2</th>
         <th data-sort="int">Number</td>
+        <th colspan="2" data-sort="int">From</td>
+        <th colspan="2" data-sort="int">To</td>
+        <th data-sort="string-ins">Insensitive</td>
       </tr>
     </thead>
     <tbody>
@@ -50,18 +62,30 @@
         <td>X</td>
         <td>9</td>
         <td>1</td>
+        <td>100</td>
+        <td colspan="2" class="arrow"></td>
+        <td>110</td>
+        <td>C</td>
       </tr>
       <tr>
         <td>abc</td>
         <td>Z</td>
         <td>8</td>
         <td>2</td>
+        <td>200</td>
+        <td colspan="2" class="arrow"></td>
+        <td>190</td>
+        <td>a</td>
       </tr>
       <tr>
         <td>bcd</td>
         <td>Y</td>
         <td>7</td>
         <td>0</td>
+        <td>50</td>
+        <td colspan="2" class="arrow"></td>
+        <td>300</td>
+        <td>B</td>
       </tr>
     </tbody>
   </table>
