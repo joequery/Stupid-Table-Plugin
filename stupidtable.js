@@ -58,7 +58,13 @@
           // Extract the data for the column that needs to be sorted and pair it up
           // with the TR itself into a tuple
           trs.each(function(index,tr) {
-            var $e = $(tr).children().eq(th_index);
+            var index = 0;
+            var $e;
+            $(tr).children().each(function() {
+              $e = $(this);
+              if (index >= th_index) return false;
+              index += parseInt($e.attr("colspan"), 10) || 1;
+            });
             var sort_val = $e.data("sort-value");
             var order_by = typeof(sort_val) !== "undefined" ? sort_val : $.trim($e.text());
             column.push([order_by, tr]);
