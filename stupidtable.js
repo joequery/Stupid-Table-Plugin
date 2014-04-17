@@ -60,7 +60,7 @@
           trs.each(function(index,tr) {
             var $e = $(tr).children().eq(th_index);
             var sort_val = $e.data("sort-value");
-            var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
+            var order_by = typeof(sort_val) !== "undefined" ? sort_val : $.trim($e.text());
             column.push([order_by, tr]);
           });
 
