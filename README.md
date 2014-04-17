@@ -173,5 +173,5 @@ Tests
 Visit `tests/test.html` in your browser to run the QUnit tests.
 
 
-[0]: http://joequery.github.com/Stupid-Table-Plugin/
+[0]: http://joequery.github.io/Stupid-Table-Plugin/
 [1]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort
