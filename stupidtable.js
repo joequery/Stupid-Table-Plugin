@@ -18,12 +18,12 @@
       // ==================================================== //
 
       // Do sorting when THs are clicked
-      $table.on("click.stupidtable", "th", function() {
+      $table.on("click.stupidtable", "thead th", function() {
         var $this = $(this);
         var th_index = 0;
         var dir = $.fn.stupidtable.dir;
 
-        $table.find("th").slice(0, $this.index()).each(function() {
+        $table.find("thead th").slice(0, $this.index()).each(function() {
           var cols = $(this).attr("colspan") || 1;
           th_index += parseInt(cols,10);
         });
@@ -58,9 +58,15 @@
           // Extract the data for the column that needs to be sorted and pair it up
           // with the TR itself into a tuple
           trs.each(function(index,tr) {
-            var $e = $(tr).children().eq(th_index);
+            var index = 0;
+            var $e;
+            $(tr).children().each(function() {
+              $e = $(this);
+              if (index >= th_index) return false;
+              index += parseInt($e.attr("colspan"), 10) || 1;
+            });
             var sort_val = $e.data("sort-value");
-            var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
+            var order_by = typeof(sort_val) !== "undefined" ? sort_val : $.trim($e.text());
             column.push([order_by, tr]);
           });
 
@@ -75,7 +81,7 @@
           $table.children("tbody").append(trs);
 
           // Reset siblings
-          $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
+          $table.find("thead th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
           $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
 
           // Trigger `aftertablesort` event. Similar to `beforetablesort`
@@ -92,10 +98,10 @@
 
   $.fn.stupidtable.default_sort_fns = {
     "int": function(a, b) {
-      return parseInt(a, 10) - parseInt(b, 10);
+      return (parseInt(a, 10) || 0) - (parseInt(b, 10) || 0);
     },
     "float": function(a, b) {
-      return parseFloat(a) - parseFloat(b);
+      return (parseFloat(a) || 0) - (parseFloat(b) || 0);
     },
     "string": function(a, b) {
       if (a < b) return -1;
