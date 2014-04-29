@@ -99,16 +99,12 @@
       return parseFloat(a) - parseFloat(b);
     },
     "string": function(a, b) {
-      if (a < b) return -1;
-      if (a > b) return +1;
-      return 0;
+      return a.localeCompare(b);
     },
     "string-ins": function(a, b) {
-      a = a.toLowerCase();
-      b = b.toLowerCase();
-      if (a < b) return -1;
-      if (a > b) return +1;
-      return 0;
+      a = a.toLocaleLowerCase();
+      b = b.toLocaleLowerCase();
+      return a.localeCompare(b);
     }
   };
 
