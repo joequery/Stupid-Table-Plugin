@@ -23,7 +23,7 @@
 
     <div class="tablewrap">
         <h2>Basic Table</h2>
-        <table id="basic-table">
+        <table id="basic">
             <thead>
                 <tr>
                     <th data-sort="int">int</th>
@@ -63,7 +63,7 @@
 
     <div class="tablewrap">
         <h2>Complex Table</h2>
-        <table id="complex-table">
+        <table id="complex">
             <thead>
                 <tr>
                     <th data-sort="int">int</th>
@@ -120,8 +120,8 @@
     </div>
 
     <div class="tablewrap">
-        <h2>Colspan Table</h2>
-        <table id="colspan-table">
+        <h2>Basic Colspan Table</h2>
+        <table id="basic-colspan">
             <thead>
                 <tr>
                     <th data-sort="string">Letter</td>
@@ -150,7 +150,42 @@
                 </tr>
             </tbody>
         </table>
+    </div>
 
+    <div class="tablewrap">
+        <h2>Complex Colspan Table</h2>
+        <table id="complex-colspan">
+            <thead>
+                <tr>
+                    <th colspan="4">The Big Table Header</th>
+                </tr>
+                <tr>
+                    <th data-sort="string">Letter</td>
+                    <th colspan="2" data-sort="string">colspan=2</th>
+                    <th data-sort="int">Number</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>def</td>
+                    <td>X</td>
+                    <td>9</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>abc</td>
+                    <td>Z</td>
+                    <td>8</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>bcd</td>
+                    <td>Y</td>
+                    <td>7</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </div><!--qunit-fixture-->
