@@ -18,12 +18,13 @@
       // ==================================================== //
 
       // Do sorting when THs are clicked
-      $table.on("click.stupidtable", "th", function() {
+      $table.on("click.stupidtable", "thead th", function() {
         var $this = $(this);
         var th_index = 0;
         var dir = $.fn.stupidtable.dir;
 
-        $table.find("th").slice(0, $this.index()).each(function() {
+        // Account for colspans
+        $this.parents("tr").find("th").slice(0, $this.index()).each(function() {
           var cols = $(this).attr("colspan") || 1;
           th_index += parseInt(cols,10);
         });

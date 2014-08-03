@@ -9,7 +9,12 @@ $(function(){
 // Test helpers & QUnit callbacks
 // ===========================================================================
 window.WAIT_TIME_MS = 50;
-window.TEST_TABLES = ["#basic-table", "#complex-table"];
+window.TEST_TABLES = [
+    "#basic",
+    "#complex",
+    "basic-colspan",
+    "complex-colspan"
+];
 window.TEST_TABLES_ORIG_HTML = {};
 
 var get_column_elements = function($table, col_index){
@@ -28,11 +33,24 @@ var test_table_state = function(fn){
     }, WAIT_TIME_MS);
 };
 
-/* 
- * We have to use a slight pause between clicks to avoid testing issues. I
- * certainly have not noticed any time where a human rapidly clicking has thrown
- * off the sort order of the tables, but during unittests the rapid "clicking"
- * of the table columns causes the sort to get out of order.
+var date_from_string = function(str){
+    var months = ["jan","feb","mar","apr","may","jun","jul",
+    "aug","sep","oct","nov","dec"];
+    var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
+    var re = new RegExp(pattern);
+    var DateParts = re.exec(str).slice(1);
+
+    var Year = DateParts[2];
+    var Month = $.inArray(DateParts[0].toLowerCase(), months);
+    var Day = DateParts[1];
+    return new Date(Year, Month, Day);
+}
+
+/*
+ * In order to accurately simulate a double click, we have to use a slight pause
+ * between clicks. During unittests, calling .click() on a column header twice
+ * without delay causes the sort to get out of order. I have not been able to
+ * reproduce this manually. Maybe some sort of lock is needed...UNTIL THEN!...
  */
 $.fn.doubleclick = function(){
     var $this = $(this);
@@ -43,7 +61,7 @@ $.fn.doubleclick = function(){
     return this;
 };
 
-/* 
+/*
  * We do this to reset the table html and unbind stupidtable.
  */
 QUnit.begin(function(){
@@ -62,6 +80,25 @@ QUnit.testStart(function(){
     }
 });
 
+/*
+ * Enable stupid tables at the end for manual testing and experiments
+ */
+QUnit.done(function(){
+    $("#complex").stupidtable({
+        "date":function(a,b){
+            // Get these into date objects for comparison.
+            var aDate = date_from_string(a);
+            var bDate = date_from_string(b);
+
+            return aDate - bDate;
+        }
+    });
+    $("#basic").stupidtable();
+    $("#basic-colspan").stupidtable();
+    $("#complex-colspan").stupidtable();
+    $("#qunit-fixture").removeClass("test-hidden");
+});
+
 
 /*
  *  Begin tests
@@ -77,7 +114,7 @@ test("Basic table initial order", function(){
     var expected;
     var vals;
 
-    var $table = $("#basic-table");
+    var $table = $("#basic");
 
     expected = ["15", "95", "2", "-53", "195"];
     vals = get_column_elements($table, INT_COLUMN);
@@ -95,7 +132,7 @@ test("Basic table initial order", function(){
 
 asyncTest("Basic int sort", function(){
     var INT_COLUMN = 0;
-    var $table = $("#basic-table");
+    var $table = $("#basic");
     var $table_cols = $table.find("th");
 
     $table.stupidtable();
@@ -110,7 +147,7 @@ asyncTest("Basic int sort", function(){
 
 asyncTest("Basic float sort", function(){
     var FLOAT_COLUMN = 1;
-    var $table = $("#basic-table");
+    var $table = $("#basic");
     var $table_cols = $table.find("th");
 
     $table.stupidtable();
@@ -125,7 +162,7 @@ asyncTest("Basic float sort", function(){
 
 asyncTest("Basic string sort", function(){
     var STRING_COLUMN = 2;
-    var $table = $("#basic-table");
+    var $table = $("#basic");
     var $table_cols = $table.find("th");
 
     $table.stupidtable();
@@ -141,7 +178,7 @@ asyncTest("Basic string sort", function(){
 asyncTest("Basic alternating sort", function(){
     // A double click should cause the sort to reverse
     var INT_COLUMN = 0;
-    var $table = $("#basic-table");
+    var $table = $("#basic");
     var $table_cols = $table.find("th");
     $table.stupidtable();
 
@@ -168,7 +205,7 @@ test("Complex table initial order", function(){
     var expected;
     var vals;
 
-    var $table = $("#complex-table");
+    var $table = $("#complex");
 
     expected = ["15", "95", "2", "-53", "195"];
     vals = get_column_elements($table, INT_COLUMN);
@@ -198,7 +235,7 @@ test("Complex table initial order", function(){
 
 asyncTest("No data-sort means no sort", function(){
     var NOSORT_COLUMN = 3;
-    var $table = $("#complex-table");
+    var $table = $("#complex");
     var $table_cols = $table.find("th");
 
     $table.stupidtable();
@@ -213,7 +250,7 @@ asyncTest("No data-sort means no sort", function(){
 
 asyncTest("data-sort-by values should be used over text values", function(){
     var LETTER_FREQ_COLUMN = 5;
-    var $table = $("#complex-table");
+    var $table = $("#complex");
     var $table_cols = $table.find("th");
 
     $table.stupidtable();
@@ -228,7 +265,7 @@ asyncTest("data-sort-by values should be used over text values", function(){
 
 asyncTest("case insensitive string sort", function(){
     var STRING_COLUMN = 2;
-    var $table = $("#complex-table");
+    var $table = $("#complex");
     var $table_cols = $table.find("th");
 
     $table.stupidtable();
@@ -243,21 +280,9 @@ asyncTest("case insensitive string sort", function(){
 
 asyncTest("custom sort functions", function(){
     var DATE_COLUMN = 4;
-    var $table = $("#complex-table");
+    var $table = $("#complex");
     var $table_cols = $table.find("th");
 
-    var date_from_string = function(str){
-        var months = ["jan","feb","mar","apr","may","jun","jul",
-        "aug","sep","oct","nov","dec"];
-        var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
-        var re = new RegExp(pattern);
-        var DateParts = re.exec(str).slice(1);
-
-        var Year = DateParts[2];
-        var Month = $.inArray(DateParts[0].toLowerCase(), months);
-        var Day = DateParts[1];
-        return new Date(Year, Month, Day);
-    }
 
     $table.stupidtable({
         "date":function(a,b){
@@ -281,7 +306,7 @@ asyncTest("custom sort functions", function(){
 
 asyncTest("default sort direction - DESC", function(){
     var FLOAT_COLUMN = 1;
-    var $table = $("#complex-table");
+    var $table = $("#complex");
     var $table_cols = $table.find("th");
 
     $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'desc');
@@ -297,7 +322,7 @@ asyncTest("default sort direction - DESC", function(){
 
 asyncTest("default sort direction - ASC", function(){
     var FLOAT_COLUMN = 1;
-    var $table = $("#complex-table");
+    var $table = $("#complex");
     var $table_cols = $table.find("th");
 
     $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'asc');
@@ -313,11 +338,10 @@ asyncTest("default sort direction - ASC", function(){
 
 asyncTest("sorting should preserve tbody classes", function(){
     var FLOAT_COLUMN = 1;
-    var $table = $("#complex-table");
+    var $table = $("#complex");
     var $table_cols = $table.find("th");
     var $tbody = $table.find("tbody");
 
-    $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'asc');
     $table.stupidtable();
 
     // These are initial values hardcoded in the html. We need to make sure they
@@ -328,10 +352,93 @@ asyncTest("sorting should preserve tbody classes", function(){
     $table_cols.eq(FLOAT_COLUMN).click();
 
     test_table_state(function(){
-        var $table = $("#complex-table");
+        var $table = $("#complex");
         var $tbody = $table.find("tbody");
         ok($tbody.hasClass('some-tbody-class'));
         ok(_.isEqual("border: 2px;", $tbody.attr("style")));
+    });
+});
+
+asyncTest("Basic colspan table sort column before colspan column", function(){
+    var LETTER_COLUMN = 0;
+    var $table = $("#basic-colspan");
+    var $table_cols = $table.find("th");
+    var $tbody = $table.find("tbody");
+
+    $table.stupidtable();
+    $table_cols.eq(LETTER_COLUMN).click();
+
+    test_table_state(function(){
+        var expected = ["abc", "bcd", "def"];
+        var vals = get_column_elements($table, LETTER_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("Basic colspan table sort column after colspan column", function(){
+    var NUMBER_COLUMN_TH = 2;
+    var NUMBER_COLUMN = 3;
+    var $table = $("#basic-colspan");
+    var $table_cols = $table.find("th");
+    var $tbody = $table.find("tbody");
+
+    $table.stupidtable();
+    $table_cols.eq(NUMBER_COLUMN_TH).click();
+
+    test_table_state(function(){
+        var expected = ["0", "1", "2"];
+        var vals = get_column_elements($table, NUMBER_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("Basic colspan table sort column on colspan column", function(){
+    var COLSPAN_COLUMN = 1;
+    var $table = $("#basic-colspan");
+    var $table_cols = $table.find("th");
+    var $tbody = $table.find("tbody");
+
+    $table.stupidtable();
+    $table_cols.eq(COLSPAN_COLUMN).click();
+
+    test_table_state(function(){
+        var expected = ["X", "Y", "Z"];
+        var vals = get_column_elements($table, COLSPAN_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("Complex colspan table sort - single click", function(){
+    var NUMBER_COLUMN_TH = 3;
+    var NUMBER_COLUMN = 3;
+    var $table = $("#complex-colspan");
+    var $table_cols = $table.find("th");
+    var $tbody = $table.find("tbody");
+
+    $table.stupidtable();
+    $table_cols.eq(NUMBER_COLUMN_TH).click();
+
+    test_table_state(function(){
+        var expected = ["0", "1", "2"];
+        var vals = get_column_elements($table, NUMBER_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("Complex colspan table sort - double click", function(){
+    var NUMBER_COLUMN_TH = 3;
+    var NUMBER_COLUMN = 3;
+    var $table = $("#complex-colspan");
+    var $table_cols = $table.find("th");
+    var $tbody = $table.find("tbody");
+
+    $table.stupidtable();
+    $table_cols.eq(NUMBER_COLUMN_TH).doubleclick();
+
+    test_table_state(function(){
+        var expected = ["2", "1", "0"];
+        var vals = get_column_elements($table, NUMBER_COLUMN);
+        ok(_.isEqual(vals, expected));
     });
 });
 

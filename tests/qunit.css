@@ -235,7 +235,23 @@
 
 /** Fixture */
 
-#qunit-fixture {
+
+/* Custom styles */
+table {
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px 10px;
+    border: 1px solid #999;
+}
+th {
+    background-color: #eee;
+}
+th[data-sort]{
+    cursor:pointer;
+}
+
+.test-hidden {
 	position: absolute;
 	top: -10000px;
 	left: -10000px;
