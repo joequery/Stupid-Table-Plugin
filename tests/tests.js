@@ -28,7 +28,20 @@ var test_table_state = function(fn){
     }, WAIT_TIME_MS);
 };
 
-/* 
+var date_from_string = function(str){
+    var months = ["jan","feb","mar","apr","may","jun","jul",
+    "aug","sep","oct","nov","dec"];
+    var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
+    var re = new RegExp(pattern);
+    var DateParts = re.exec(str).slice(1);
+
+    var Year = DateParts[2];
+    var Month = $.inArray(DateParts[0].toLowerCase(), months);
+    var Day = DateParts[1];
+    return new Date(Year, Month, Day);
+}
+
+/*
  * We have to use a slight pause between clicks to avoid testing issues. I
  * certainly have not noticed any time where a human rapidly clicking has thrown
  * off the sort order of the tables, but during unittests the rapid "clicking"
@@ -43,7 +56,7 @@ $.fn.doubleclick = function(){
     return this;
 };
 
-/* 
+/*
  * We do this to reset the table html and unbind stupidtable.
  */
 QUnit.begin(function(){
@@ -60,6 +73,24 @@ QUnit.testStart(function(){
         var html = TEST_TABLES_ORIG_HTML[selector];
         $(selector).parent(".tablewrap").html(html);
     }
+});
+
+/*
+ * Enable stupid tables at the end for manual testing and experiments
+ */
+QUnit.done(function(){
+    $("#complex-table").stupidtable({
+        "date":function(a,b){
+            // Get these into date objects for comparison.
+            var aDate = date_from_string(a);
+            var bDate = date_from_string(b);
+
+            return aDate - bDate;
+        }
+    });
+    $("#basic-table").stupidtable();
+    $("#colspan-table").stupidtable();
+    $("#qunit-fixture").removeClass("test-hidden");
 });
 
 
@@ -246,18 +277,6 @@ asyncTest("custom sort functions", function(){
     var $table = $("#complex-table");
     var $table_cols = $table.find("th");
 
-    var date_from_string = function(str){
-        var months = ["jan","feb","mar","apr","may","jun","jul",
-        "aug","sep","oct","nov","dec"];
-        var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
-        var re = new RegExp(pattern);
-        var DateParts = re.exec(str).slice(1);
-
-        var Year = DateParts[2];
-        var Month = $.inArray(DateParts[0].toLowerCase(), months);
-        var Day = DateParts[1];
-        return new Date(Year, Month, Day);
-    }
 
     $table.stupidtable({
         "date":function(a,b){
