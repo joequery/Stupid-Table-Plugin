@@ -3,19 +3,11 @@
  *  tests will be created using many setTimeouts. This means if your computer
  *  is substantially slower than mine, you may get inconsistent results.
  */
-
 $(function(){
 // ===========================================================================
 // Test helpers & QUnit callbacks
 // ===========================================================================
 window.WAIT_TIME_MS = 50;
-window.TEST_TABLES = [
-    "#basic",
-    "#complex",
-    "basic-colspan",
-    "complex-colspan"
-];
-window.TEST_TABLES_ORIG_HTML = {};
 
 var get_column_elements = function($table, col_index){
     var vals = [];
@@ -60,25 +52,6 @@ $.fn.doubleclick = function(){
     }, 10);
     return this;
 };
-
-/*
- * We do this to reset the table html and unbind stupidtable.
- */
-QUnit.begin(function(){
-    for(var i=0; i<TEST_TABLES.length; i++){
-        var selector = TEST_TABLES[i];
-        var html = $(selector).parent('.tablewrap').html();
-        TEST_TABLES_ORIG_HTML[selector] = html;
-    }
-});
-
-QUnit.testStart(function(){
-    for(var i=0; i<TEST_TABLES.length; i++){
-        var selector = TEST_TABLES[i];
-        var html = TEST_TABLES_ORIG_HTML[selector];
-        $(selector).parent(".tablewrap").html(html);
-    }
-});
 
 /*
  * Enable stupid tables at the end for manual testing and experiments
