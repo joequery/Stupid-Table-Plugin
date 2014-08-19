@@ -2,7 +2,7 @@ Stupid jQuery Table Sort
 ========================
 
 This is a stupid jQuery table sorting plugin. Nothing fancy, nothing really
-impressive. Overall, stupidly simple.
+impressive. Overall, stupidly simple. Requires jQuery 1.7 or newer.
 
 [View the demo here][0]
 
