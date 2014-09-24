@@ -8,6 +8,12 @@
     var th_index = 0; // we'll increment this soon
     var dir = $.fn.stupidtable.dir;
     var $table = $this.closest("table");
+    var datatype = $this.data("sort") || null;
+
+    // No datatype? Nothing to do.
+    if (datatype === null) {
+      return;
+    }
 
     // Account for colspans
     $this.parents("tr").find("th").slice(0, $(this).index()).each(function() {
@@ -15,19 +21,16 @@
       th_index += parseInt(cols,10);
     });
 
-    if(arguments.length != 1){
-        force_direction = null;
+    var sort_dir;
+    if(arguments.length == 1){
+        sort_dir = force_direction;
     }
-    var sort_dir = force_direction || $this.data("sort-default") || dir.ASC;
-    if ($this.data("sort-dir"))
-       sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
-
-    var datatype = $this.data("sort") || null;
-
-    // No datatype? Nothing to do.
-    if (datatype === null) {
-      return;
+    else{
+        sort_dir = force_direction || $this.data("sort-default") || dir.ASC;
+        if ($this.data("sort-dir"))
+           sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
     }
+
 
     $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
 
