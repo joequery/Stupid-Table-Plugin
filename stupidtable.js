@@ -1,94 +1,90 @@
 // Stupid jQuery table plugin.
 
-// Call on a table
-// sortFns: Sort functions for your datatypes.
 (function($) {
+
+  // Expects $("#mytable").stupidtable() to have already been called.
+  $.fn.stupidsort = function(force_direction){
+    var $this = $(this);
+    var th_index = 0; // we'll increment this soon
+    var dir = $.fn.stupidtable.dir;
+    var $table = $this.closest("table");
+
+    // Account for colspans
+    $this.parents("tr").find("th").slice(0, $(this).index()).each(function() {
+      var cols = $(this).attr("colspan") || 1;
+      th_index += parseInt(cols,10);
+    });
+
+    if(arguments.length != 1){
+        force_direction = null;
+    }
+    var sort_dir = force_direction || $this.data("sort-default") || dir.ASC;
+    if ($this.data("sort-dir"))
+       sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
+
+    var datatype = $this.data("sort") || null;
+
+    // No datatype? Nothing to do.
+    if (datatype === null) {
+      return;
+    }
+
+    $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
+
+    // More reliable method of forcing a redraw
+    $table.css("display");
+
+    // Run sorting asynchronously on a timout to force browser redraw after
+    // `beforetablesort` callback. Also avoids locking up the browser too much.
+    setTimeout(function() {
+      // Gather the elements for this column
+      var column = [];
+      var sortFns = $table.data('sortFns');
+      var sortMethod = sortFns[datatype];
+      var trs = $table.children("tbody").children("tr");
+
+      // Extract the data for the column that needs to be sorted and pair it up
+      // with the TR itself into a tuple
+      trs.each(function(index,tr) {
+        var $e = $(tr).children().eq(th_index);
+        var sort_val = $e.data("sort-value");
+        var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
+        column.push([order_by, tr]);
+      });
+
+      // Sort by the data-order-by value
+      column.sort(function(a, b) { return sortMethod(a[0], b[0]); });
+      if (sort_dir != dir.ASC)
+        column.reverse();
+
+      // Replace the content of tbody with the sorted rows. Strangely
+      // enough, .append accomplishes this for us.
+      trs = $.map(column, function(kv) { return kv[1]; });
+      $table.children("tbody").append(trs);
+
+      // Reset siblings
+      $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
+      $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
+
+      $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
+      $table.css("display");
+    }, 10);
+
+  };
 
   $.fn.stupidtable = function(sortFns) {
     return this.each(function() {
       var $table = $(this);
       sortFns = sortFns || {};
-
-      // Merge sort functions with some default sort functions.
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
+      $table.data('sortFns', sortFns);
 
-
-      // ==================================================== //
-      //                  Begin execution!                    //
-      // ==================================================== //
-
-      // Do sorting when THs are clicked
       $table.on("click.stupidtable", "thead th", function() {
-        var $this = $(this);
-        var th_index = 0;
-        var dir = $.fn.stupidtable.dir;
-
-        // Account for colspans
-        $this.parents("tr").find("th").slice(0, $this.index()).each(function() {
-          var cols = $(this).attr("colspan") || 1;
-          th_index += parseInt(cols,10);
-        });
-
-        // Determine (and/or reverse) sorting direction, default `asc`
-        var sort_dir = $this.data("sort-default") || dir.ASC;
-        if ($this.data("sort-dir"))
-           sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
-
-        // Choose appropriate sorting function.
-        var type = $this.data("sort") || null;
-
-        // Prevent sorting if no type defined
-        if (type === null) {
-          return;
-        }
-
-        // Trigger `beforetablesort` event that calling scripts can hook into;
-        // pass parameters for sorted column index and sorting direction
-        $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
-        // More reliable method of forcing a redraw
-        $table.css("display");
-
-        // Run sorting asynchronously on a timout to force browser redraw after
-        // `beforetablesort` callback. Also avoids locking up the browser too much.
-        setTimeout(function() {
-          // Gather the elements for this column
-          var column = [];
-          var sortMethod = sortFns[type];
-          var trs = $table.children("tbody").children("tr");
-
-          // Extract the data for the column that needs to be sorted and pair it up
-          // with the TR itself into a tuple
-          trs.each(function(index,tr) {
-            var $e = $(tr).children().eq(th_index);
-            var sort_val = $e.data("sort-value");
-            var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
-            column.push([order_by, tr]);
-          });
-
-          // Sort by the data-order-by value
-          column.sort(function(a, b) { return sortMethod(a[0], b[0]); });
-          if (sort_dir != dir.ASC)
-            column.reverse();
-
-          // Replace the content of tbody with the sorted rows. Strangely (and
-          // conveniently!) enough, .append accomplishes this for us.
-          trs = $.map(column, function(kv) { return kv[1]; });
-          $table.children("tbody").append(trs);
-
-          // Reset siblings
-          $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
-          $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
-
-          // Trigger `aftertablesort` event. Similar to `beforetablesort`
-          $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
-          // More reliable method of forcing a redraw
-          $table.css("display");
-        }, 10);
+          $(this).stupidsort();
       });
     });
   };
 
-  // Enum containing sorting directions
   $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
 
   $.fn.stupidtable.default_sort_fns = {
