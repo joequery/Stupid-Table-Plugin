@@ -48,32 +48,36 @@
         // More reliable method of forcing a redraw
         $table.css("display");
 
-        // Run sorting asynchronously on a timout to force browser redraw after
+        // Run sorting asynchronously on a timeout to force browser redraw after
         // `beforetablesort` callback. Also avoids locking up the browser too much.
         setTimeout(function() {
           // Gather the elements for this column
-          var column = [];
           var sortMethod = sortFns[type];
-          var trs = $table.children("tbody").children("tr");
 
-          // Extract the data for the column that needs to be sorted and pair it up
-          // with the TR itself into a tuple
-          trs.each(function(index,tr) {
-            var $e = $(tr).children().eq(th_index);
-            var sort_val = $e.data("sort-value");
-            var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
-            column.push([order_by, tr]);
+          $table.children("tbody").each(function(index,tbody){
+              var column = [];
+              var $tbody = $(tbody);
+              var trs = $tbody.children("tr").not('[data-sort-ignore]');
+
+              // Extract the data for the column that needs to be sorted and pair it up
+              // with the TR itself into a tuple
+              trs.each(function(index,tr) {
+                var $e = $(tr).children().eq(th_index);
+                var sort_val = $e.data("sort-value");
+                var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
+                column.push([order_by, tr]);
+              });
+
+              // Sort by the data-order-by value
+              column.sort(function(a, b) { return sortMethod(a[0], b[0]); });
+              if (sort_dir != dir.ASC)
+                column.reverse();
+
+              // Replace the content of tbody with the sorted rows. Strangely (and
+              // conveniently!) enough, .append accomplishes this for us.
+              trs = $.map(column, function(kv) { return kv[1]; });
+              $tbody.append(trs);
           });
-
-          // Sort by the data-order-by value
-          column.sort(function(a, b) { return sortMethod(a[0], b[0]); });
-          if (sort_dir != dir.ASC)
-            column.reverse();
-
-          // Replace the content of tbody with the sorted rows. Strangely (and
-          // conveniently!) enough, .append accomplishes this for us.
-          trs = $.map(column, function(kv) { return kv[1]; });
-          $table.children("tbody").append(trs);
 
           // Reset siblings
           $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
