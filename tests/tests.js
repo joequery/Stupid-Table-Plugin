@@ -314,13 +314,14 @@ asyncTest("sorting should preserve tbody classes", function(){
     var $table = $("#complex");
     var $table_cols = $table.find("th");
     var $tbody = $table.find("tbody");
+    var tbodyStyleBefore = $tbody.attr("style");
 
     $table.stupidtable();
 
     // These are initial values hardcoded in the html. We need to make sure they
     // aren't changed once we click a column.
     ok($tbody.hasClass('some-tbody-class'));
-    ok(_.isEqual("border: 2px;", $tbody.attr("style")));
+    ok(_.isEqual(tbodyStyleBefore, $tbody.attr("style")));
 
     $table_cols.eq(FLOAT_COLUMN).click();
 
@@ -328,7 +329,7 @@ asyncTest("sorting should preserve tbody classes", function(){
         var $table = $("#complex");
         var $tbody = $table.find("tbody");
         ok($tbody.hasClass('some-tbody-class'));
-        ok(_.isEqual("border: 2px;", $tbody.attr("style")));
+        ok(_.isEqual(tbodyStyleBefore, $tbody.attr("style")));
     });
 });
 
