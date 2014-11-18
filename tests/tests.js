@@ -7,7 +7,7 @@ $(function(){
 // ===========================================================================
 // Test helpers & QUnit callbacks
 // ===========================================================================
-window.WAIT_TIME_MS = 50;
+window.WAIT_TIME_MS = 200;
 
 var get_column_elements = function($table, col_index){
     var vals = [];
