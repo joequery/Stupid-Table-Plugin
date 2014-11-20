@@ -36,7 +36,7 @@ The HTML:
         ...
         ...
 
-The thead and tbody tags must be used.
+The thead and tbody tags must be used. Multiple tbody tags may be used; rows within each tbody will be sorted separately.
 
 Add a `data-sort` attribute of "DATATYPE" to the th elements to make them sortable
 by that data type. If you don't want that column to be sortable, just omit the
@@ -116,6 +116,11 @@ By default, columns will sort ascending. You can specify a column to sort "ASC"
 or "DESC" first.
 
     <th data-sort="float" data-sort-default="desc">float</th>
+
+Exclude rows from sorting
+-------------------------
+
+To omit certain rows from being sorted, add the attribute `data-sort-ignore` to the `<tr>`.
 
 Callbacks
 ---------
