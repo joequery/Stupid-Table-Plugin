@@ -3,12 +3,13 @@
 (function($) {
 
   // Expects $("#mytable").stupidtable() to have already been called.
+  // Call on a table header.
   $.fn.stupidsort = function(force_direction){
-    var $this = $(this);
+    var $this_th = $(this);
     var th_index = 0; // we'll increment this soon
     var dir = $.fn.stupidtable.dir;
-    var $table = $this.closest("table");
-    var datatype = $this.data("sort") || null;
+    var $table = $this_th.closest("table");
+    var datatype = $this_th.data("sort") || null;
 
     // No datatype? Nothing to do.
     if (datatype === null) {
@@ -16,7 +17,7 @@
     }
 
     // Account for colspans
-    $this.parents("tr").find("th").slice(0, $(this).index()).each(function() {
+    $this_th.parents("tr").find("th").slice(0, $(this).index()).each(function() {
       var cols = $(this).attr("colspan") || 1;
       th_index += parseInt(cols,10);
     });
@@ -26,9 +27,9 @@
         sort_dir = force_direction;
     }
     else{
-        sort_dir = force_direction || $this.data("sort-default") || dir.ASC;
-        if ($this.data("sort-dir"))
-           sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
+        sort_dir = force_direction || $this_th.data("sort-default") || dir.ASC;
+        if ($this_th.data("sort-dir"))
+           sort_dir = $this_th.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
     }
 
 
@@ -47,12 +48,20 @@
       var trs = $table.children("tbody").children("tr");
 
       // Extract the data for the column that needs to be sorted and pair it up
-      // with the TR itself into a tuple
+      // with the TR itself into a tuple. This way sorting the values will
+      // incidentally sort the trs.
       trs.each(function(index,tr) {
         var $e = $(tr).children().eq(th_index);
         var sort_val = $e.data("sort-value");
-        var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
-        column.push([order_by, tr]);
+
+        // Store and read from the .data cache for display text only sorts
+        // instead of looking through the DOM every time
+        if(typeof(sort_val) === "undefined"){
+          var txt = $e.text();
+          $e.data('sort-value', txt);
+          sort_val = txt;
+        }
+        column.push([sort_val, tr]);
       });
 
       // Sort by the data-order-by value
@@ -67,12 +76,24 @@
 
       // Reset siblings
       $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
-      $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
+      $this_th.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
 
       $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
       $table.css("display");
     }, 10);
+  };
 
+  // Call on a sortable td to update its value in the sort. This should be the
+  // only mechanism used to update a cell's sort value. If your display value is
+  // also your sort value, omit the second argument. new_display_val is HTML
+  // friendly.
+  $.fn.updateSortVal = function(new_display_val, new_sort_val){
+  var $this_tr = $(this);
+    if(typeof(new_sort_val) === "undefined"){
+      new_sort_val = new_display_val;
+    }
+    $this_tr.data("sort-value", new_sort_val);
+    $this_tr.html(new_display_val);
   };
 
   $.fn.stupidtable = function(sortFns) {
