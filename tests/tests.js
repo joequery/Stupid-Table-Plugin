@@ -506,6 +506,53 @@ asyncTest("Update sort value - display and sort value - double click", function(
     });
 });
 
+asyncTest("Update sort value - also updates data-sort-value attribute", function(){
+    var LETTER_FREQ_COLUMN = 5;
+    var $table = $("#complex");
+    var $table_cols = $table.find("th");
+    var $letter_freq_col = $table_cols.eq(LETTER_FREQ_COLUMN);
+    var $e_td = $table.find("[data-sort-value=0]");
+
+    $table.stupidtable();
+    $letter_freq_col.doubleclick();
+
+    ok(_.isEqual($e_td.text(), "E"));
+    ok(_.isEqual($e_td.data('sort-value'), 0));
+
+    $e_td.updateSortVal("<b>YO</b>", 10);
+
+
+    test_table_state(function(){
+        var expected = ["<b>YO</b>", "I", "O", "A", "T"];
+        var vals = get_column_elements($table, LETTER_FREQ_COLUMN);
+        ok(_.isEqual(vals, expected));
+        ok(_.isEqual($e_td.attr('data-sort-value'), "10"));
+    });
+});
+
+asyncTest("Update sort value - display value only doesn't add data-sort-value attribute", function(){
+    var INT_COLUMN = 0;
+    var $table = $("#basic");
+    var $table_cols = $table.find("th");
+    var $int_column = $table_cols.eq(INT_COLUMN);
+    var $first_int_td = $table.find("tbody tr td").first();
+
+    $table.stupidtable();
+    ok(_.isEqual($first_int_td.text(), "15"));
+
+    $first_int_td.updateSortVal(200);
+    $int_column.click();
+
+    test_table_state(function(){
+        var $first_int_td = $table.find("tbody tr td").first();
+        var expected = ["-53", "2", "95", "195", "200"];
+        var vals = get_column_elements($table, INT_COLUMN);
+
+        ok(_.isEqual(vals, expected));
+        ok(!$first_int_td.attr('data-sort-value'));
+    });
+});
+
 asyncTest("Basic individual column sort - no force direction", function(){
     var FLOAT_COLUMN = 1;
     var $table = $("#complex");

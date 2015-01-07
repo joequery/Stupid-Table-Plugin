@@ -90,13 +90,17 @@
   // also your sort value, omit the second argument. new_display_val is HTML
   // friendly. Assumes stupidtable has already been called for the table.
   $.fn.updateSortVal = function(new_display_val, new_sort_val){
-  var $this_tr = $(this);
+  var $this_td = $(this);
     if(typeof(new_sort_val) === "undefined"){
       new_sort_val = new_display_val;
     }
-    $this_tr.data("sort-value", new_sort_val);
-    $this_tr.html(new_display_val);
-    return $this_tr;
+    else{
+      // For visual consistency with the .data cache
+      $this_td.attr('data-sort-value', new_sort_val);
+    }
+    $this_td.data("sort-value", new_sort_val);
+    $this_td.html(new_display_val);
+    return $this_td;
   };
 
   $.fn.stupidtable = function(sortFns) {
