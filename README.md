@@ -57,6 +57,92 @@ only predefined datatypes that you can pass to the th elements are
 These data types will be sufficient for many simple tables. However, if you need
 different data types for sorting, you can easily create your own!
 
+Data with multiple representations/predefined order
+---------------------------------------------------
+
+Stupid Table lets you sort a column by computer friendly values while displaying
+human friendly values via the `data-sort-value` on a td element. For example, to sort
+timestamps (computer friendly) but display pretty formated dates (human
+friendly)
+
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="string">Name</th>
+          <th data-sort="int">Birthday</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Joe McCullough</td>
+          <td data-sort-value="672537600">April 25, 1991</td>
+        </tr>
+        <tr>
+          <td>Clint Dempsey</td>
+          <td data-sort-value="416016000">March 9, 1983</td>
+        </tr>
+        ...
+        ...
+        ...
+
+In this example, Stupid Table will sort the Birthday column by the timestamps
+provided in the `data-sort-value` attributes of the corresponding tds. Since
+timestamps are integers, and that's what we're sorting the column by, we specify
+the Birthday column as an `int` column in the `data-sort` value of the table
+header.
+
+
+Default sorting direction
+-------------------------
+
+By default, columns will sort ascending. You can specify a column to sort "asc"
+or "desc" first.
+
+    <table>
+      <thead>
+        <tr>
+            <th data-sort="float" data-sort-default="desc">float</th>
+            ...
+        </tr>
+      </thead>
+    </table>
+
+Sorting a column programatically
+--------------------------------
+
+After you have called `$("#mytable").stupidtable()`, if you wish to sort a
+column without requiring the user to click on it, select the column th and call
+
+
+    var $table = $("#mytable").stupidtable();
+    var $th_to_sort = $table.find("thead th").eq(0);
+    $th_to_sort.stupidsort();
+
+    // You can also force a direction.
+    $th_to_sort.stupidsort('asc');
+    $th_to_sort.stupidsort('desc');
+
+
+Callbacks
+---------
+
+To execute a callback function after a table column has been sorted, you can
+bind on `aftertablesort`.
+
+    var table = $("table").stupidtable();
+    table.bind('aftertablesort', function (event, data) {
+        // data.column - the index of the column sorted after a click
+        // data.direction - the sorting direction (either asc or desc)
+        // $(this) - this table object
+
+        console.log("The sorting direction: " + data.direction);
+        console.log("The column index: " + data.column);
+    });
+
+Similarly, to execute a callback before a table column has been sorted, you can
+bind on `beforetablesort`.
+
+See the complex_example.html file.
 
 Creating your own data types
 ----------------------------
@@ -108,58 +194,6 @@ we do the following:
 
 This extracts the integers from the cell and compares them in the style
 that sort functions use.
-
-Default sorting direction
--------------------------
-
-By default, columns will sort ascending. You can specify a column to sort "ASC"
-or "DESC" first.
-
-    <th data-sort="float" data-sort-default="desc">float</th>
-
-Callbacks
----------
-
-To execute a callback function after a table column has been sorted, you can
-bind on `aftertablesort`.
-
-    var table = $("table").stupidtable();
-    table.bind('aftertablesort', function (event, data) {
-        // data.column - the index of the column sorted after a click
-        // data.direction - the sorting direction (either asc or desc)
-        // $(this) - this table object
-
-        console.log("The sorting direction: " + data.direction);
-        console.log("The column index: " + data.column);
-    });
-
-Similarly, to execute a callback before a table column has been sorted, you can
-bind on `beforetablesort`.
-
-See the complex_example.html file.
-
-
-Data with multiple representations/predefined order
----------------------------------------------------
-
-Often we find two distinct ways of offering data: In a machine friendly way,
-and a Human-friendly way. A clear example is a Timestamp. Additionally,
-arbitrary data values may already have a predefined sort order. In either case,
-it's to our advantage to have a way to store the "sortable data" while letting
-the viewer see the Human-friendly representation of that data. While the
-purpose of the custom sort methods is to take data and make it sortable
-(machine friendly), sometimes this is too hard or too expensive, computationally
-speaking.
-
-To solve this problem, you can specify a `data-sort-value` attribute to
-table cells, and the attribute value will be the basis of the sort as opposed
-to the text value of the table cell. See the complex_example.html file, where
-we sort a column of letters based not on their alphabetical order, but by their
-frequency in the English language. You'll still need to specify a sort type
-or come up with your own custom sort function, but the presence of the
-`data-sort-value` attribute tells the plugin to use the value of the
-attribute as the basis of the sort.
-
 
 License
 -------
