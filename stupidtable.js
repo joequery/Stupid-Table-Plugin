@@ -81,12 +81,14 @@
       $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
       $table.css("display");
     }, 10);
+
+    return $this_th;
   };
 
   // Call on a sortable td to update its value in the sort. This should be the
   // only mechanism used to update a cell's sort value. If your display value is
   // also your sort value, omit the second argument. new_display_val is HTML
-  // friendly.
+  // friendly. Assumes stupidtable has already been called for the table.
   $.fn.updateSortVal = function(new_display_val, new_sort_val){
   var $this_tr = $(this);
     if(typeof(new_sort_val) === "undefined"){
@@ -94,6 +96,7 @@
     }
     $this_tr.data("sort-value", new_sort_val);
     $this_tr.html(new_display_val);
+    return $this_tr;
   };
 
   $.fn.stupidtable = function(sortFns) {
