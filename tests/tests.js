@@ -36,7 +36,7 @@ var date_from_string = function(str){
     var Month = $.inArray(DateParts[0].toLowerCase(), months);
     var Day = DateParts[1];
     return new Date(Year, Month, Day);
-}
+};
 
 /*
  * In order to accurately simulate a double click, we have to use a slight pause
