@@ -506,4 +506,40 @@ asyncTest("Update sort value - display and sort value - double click", function(
     });
 });
 
+asyncTest("Basic individual column sort - no force direction", function(){
+    var FLOAT_COLUMN = 1;
+    var $table = $("#complex");
+    var $table_cols = $table.find("th");
+
+    // Specify a sorting direction
+    $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'desc');
+    $table.stupidtable();
+
+    $table_cols.eq(FLOAT_COLUMN).stupidsort();
+
+    test_table_state(function(){
+        var expected = ["88.5", "36", "-.18", "-152.5", "-858"];
+        var vals = get_column_elements($table, FLOAT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("Basic individual column sort - force direction", function(){
+    var FLOAT_COLUMN = 1;
+    var $table = $("#complex");
+    var $table_cols = $table.find("th");
+
+    // Specify a sorting direction
+    $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'desc');
+    $table.stupidtable();
+
+    $table_cols.eq(FLOAT_COLUMN).stupidsort('asc');
+
+    test_table_state(function(){
+        var expected = ["-858", "-152.5", "-.18", "36", "88.5"];
+        var vals = get_column_elements($table, FLOAT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
 }); //jQuery
