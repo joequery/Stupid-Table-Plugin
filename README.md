@@ -122,6 +122,26 @@ column without requiring the user to click on it, select the column th and call
     $th_to_sort.stupidsort('asc');
     $th_to_sort.stupidsort('desc');
 
+Updating a table cell's value
+-----------------------------
+
+If you wish for Stupid Table to respond to changes in the table cell values, you
+must explicitely inform Stupid Table to update its cache with the new values. If
+you update the table display/sort values without using this mechanism, your
+newly updated table **will not sort correctly!**
+
+    /*
+     * Suppose $age_td is some td in a table under a column specified as an int
+     * column. stupidtable() must already be called for this table.
+     */
+
+    // Updates both the display value and the sort value to be 23
+    $age_td.updateSortVal(23);
+
+    // Updates both the display value to be "23 years old", and the sort value
+    // to be `23`
+    $age_td.updateSortVal("23 years old", 23);
+
 
 Callbacks
 ---------
@@ -147,12 +167,14 @@ See the complex_example.html file.
 Creating your own data types
 ----------------------------
 
-Creating your own data type  for sorting purposes is easy as long as you are
-comfortable using custom functions for sorting. Consult [Mozilla's Docs][1]
-if you're not.
+Sometimes you don't have control over the HTML produced by the backend. In the
+event you need to sort complex data without a `data-sort-value` attribute, you
+can create your own data type. Creating your own data type for sorting purposes
+is easy as long as you are comfortable using custom functions for sorting.
+Consult [Mozilla's Docs][1] if you're not.
 
-Let's create an alphanum datatype for a User ID that takes strings in the
-form "D10", "A40", and sorts them based on the number.
+Let's create an alphanum datatype for a User ID that takes strings in the form
+"D10", "A40", and sorts the column based on the numbers in the string.
 
     <thead>
       <tr>
