@@ -75,6 +75,10 @@ QUnit.done(function(){
 
 /*
  *  Begin tests
+ *  NOTE: when to use test vs asyncTest: When you plan on sorting the table and
+ *  examining the results, you must use the test_table_state function and have
+ *  your test wrapped in asyncTest(). If you wish to only make assertions
+ *  regarding the initial state of the html, just use test().
  */
 
 // =============================================================================
@@ -394,6 +398,23 @@ asyncTest("Complex colspan table sort - single click", function(){
 
     test_table_state(function(){
         var expected = ["0", "1", "2"];
+        var vals = get_column_elements($table, NUMBER_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("Complex colspan table sort - double click", function(){
+    var NUMBER_COLUMN_TH = 3;
+    var NUMBER_COLUMN = 3;
+    var $table = $("#complex-colspan");
+    var $table_cols = $table.find("th");
+    var $tbody = $table.find("tbody");
+
+    $table.stupidtable();
+    $table_cols.eq(NUMBER_COLUMN_TH).doubleclick();
+
+    test_table_state(function(){
+        var expected = ["2", "1", "0"];
         var vals = get_column_elements($table, NUMBER_COLUMN);
         ok(_.isEqual(vals, expected));
     });
