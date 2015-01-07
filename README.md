@@ -61,9 +61,9 @@ Data with multiple representations/predefined order
 ---------------------------------------------------
 
 Stupid Table lets you sort a column by computer friendly values while displaying
-human friendly values via the `data-sort-value` on a td element. For example, to sort
-timestamps (computer friendly) but display pretty formated dates (human
-friendly)
+human friendly values via the `data-sort-value` attribute on a td element. For
+example, to sort timestamps (computer friendly) but display pretty formated
+dates (human friendly)
 
     <table>
       <thead>
@@ -88,7 +88,7 @@ friendly)
 In this example, Stupid Table will sort the Birthday column by the timestamps
 provided in the `data-sort-value` attributes of the corresponding tds. Since
 timestamps are integers, and that's what we're sorting the column by, we specify
-the Birthday column as an `int` column in the `data-sort` value of the table
+the Birthday column as an `int` column in the `data-sort` value of the column
 header.
 
 
