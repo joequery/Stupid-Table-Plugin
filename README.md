@@ -134,13 +134,11 @@ newly updated table **will not sort correctly!**
      * Suppose $age_td is some td in a table under a column specified as an int
      * column. stupidtable() must already be called for this table.
      */
-
-    // Updates both the display value and the sort value to be 23
     $age_td.updateSortVal(23);
 
-    // Updates both the display value to be "23 years old", and the sort value
-    // to be `23`
-    $age_td.updateSortVal("23 years old", 23);
+Note that this only changes the internal sort value (whether you specified a
+`data-sort-value` or not). Use the standard jQuery `.text()` / `.html()` methods
+if you wish to change the display values.
 
 
 Callbacks

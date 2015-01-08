@@ -420,7 +420,7 @@ asyncTest("Complex colspan table sort - double click", function(){
     });
 });
 
-asyncTest("Update sort value - display value only - single click", function(){
+asyncTest("Update sort value - same display and sort values - single click", function(){
     var INT_COLUMN = 0;
     var $table = $("#basic");
     var $table_cols = $table.find("th");
@@ -431,6 +431,7 @@ asyncTest("Update sort value - display value only - single click", function(){
     ok(_.isEqual($first_int_td.text(), "15"));
 
     $first_int_td.updateSortVal(200);
+    $first_int_td.text("200");
     $int_column.click();
 
     test_table_state(function(){
@@ -440,7 +441,7 @@ asyncTest("Update sort value - display value only - single click", function(){
     });
 });
 
-asyncTest("Update sort value - display value only - double click", function(){
+asyncTest("Update sort value - same display and sort values - double click", function(){
     var INT_COLUMN = 0;
     var $table = $("#basic");
     var $table_cols = $table.find("th");
@@ -451,6 +452,7 @@ asyncTest("Update sort value - display value only - double click", function(){
     ok(_.isEqual($first_int_td.text(), "15"));
 
     $first_int_td.updateSortVal(200);
+    $first_int_td.text("200");
     $int_column.doubleclick();
 
     test_table_state(function(){
@@ -460,7 +462,7 @@ asyncTest("Update sort value - display value only - double click", function(){
     });
 });
 
-asyncTest("Update sort value - display and sort value - single click", function(){
+asyncTest("Update sort value - different display and sort value - single click", function(){
     var LETTER_FREQ_COLUMN = 5;
     var $table = $("#complex");
     var $table_cols = $table.find("th");
@@ -473,7 +475,8 @@ asyncTest("Update sort value - display and sort value - single click", function(
     ok(_.isEqual($e_td.text(), "E"));
     ok(_.isEqual($e_td.data('sort-value'), 0));
 
-    $e_td.updateSortVal("<b>YO</b>", 10);
+    $e_td.updateSortVal(10);
+    $e_td.html("<b>YO</b>");
 
 
     test_table_state(function(){
@@ -483,7 +486,7 @@ asyncTest("Update sort value - display and sort value - single click", function(
     });
 });
 
-asyncTest("Update sort value - display and sort value - double click", function(){
+asyncTest("Update sort value - different display and sort value - double click", function(){
     var LETTER_FREQ_COLUMN = 5;
     var $table = $("#complex");
     var $table_cols = $table.find("th");
@@ -496,7 +499,8 @@ asyncTest("Update sort value - display and sort value - double click", function(
     ok(_.isEqual($e_td.text(), "E"));
     ok(_.isEqual($e_td.data('sort-value'), 0));
 
-    $e_td.updateSortVal("<b>YO</b>", 10);
+    $e_td.updateSortVal(10);
+    $e_td.html("<b>YO</b>");
 
 
     test_table_state(function(){
@@ -519,7 +523,8 @@ asyncTest("Update sort value - also updates data-sort-value attribute", function
     ok(_.isEqual($e_td.text(), "E"));
     ok(_.isEqual($e_td.data('sort-value'), 0));
 
-    $e_td.updateSortVal("<b>YO</b>", 10);
+    $e_td.updateSortVal(10);
+    $e_td.html("<b>YO</b>");
 
 
     test_table_state(function(){
@@ -541,6 +546,7 @@ asyncTest("Update sort value - display value only doesn't add data-sort-value at
     ok(_.isEqual($first_int_td.text(), "15"));
 
     $first_int_td.updateSortVal(200);
+    $first_int_td.text("200");
     $int_column.click();
 
     test_table_state(function(){
