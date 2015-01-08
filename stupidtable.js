@@ -1,6 +1,19 @@
 // Stupid jQuery table plugin.
 
 (function($) {
+  $.fn.stupidtable = function(sortFns) {
+    return this.each(function() {
+      var $table = $(this);
+      sortFns = sortFns || {};
+      sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
+      $table.data('sortFns', sortFns);
+
+      $table.on("click.stupidtable", "thead th", function() {
+          $(this).stupidsort();
+      });
+    });
+  };
+
 
   // Expects $("#mytable").stupidtable() to have already been called.
   // Call on a table header.
@@ -99,21 +112,10 @@
     return $this_td;
   };
 
-  $.fn.stupidtable = function(sortFns) {
-    return this.each(function() {
-      var $table = $(this);
-      sortFns = sortFns || {};
-      sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
-      $table.data('sortFns', sortFns);
-
-      $table.on("click.stupidtable", "thead th", function() {
-          $(this).stupidsort();
-      });
-    });
-  };
-
+  // ------------------------------------------------------------------
+  // Default settings
+  // ------------------------------------------------------------------
   $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
-
   $.fn.stupidtable.default_sort_fns = {
     "int": function(a, b) {
       return parseInt(a, 10) - parseInt(b, 10);
@@ -130,5 +132,4 @@
       return a.localeCompare(b);
     }
   };
-
 })(jQuery);
