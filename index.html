@@ -19,43 +19,6 @@
     <script>
     $(function(){
       $("#simpleTable").stupidtable();
-
-      // Helper function to convert a string of the form "Mar 15, 1987" into
-      // a Date object. 
-      var date_from_string = function(str){
-          var months = ["jan","feb","mar","apr","may","jun","jul",
-          "aug","sep","oct","nov","dec"];
-          var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
-          var re = new RegExp(pattern);
-          var DateParts = re.exec(str).slice(1);
-
-          var Year = DateParts[2];
-          var Month = $.inArray(DateParts[0].toLowerCase(), months);
-          var Day = DateParts[1];
-          return new Date(Year, Month, Day);
-      }
-
-      var table = $("#complexTable").stupidtable({
-          "date":function(a,b){
-              // Get these into date objects for comparison.
-
-              aDate = date_from_string(a);
-              bDate = date_from_string(b);
-
-              return aDate - bDate;
-          }
-      });
-
-        table.bind('aftertablesort', function (event, data) {
-          // data.column - the index of the column sorted after a click
-          // data.direction - the sorting direction (either asc or desc)
-
-          var th = $(this).find("th");
-          th.find(".arrow").remove();
-          var arrow = data.direction === "asc" ? "&uarr;" : "&darr;";
-          th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
-        });
-
     });
 
     </script>
@@ -75,18 +38,12 @@
         <h1>Stupid jQuery Table Sort</h1>
 
         <p>This is a stupidly simple, <a href="https://raw.github.com/joequery/Stupid-Table-Plugin/master/stupidtable.min.js">absurdly lightweight</a> jQuery table sorting plugin.
-As long as you understand basic
-<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort">JavaScript sorting</a>, you can make this plugin do as much
-or as little as you want.</p>
 
 <h2>Table of Contents</h2>
 <ul>
     <li><a href="#philosophy">Philosophy</a></li>
     <li><a href="#basic-usage">Basic usage</a></li>
-    <li><a href="#custom-sorts">Custom sorts</a></li>
-    <li><a href="#machine-friendly">Machine-friendly sort values vs
-        Human-friendly Display values</a></li>
-    <li><a href="#callbacks">Callbacks</a></li>
+    <li><a href="#documentation">Documentation</a></li>
     <li><a href="#examples">More examples</a></li>
 </ul>
 
@@ -165,160 +122,6 @@ And the following HTML
   ... (rest of the table)
 </pre></code>
 
-<h2 id="custom-sorts">Custom sorts</h2>
-
-<p>Here is a slightly more complex table, which implements a custom sort on the Date
-column.</p>
-
- <table id="complexTable">
-      <thead>
-        <tr>
-          <th data-sort="int">int</th>
-          <th data-sort="float">float</th>
-          <th data-sort="string">string</th>
-          <th>Can't sort me!</th>
-          <th data-sort="date">date</th>
-          <th data-sort="int">Letter frequency</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>15</td> <td>-.18</td> <td>banana</td> <td>arbitrary</td>
-          <td>Mar 15, 1986</td><td data-sort-value="1">E</td>
-        </tr>
-        <tr>
-          <td>95</td> <td>36</td> <td></td> <td>pointless</td>
-          <td>Feb 27, 2086</td><td data-sort-value="2">T</td>
-        </tr>
-        <tr>
-          <td>2</td> <td>-152.5</td> <td></td> <td>silly</td>
-          <td>Aug 07, 2004</td><td data-sort-value="3">A</td>
-        </tr>
-        <tr>
-          <td>-53</td> <td>88.5</td> <td>hello</td> <td>eccentric</td>
-          <td>Sep 15, 2002</td><td data-sort-value="4">O</td>
-
-        </tr>
-        <tr>
-          <td>195</td> <td>-858</td> <td>orange</td> <td>garbage</td>
-          <td>Mar 15, 1986</td><td data-sort-value="5">I</td>
-        </tr>
-      </tbody>
-
-    </table>
-
-<p>Here's how we created a sort function to sort dates in the format seen in
-the example above.</p>
-
-JS
-<code><pre>
-var date_from_string = function(str){
-    var months = ["jan","feb","mar","apr","may","jun","jul",
-    "aug","sep","oct","nov","dec"];
-    var pattern = "^([a-zA-Z]{3})\\s*(\\d{2}),\\s*(\\d{4})$";
-    var re = new RegExp(pattern);
-    var DateParts = re.exec(str).slice(1);
-
-    var Year = DateParts[2];
-    var Month = $.inArray(DateParts[0].toLowerCase(), months);
-    var Day = DateParts[1];
-    return new Date(Year, Month, Day);
-}
-
-var table = $("#complexTable").stupidtable({
-    "date":function(a,b){
-        // Get these into date objects for comparison.
-        aDate = date_from_string(a);
-        bDate = date_from_string(b);
-
-        return aDate - bDate;
-    }
-});
-</pre></code>
-
-HTML
-<code><pre>
-&lt;table id="complexTable"&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th data-sort="int" &gt;int&lt;/th&gt;
-      &lt;th data-sort="float"&gt;float&lt;/th&gt;
-      &lt;th data-sort="string"&gt;string&lt;/th&gt;
-      &lt;th&gt;Can't sort me!&lt;/th&gt;
-      &lt;th data-sort="date"&gt;date&lt;/th&gt;
-      &lt;th data-sort="int"&gt;Letter frequency&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  ...
-  ... (rest of the table)
-</pre></code>
-
-<h2 id="machine-friendly">Machine-friendly sort values vs Human-friendly display values</h2>
-
-<p>However, we can sometimes avoid the need for a custom sort by providing a
-machine-friendly sort value to the Stupid Table while displaying a
-human-friendly form of the sort value to the user.</p>
-
-<p>
-Consider the Date custom sort we built above: If a server-side process generates
-the table, the process probably uses some <code>strftime()</code> function to
-get dates to appear that way. This means we should also have access to the
-timestamp. It is <em>much</em> easier to perform an integer sort on the
-timestamp as opposed to parsing the date string out into the components
-necessary for the <code>Date()</code> JavaScript constructor!  </p>
-
-<p>
-Using <code>data-sort-value="myvalue"</code> on a table cell 
-<a href="https://github.com/joequery/Stupid-Table-Plugin/blob/05bb4664f010b2b4cb98fc1032a80990ffb746da/stupidtable.js#L124-L125"> tells Stupid Table</a>
-to use "myvalue" as the basis of the sort instead of the contents of the cell.
-So to apply our example, we should 
-
-<ol>
-    <li>Tell Stupid Table the Date column will be an integer type</li>
-    <li>Pass the timestamp of the date to <code>data-sort-value</code> on the
-    table cell</li>
-    <li>Pass the formatted date into the contents of the table cell</li>
-</ol>
-
-The end result looks like
-</p>
-
-<code><pre>
-&lt;th data-sort="int"&gt;Date&lt;/th&gt;
-...
-...
-&lt;td data-sort-value="1335798463"&gt;Apr 30, 2012&lt;/td&gt;
-</pre></code>
-
-
-</p>
-
-<h2 id="callbacks">Callbacks</h2>
-
-<p>The complex table above uses a custom callback to add an arrow to the table
-headers after the table is sorted. To execute a callback after the table is
-sorted, bind on the 'aftertablesort' event. Here's how the arrow effect was
-achieved:
-
-<code><pre>
-var table = $("#complexTable").stupidtable({
-    // Sort functions here
-});
-
-table.bind('aftertablesort', function (event, data) {
-    // data.column - the index of the column sorted after a click
-    // data.direction - the sorting direction (either asc or desc)
-
-    var th = $(this).find("th");
-    th.find(".arrow").remove();
-    var arrow = data.direction === "asc" ? "&uarr;" : "&darr;";
-    th.eq(data.column).append('&lt;span class="arrow"&gt;' + arrow +'&lt;/span&gt;');
-});
-</pre></code>
-
-<p>Similarly, you can also bind on 'beforetablesort' to execute a callback 
-before the sort actually takes place when a column is clicked.</p>
-
 <h2 id="examples">More examples</h2>
 <ul>
     <li>A basic table: (<a
@@ -334,6 +137,12 @@ before the sort actually takes place when a column is clicked.</p>
         href="http://rawgithub.com/joequery/Stupid-Table-Plugin/master/examples/large-table.html">demo</a>, <a
         href="https://github.com/joequery/Stupid-Table-Plugin/blob/master/examples/large-table.html">source</a>)</li>
 </ul>
+
+<h2 id="documentation">Documentation</h2>
+<p>View the <a
+    href="https://github.com/joequery/Stupid-Table-Plugin#stupid-jquery-table-sort">README</a>
+for full documentation.
+</p>
 
       </section>
     </div>
