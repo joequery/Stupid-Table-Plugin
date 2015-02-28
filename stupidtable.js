@@ -11,6 +11,9 @@
       $table.on("click.stupidtable", "thead th", function() {
           $(this).stupidsort();
       });
+      $table.on("touchend.stupidtable", "thead th", function() {
+          $(this).stupidsort();
+      });
     });
   };
 
