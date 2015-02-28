@@ -8,12 +8,8 @@
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
       $table.data('sortFns', sortFns);
 
-      $table.on("click.stupidtable", "thead th", function() {
-          $(this).stupidsort();
-      });
-      $table.on("touchend.stupidtable", "thead th", function() {
-          $(this).stupidsort();
-      });
+      $table.on("click.stupidtable", "thead th", $(this).stupidsort);
+      $table.on("touchend.stupidtable", "thead th", $(this).stupidsort);
     });
   };
 
