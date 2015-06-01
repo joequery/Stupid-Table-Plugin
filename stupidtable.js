@@ -25,7 +25,7 @@
     var datatype = $this_th.data("sort") || null;
 
     // No datatype? Nothing to do.
-    if (datatype === null) {
+    if (datatype === null || $this_th.hasClass('sort-disabled')) {
       return;
     }
 
@@ -76,6 +76,25 @@
         }
         column.push([sort_val, tr]);
       });
+
+      var preventSort = $table.attr('prevent-sort-equal');
+      // Check if data attribute 'prevent-sort-equal' is set.
+      // If so, sorting will be blocked for columns with equal values.
+      if (typeof preventSort !== typeof undefined && preventSort !== false) {
+        var sort_val = $(column).get(0)[0];
+        var is_equal = true;
+
+        // Check the equality of column values
+        $(column).each(function(index, col) {
+          is_equal = is_equal && col[0] === sort_val;
+        });
+
+        // No need for sorting equal values
+        if (is_equal) {
+          $this_th.addClass('sort-disabled');
+          return;
+        }
+      }
 
       // Sort by the data-order-by value
       column.sort(function(a, b) { return sortMethod(a[0], b[0]); });
