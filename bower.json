@@ -5,7 +5,7 @@
     "Joseph McCullough"
   ],
   "description": "A stupidly small and simple jQuery table sorter plugin",
-  "main": "stupidtable.js",
+  "main": "stupidtable.min.js",
   "dependencies": {
     "jquery": ">= 1.7.0"
   },
