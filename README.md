@@ -6,7 +6,12 @@ impressive. Overall, stupidly simple. Requires jQuery 1.7 or newer.
 
 [View the demo here][0]
 
-See the example.html document to see how to implement it.
+See the examples directory.
+
+Installation via Bower
+----------------------
+
+    $ bower install jquery-stupid-table
 
 
 Example Usage
