@@ -65,6 +65,25 @@
         $("#msg").text("Sorting index " + data.column)
       });
 
+      // Here we use a callback to modify data after it's been sorted - in this case,
+      // keeping blank values (in the third column) at the bottom of the list.
+      table.on("afterdatasort", function (event, data) {
+        // data.column - the index of the column sorted after a click
+        // data.direction - the sorting direction (either asc or desc)
+        // data.datatype - the type of data being sorted (e.g. int, string)
+        // data.columnRows - the actual data itself, format: [[val, tr], [val, tr], ...]
+        if (data.column == 3) {
+          var movedElems = [];
+          for (var i = data.columnRows.length-1; i >= 0; i--) {
+            if ($.trim(data.columnRows[i][0]) == "") {
+              var extract = data.columnRows.splice(i, 1);
+              movedElems.push(extract[0]);
+            }
+          }
+          Array.prototype.push.apply(data.columnRows, movedElems);
+        }
+      });
+
       table.on("aftertablesort", function (event, data) {
         var th = $(this).find("th");
         th.find(".arrow").remove();
@@ -118,7 +137,7 @@
         <th data-sort="int">int</th>
         <th data-sort="int">int</th>
         <th data-sort="float" data-sort-default="desc">float</th>
-        <th data-sort="moveBlanks" data-sort-desc="moveBlanksDesc">string</th>
+        <th data-sort="string">string</th>
         <th data-sort="string-ins">case</th>
         <th>Can't sort me!</th>
         <th data-sort="date">date</th>

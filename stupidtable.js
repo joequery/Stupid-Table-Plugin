@@ -82,6 +82,8 @@
       if (sort_dir != dir.ASC)
         column.reverse();
 
+      $table.trigger("afterdatasort", {column: th_index, direction: sort_dir, datatype: datatype, columnRows: column});
+
       // Replace the content of tbody with the sorted rows. Strangely
       // enough, .append accomplishes this for us.
       trs = $.map(column, function(kv) { return kv[1]; });
