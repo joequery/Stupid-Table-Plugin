@@ -124,11 +124,11 @@
       return parseFloat(a) - parseFloat(b);
     },
     "string": function(a, b) {
-      return a.localeCompare(b);
+      return a.toString().localeCompare(b.toString());
     },
     "string-ins": function(a, b) {
-      a = a.toLocaleLowerCase();
-      b = b.toLocaleLowerCase();
+      a = a.toString().toLocaleLowerCase();
+      b = b.toString().toLocaleLowerCase();
       return a.localeCompare(b);
     }
   };
