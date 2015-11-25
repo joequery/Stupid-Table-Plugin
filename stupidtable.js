@@ -59,7 +59,7 @@
       var sortFns = $table.data('sortFns');
       var sortMethod = sortFns[datatype];
       var trs = $table.children("tbody").children("tr");
-      var group = [], groups = []
+      var group = [];
       var rowcount = 1;
 
       // Extract the data for the column that needs to be sorted and pair it up
