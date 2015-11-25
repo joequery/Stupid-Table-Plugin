@@ -59,11 +59,20 @@
       var sortFns = $table.data('sortFns');
       var sortMethod = sortFns[datatype];
       var trs = $table.children("tbody").children("tr");
+      var group = [], groups = []
+      var rowcount = 1;
 
       // Extract the data for the column that needs to be sorted and pair it up
       // with the TR itself into a tuple. This way sorting the values will
       // incidentally sort the trs.
       trs.each(function(index,tr) {
+        if (--rowcount > 0) {
+          group.push(tr);
+          return true;
+        }
+        group = [tr];
+        rowcount = 1 + ($(tr).data('childrows') || 0);
+
         var $e = $(tr).children().eq(th_index);
         var sort_val = $e.data("sort-value");
 
@@ -74,7 +83,7 @@
           $e.data('sort-value', txt);
           sort_val = txt;
         }
-        column.push([sort_val, tr]);
+        column.push([sort_val, group]);
       });
 
       // Sort by the data-order-by value
