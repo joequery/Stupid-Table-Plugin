@@ -58,7 +58,7 @@
       var column = [];
       var sortFns = $table.data('sortFns');
       var sortMethod = sortFns[datatype];
-      var trs = $table.children("tbody").children("tr");
+      var trs = $table.children("tbody").children("tr:not([data-sort-ignore])");
 
       // Extract the data for the column that needs to be sorted and pair it up
       // with the TR itself into a tuple. This way sorting the values will
