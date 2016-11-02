@@ -46,7 +46,7 @@
     }
 
 
-    $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
+    $table.trigger("beforetablesort", {column: th_index, direction: sort_dir, $th: $this_th});
 
     // More reliable method of forcing a redraw
     $table.css("display");
@@ -91,7 +91,7 @@
       $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
       $this_th.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
 
-      $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
+      $table.trigger("aftertablesort", {column: th_index, direction: sort_dir, $th: $this_th});
       $table.css("display");
     }, 10);
 
