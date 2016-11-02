@@ -156,6 +156,7 @@ bind on `aftertablesort`.
     table.bind('aftertablesort', function (event, data) {
         // data.column - the index of the column sorted after a click
         // data.direction - the sorting direction (either asc or desc)
+        // data.$th - the th element (in jQuery wrapper)
         // $(this) - this table object
 
         console.log("The sorting direction: " + data.direction);
