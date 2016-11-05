@@ -69,6 +69,7 @@ QUnit.done(function(){
     $("#basic").stupidtable();
     $("#basic-colspan").stupidtable();
     $("#complex-colspan").stupidtable();
+    $("#repeated-values").stupidtable();
     $("#qunit-fixture").removeClass("test-hidden");
 });
 
@@ -620,6 +621,22 @@ asyncTest("No events fired if column sort - force direction doesn't change", fun
     test_table_state(function(){
         ok(_.isEqual(beforeCalls, 1));
         ok(_.isEqual(afterCalls, 1));
+    });
+});
+
+asyncTest("Order of equal adjacent rows are preserved", function() {
+    var STRING_COLUMN = 0;
+    var INT_COLUMN = 1;
+    var $table = $("#repeated-values");
+    var $table_cols = $table.find("th");
+    $table.stupidtable();
+
+    $table_cols.eq(STRING_COLUMN).click();
+
+    test_table_state(function(){
+        var expected = ["A", "A", "B", "C", "C", "C"];
+        var vals = get_column_elements($table, STRING_COLUMN);
+        ok(_.isEqual(vals, expected));
     });
 });
 
