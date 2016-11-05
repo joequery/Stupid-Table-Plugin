@@ -1,0 +1,59 @@
+<html>
+<head>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="../stupidtable.js" > </script>
+      <style type="text/css">
+        table {
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 5px 10px;
+          border: 1px solid #999;
+        }
+        th {
+          background-color: #eee;
+        }
+        th[data-sort]{
+          cursor:pointer;
+        }
+        tr.awesome{
+          color: red;
+        }
+      </style>
+        <script>
+            $(function(){
+                $("table").stupidtable();
+            });
+        </script>
+</head>
+<body>
+        <table class="table table-bordered table-checkedrows table-condensed">
+        <thead>
+        <tr>
+            <th data-sort="string-ins" class=" ">Name</th>
+            <th data-sort="int" class=" ">Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td>A</td><td>1</td></tr>
+        <tr><td>B</td><td>1</td></tr>
+        <tr><td>B</td><td>1</td></tr>
+        <tr><td>C</td><td>1</td></tr>
+        <tr><td>C</td><td>1</td></tr>
+        <tr><td>C</td><td>2</td></tr>
+        <tr><td>D</td><td>2</td></tr>
+        <tr><td>D</td><td>3</td></tr>
+
+        <tr><td>D</td><td>3</td></tr>
+        <tr><td>D</td><td>3</td></tr>
+        <tr><td>E</td><td>4</td></tr>
+        <tr><td>E</td><td>4</td></tr>
+        <tr><td>E</td><td>4</td></tr>
+        <tr><td>E</td><td>5</td></tr>
+        <tr><td>E</td><td>5</td></tr>
+
+    </tbody>
+</table>
+</body>
+
+</html>

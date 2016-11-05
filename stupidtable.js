@@ -84,10 +84,11 @@
       });
 
       // Sort by the data-order-by value
+      var sort_dir_factor = sort_dir == dir.ASC ? 1 : -1;
       column.sort(function(a, b) {
         var diff = sortMethod(a[0], b[0]);
         if (diff === 0)
-          return a[2] - b[2];
+          return sort_dir_factor * (a[2] - b[2]);
         else
           return diff;
       });
