@@ -595,4 +595,32 @@ asyncTest("Basic individual column sort - force direction", function(){
     });
 });
 
+asyncTest("No events fired if column sort - force direction doesn't change", function() {
+        var FLOAT_COLUMN = 1;
+    var $table = $("#complex");
+    var $table_cols = $table.find("th");
+
+    // Specify a sorting direction
+    $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'desc');
+    $table.stupidtable();
+
+    var beforeCalls = 0;
+    $table.bind('beforetablesort', function(){
+        beforeCalls++;
+    });
+    var afterCalls = 0;
+    $table.bind('aftertablesort', function(){
+        afterCalls++;
+    });
+
+    $table_cols.eq(FLOAT_COLUMN).stupidsort('asc');
+    $table_cols.eq(FLOAT_COLUMN).stupidsort('asc');
+    $table_cols.eq(FLOAT_COLUMN).stupidsort('asc');
+
+    test_table_state(function(){
+        ok(_.isEqual(beforeCalls, 1));
+        ok(_.isEqual(afterCalls, 1));
+    });
+});
+
 }); //jQuery
