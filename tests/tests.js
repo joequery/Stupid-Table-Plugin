@@ -624,7 +624,7 @@ asyncTest("No events fired if column sort - force direction doesn't change", fun
     });
 });
 
-asyncTest("Order of equal adjacent rows are preserved", function() {
+asyncTest("Order of equal adjacent rows are preserved - 1", function() {
     var STRING_COLUMN = 0;
     var INT_COLUMN = 1;
     var $table = $("#repeated-values");
@@ -636,6 +636,33 @@ asyncTest("Order of equal adjacent rows are preserved", function() {
     test_table_state(function(){
         var expected = ["A", "A", "B", "C", "C", "C"];
         var vals = get_column_elements($table, STRING_COLUMN);
+        ok(_.isEqual(vals, expected));
+
+        var expected = ["1", "2", "3", "2", "3", "3"];
+        var vals = get_column_elements($table, INT_COLUMN);
+        console.log('vals', vals);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("Order of equal adjacent rows are preserved - 2", function() {
+    var STRING_COLUMN = 0;
+    var INT_COLUMN = 1;
+    var $table = $("#repeated-values");
+    var $table_cols = $table.find("th");
+    $table.stupidtable();
+
+    $table_cols.eq(STRING_COLUMN).doubleclick();
+    $table_cols.eq(STRING_COLUMN).click();
+
+    test_table_state(function(){
+        var expected = ["A", "A", "B", "C", "C", "C"];
+        var vals = get_column_elements($table, STRING_COLUMN);
+        ok(_.isEqual(vals, expected));
+
+        var expected = ["1", "2", "3", "2", "3", "3"];
+        var vals = get_column_elements($table, INT_COLUMN);
+        console.log('vals', vals);
         ok(_.isEqual(vals, expected));
     });
 });

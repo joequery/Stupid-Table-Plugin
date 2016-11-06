@@ -89,12 +89,11 @@
           return value_diff;
         }
         else {
-          // sort based on their current location in the table instead of just
-          // returning 0. This helps maintain order when switching sorts between
-          // different columns.
+          // sort based on the elements index location in the table column
+          // instead of just returning 0. This helps maintain order when
+          // switching sorts between different columns.
           var index_diff = a[2] - b[2];
-          var sort_dir_factor = sort_dir == dir.ASC ? 1 : -1;
-          return sort_dir_factor * index_diff;
+          return index_diff;
         }
       });
 
