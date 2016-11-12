@@ -7,6 +7,7 @@
       sortFns = sortFns || {};
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
       $table.data('sortFns', sortFns);
+      $table.attr('data-stupidtable-initialized', true);
 
       $table.on("click.stupidtable", "thead th", function() {
           $(this).stupidsort();
