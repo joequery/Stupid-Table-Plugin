@@ -124,10 +124,10 @@
   $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
   $.fn.stupidtable.default_sort_fns = {
     "int": function(a, b) {
-      return parseInt(a, 10) - parseInt(b, 10);
+      return (parseInt(a, 10)||0) - (parseInt(b, 10)||0);
     },
     "float": function(a, b) {
-      return parseFloat(a) - parseFloat(b);
+      return (parseFloat(a)||0) - (parseFloat(b)||0);
     },
     "string": function(a, b) {
       return a.toString().localeCompare(b.toString());
