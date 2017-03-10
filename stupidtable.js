@@ -1,15 +1,19 @@
 // Stupid jQuery table plugin.
 
 (function($) {
-  $.fn.stupidtable = function(sortFns) {
+
+  $.fn.stupidtable = function(sortFns, settings) {
     return this.each(function() {
       var $table = $(this);
       sortFns = sortFns || {};
+      settings = settings || {};
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
       $table.data('sortFns', sortFns);
 
-      $table.on("click.stupidtable", "thead th", function() {
-          $(this).stupidsort();
+      var headSelector = settings.headSelector || "thead th";
+
+      $table.on("click.stupidtable", headSelector , function() {
+        $(this).stupidsort(settings);
       });
     });
   };
@@ -17,12 +21,17 @@
 
   // Expects $("#mytable").stupidtable() to have already been called.
   // Call on a table header.
-  $.fn.stupidsort = function(force_direction){
+  $.fn.stupidsort = function(settings){
     var $this_th = $(this);
     var th_index = 0; // we'll increment this soon
     var dir = $.fn.stupidtable.dir;
-    var $table = $this_th.closest("table");
-    var datatype = $this_th.data("sort") || null;
+    var $table = $this_th.closest(settings.tableSelector);
+    var datatype = $this_th.data("sort") || null,
+        rowSelector = settings.rowSelector || "tr",
+        containThSelector = settings.containThSelector || "tr",
+        headSelector = settings.headSelector || "th",
+        tbodySelector = settings.tbodySelector || "tbody"
+        ;
 
     // No datatype? Nothing to do.
     if (datatype === null) {
@@ -30,20 +39,18 @@
     }
 
     // Account for colspans
-    $this_th.parents("tr").find("th").slice(0, $(this).index()).each(function() {
+    $this_th.parents(containThSelector).find(headSelector).slice(0, $(this).index()).each(function() {
       var cols = $(this).attr("colspan") || 1;
       th_index += parseInt(cols,10);
     });
 
     var sort_dir;
-    if(arguments.length == 1){
-        sort_dir = force_direction;
-    }
-    else{
-        sort_dir = force_direction || $this_th.data("sort-default") || dir.ASC;
-        if ($this_th.data("sort-dir"))
-           sort_dir = $this_th.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
-    }
+    settings.force_direction = settings.force_direction || $this_th.data("sort-default") || dir.ASC;
+
+    sort_dir = settings.force_direction;
+    if ($this_th.data("sort-dir"))
+      sort_dir = $this_th.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
+
 
     // Bail if already sorted in this direction
     if ($this_th.data("sort-dir") === sort_dir) {
@@ -64,7 +71,7 @@
       var column = [];
       var sortFns = $table.data('sortFns');
       var sortMethod = sortFns[datatype];
-      var trs = $table.children("tbody").children("tr");
+      var trs = $table.children(tbodySelector).children(rowSelector);
 
       // Extract the data for the column that needs to be sorted and pair it up
       // with the TR itself into a tuple. This way sorting the values will
@@ -91,10 +98,10 @@
       // Replace the content of tbody with the sorted rows. Strangely
       // enough, .append accomplishes this for us.
       trs = $.map(column, function(kv) { return kv[1]; });
-      $table.children("tbody").append(trs);
+      $table.children(tbodySelector).append(trs);
 
       // Reset siblings
-      $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
+      $table.find(headSelector).data("sort-dir", null).removeClass("sorting-desc sorting-asc");
       $this_th.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
 
       $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
@@ -109,7 +116,7 @@
   // different from your sort value, use jQuery's .text() or .html() to update
   // the td contents, Assumes stupidtable has already been called for the table.
   $.fn.updateSortVal = function(new_sort_val){
-  var $this_td = $(this);
+    var $this_td = $(this);
     if($this_td.is('[data-sort-value]')){
       // For visual consistency with the .data cache
       $this_td.attr('data-sort-value', new_sort_val);
@@ -136,6 +143,9 @@
       a = a.toString().toLocaleLowerCase();
       b = b.toString().toLocaleLowerCase();
       return a.localeCompare(b);
+    },
+    "short-date": function (a, b) {
+      return new Date(a)- new Date(b);
     }
   };
 })(jQuery);

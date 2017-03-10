@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stupid jQuery table sort</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../stupidtable.js?dev"></script>
+  <script>
+    $(function(){
+      $("#my-invoices-table").stupidtable(null, {
+        rowSelector: '.data-list--row',
+        containThSelector: '.data-list--header',
+        headSelector: ".data-list--header-item",
+        tbodySelector: ".data-list--tbody",
+        tableSelector: "#my-invoices-table"
+      });
+    });
+  </script>
+  <style type="text/css">
+    .rTable { display: table; } .rTableRow { display: table-row; } .rTableHeading { display: table-header-group; } .rTableBody { display: table-row-group; } .rTableFoot { display: table-footer-group; } .rTableCell, .rTableHead { display: table-cell; }
+    .rTableHead, .rTableCell {
+      width: 100px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<h1>Stupid jQuery table sort!</h1>
+
+<p>This example shows how a sortable table can be implemented with very little configuration. Simply specify the data type on a <code>&lt;th&gt;</code> element using the <code>data-sort</code> attribute, and the plugin handles the rest.</p>
+
+
+
+<div id="my-invoices-table" class="data-list rTable" >
+  <div class="data-list--header rTableRow" aria-role="header" >
+    <span class="data-list--header-item rTableHead" data-sort="int" >ID</span>
+    <span class="data-list--header-item rTableHead" data-sort="short-date">Date </span>
+    <span class="data-list--header-item rTableHead" data-sort="int">Total </span>
+
+  </div>
+  <div class="data-list--tbody rTableBody" >
+    <div class="data-list--row rTableRow" aria-role="row">
+      <span class="data-list--row-item rTableCell">12</span>
+      <span class="data-list--row-item rTableCell">Mar 28, 2016</span>
+      <span class="data-list--row-item rTableCell">9376.47</span>
+
+    </div>
+    <div class="data-list--row rTableRow" aria-role="row">
+      <span class="data-list--row-item rTableCell">13</span>
+      <span class="data-list--row-item rTableCell">Mar 29, 2016</span>
+      <span class="data-list--row-item rTableCell">0</span>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
