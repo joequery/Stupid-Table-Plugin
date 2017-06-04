@@ -69,6 +69,7 @@ QUnit.done(function(){
     $("#basic").stupidtable();
     $("#basic-colspan").stupidtable();
     $("#complex-colspan").stupidtable();
+    $("#stability-test").stupidtable();
     $("#qunit-fixture").removeClass("test-hidden");
 });
 
@@ -620,6 +621,46 @@ asyncTest("No events fired if column sort - force direction doesn't change", fun
     test_table_state(function(){
         ok(_.isEqual(beforeCalls, 1));
         ok(_.isEqual(afterCalls, 1));
+    });
+});
+
+asyncTest("Sort Stability Testing - 1", function(){
+    // Not all browsers implement stable sorting. View the following for more
+    // information:
+    // http://ofb.net/~sethml/is-sort-stable.html
+    // http://codecoding.com/beware-chrome-array-sort-implementation-is-unstable/
+    var INDEX_COLUMN = 0;
+    var LETTER_COLUMN = 1;
+    var $table = $("#stability-test");
+    var $table_cols = $table.find("th");
+
+    $table.stupidtable();
+    $table_cols.eq(LETTER_COLUMN).click();
+
+    test_table_state(function(){
+        var expected = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+        var vals = get_column_elements($table, INDEX_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("Sort Stability Testing - 2", function(){
+    // Not all browsers implement stable sorting. View the following for more
+    // information:
+    // http://ofb.net/~sethml/is-sort-stable.html
+    // http://codecoding.com/beware-chrome-array-sort-implementation-is-unstable/
+    var INDEX_COLUMN = 0;
+    var LETTER_COLUMN = 1;
+    var $table = $("#stability-test");
+    var $table_cols = $table.find("th");
+
+    $table.stupidtable();
+    $table_cols.eq(LETTER_COLUMN).doubleclick();
+
+    test_table_state(function(){
+        var expected = ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0"];
+        var vals = get_column_elements($table, INDEX_COLUMN);
+        ok(_.isEqual(vals, expected));
     });
 });
 
