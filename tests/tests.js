@@ -664,4 +664,36 @@ asyncTest("Sort Stability Testing - 2", function(){
     });
 });
 
+asyncTest("$th passed to after/before tablesort event handlers", function(){
+    var INT_COLUMN = 0;
+    var $table = $("#basic");
+    var $table_cols = $table.find("th");
+    var $th_objs = [];
+
+    $table.stupidtable();
+    var $int_header = $table_cols.eq(INT_COLUMN)
+
+    $table.bind('beforetablesort', function(e, data){
+        $th_objs.push(data.$th);
+    });
+    var afterCalls = 0;
+    $table.bind('aftertablesort', function(e, data){
+        $th_objs.push(data.$th);
+    });
+
+    $int_header.click();
+
+    var get_raw_elements = function(arr){
+        return _.map(arr, function(el){
+            return el[0];
+        });
+    };
+
+    test_table_state(function(){
+        var expected = get_raw_elements([$int_header, $int_header]);
+        var raw_th_objs = get_raw_elements($th_objs);
+        ok(_.isEqual(raw_th_objs, expected));
+    });
+});
+
 }); //jQuery
