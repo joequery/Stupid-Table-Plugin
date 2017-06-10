@@ -1,3 +1,8 @@
+v1.0.5 (Released 06/10/2017)
+----------------------------
+
+before/aftertablesort callbacks can access the column header element via `data.$th`.
+
 v1.0.4 (Released 06/10/2017)
 ----------------------------
 
