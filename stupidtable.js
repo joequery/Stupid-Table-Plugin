@@ -80,11 +80,19 @@
           $e.data('sort-value', txt);
           sort_val = txt;
         }
-        column.push([sort_val, tr]);
+        column.push([sort_val, tr, index]);
       });
 
-      // Sort by the data-order-by value
-      column.sort(function(a, b) { return sortMethod(a[0], b[0]); });
+      // Sort by the data-order-by value. Sort by position in the table if
+      // values are the same. This enforces a stable sort across all browsers.
+      // See https://bugs.chromium.org/p/v8/issues/detail?id=90
+      column.sort(function(a, b) {
+        var diff = sortMethod(a[0], b[0]);
+        if (diff === 0)
+          return a[2] - b[2];
+        else
+          return diff;
+      });
       if (sort_dir != dir.ASC)
         column.reverse();
 
