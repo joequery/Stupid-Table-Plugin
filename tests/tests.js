@@ -596,34 +596,6 @@ asyncTest("Basic individual column sort - force direction", function(){
     });
 });
 
-asyncTest("No events fired if column sort - force direction doesn't change", function() {
-        var FLOAT_COLUMN = 1;
-    var $table = $("#complex");
-    var $table_cols = $table.find("th");
-
-    // Specify a sorting direction
-    $table_cols.eq(FLOAT_COLUMN).data('sort-default', 'desc');
-    $table.stupidtable();
-
-    var beforeCalls = 0;
-    $table.bind('beforetablesort', function(){
-        beforeCalls++;
-    });
-    var afterCalls = 0;
-    $table.bind('aftertablesort', function(){
-        afterCalls++;
-    });
-
-    $table_cols.eq(FLOAT_COLUMN).stupidsort('asc');
-    $table_cols.eq(FLOAT_COLUMN).stupidsort('asc');
-    $table_cols.eq(FLOAT_COLUMN).stupidsort('asc');
-
-    test_table_state(function(){
-        ok(_.isEqual(beforeCalls, 1));
-        ok(_.isEqual(afterCalls, 1));
-    });
-});
-
 asyncTest("Sort Stability Testing - 1", function(){
     // Not all browsers implement stable sorting. View the following for more
     // information:
@@ -694,6 +666,36 @@ asyncTest("$th passed to after/before tablesort event handlers", function(){
         var raw_th_objs = get_raw_elements($th_objs);
         ok(_.isEqual(raw_th_objs, expected));
     });
+});
+
+asyncTest("consective calls to stupidsort in same direction should work (issue #183) ", function(){
+    var INT_COLUMN = 0;
+    var $table = $("#basic");
+    var $table_cols = $table.find("th");
+    var $int_col = $table_cols.eq(INT_COLUMN);
+    var $e_td = $table.find("[data-sort-value=2]");
+
+    $table.stupidtable();
+    $table_cols.eq(INT_COLUMN).stupidsort($.fn.stupidtable.dir.ASC);
+
+    // Verify we have td with the value 2 in the INT column.
+    ok(_.isEqual($e_td.text(), "2"));
+
+    setTimeout(function(){
+        var newval = -100;
+        $e_td.updateSortVal(newval);
+        $e_td.text(newval);
+
+        $table_cols.eq(INT_COLUMN).stupidsort($.fn.stupidtable.dir.ASC);
+
+
+        test_table_state(function(){
+            var expected = ["-100", "-53", "15", "95", "195"];
+            var vals = get_column_elements($table, INT_COLUMN);
+            ok(_.isEqual(vals, expected));
+        });
+
+    }, window.WAIT_TIME_MS);
 });
 
 }); //jQuery
