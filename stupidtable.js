@@ -45,11 +45,6 @@
            sort_dir = $this_th.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
     }
 
-    // Bail if already sorted in this direction
-    if ($this_th.data("sort-dir") === sort_dir) {
-      return;
-    }
-    // Go ahead and set sort-dir.  If immediately subsequent calls have same sort-dir they will bail
     $this_th.data("sort-dir", sort_dir);
 
     $table.trigger("beforetablesort", {column: th_index, direction: sort_dir, $th: $this_th});
