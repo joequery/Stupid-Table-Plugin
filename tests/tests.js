@@ -709,7 +709,6 @@ asyncTest("table sorts column onload when specified (issue #180) ", function(){
     test_table_state(function(){
         var expected = ["apple", "banana", "coke", "orange", "zebra"];
         var vals = get_column_elements($table, STRING_COLUMN);
-        console.log("vals", vals);
         ok(_.isEqual(vals, expected));
     });
 });
