@@ -11,6 +11,11 @@
       $table.on("click.stupidtable", "thead th", function() {
           $(this).stupidsort();
       });
+
+      // Sort th immediately if data-sort-onload="yes" is specified. Limit to
+      // the first one found - only one default sort column makes sense anyway.
+      var $th_onload_sort = $table.find("th[data-sort-onload=yes]").eq(0);
+      $th_onload_sort.stupidsort();
     });
   };
 

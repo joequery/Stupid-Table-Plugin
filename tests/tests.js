@@ -698,4 +698,20 @@ asyncTest("consective calls to stupidsort in same direction should work (issue #
     }, window.WAIT_TIME_MS);
 });
 
+asyncTest("table sorts column onload when specified (issue #180) ", function(){
+    var STRING_COLUMN = 2;
+    var $table = $("#basic-onload");
+    var $table_cols = $table.find("th");
+    var $str_col = $table_cols.eq(STRING_COLUMN);
+
+    $table.stupidtable();
+
+    test_table_state(function(){
+        var expected = ["apple", "banana", "coke", "orange", "zebra"];
+        var vals = get_column_elements($table, STRING_COLUMN);
+        console.log("vals", vals);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
 }); //jQuery
