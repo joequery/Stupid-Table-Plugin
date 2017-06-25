@@ -112,6 +112,22 @@ or "desc" first.
       </thead>
     </table>
 
+Sorting a column on load
+------------------------
+
+If you want a specific column to be sorted immediately after
+`$table.stupidtable()` is called, you can provide a `data-sort-onload=yes`
+attribute.
+
+    <table>
+      <thead>
+        <tr>
+            <th data-sort="float" data-sort-onload=yes>float</th>
+            ...
+        </tr>
+      </thead>
+    </table>
+
 Sorting a column programatically
 --------------------------------
 

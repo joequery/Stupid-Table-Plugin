@@ -1,3 +1,11 @@
+v1.0.7 (Released 06/25/2017)
+----------------------------
+
+A `<th>` element can now be provided with a `data-sort-onload=yes` attribute.
+Once `$table.stupidtable()` is called the table will immediately be sorted by
+the column with the `data-sort-onload=yes` attribute if one is found.
+Resolves [Issue #180](https://github.com/joequery/Stupid-Table-Plugin/issues/180) and [Issue #126](https://github.com/joequery/Stupid-Table-Plugin/issues/126).
+
 v1.0.6 (Released 06/24/2017)
 ----------------------------
 
