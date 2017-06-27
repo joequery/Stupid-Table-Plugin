@@ -6,23 +6,7 @@
   <script src="../stupidtable.js?dev"></script>
   <script>
     $(function(){
-        var $table = $("table");
-        $table.stupidtable_settings({
-            should_redraw: function(sorted_column, sort_fn){
-              var first_val = sorted_column[0];
-              var last_val = sorted_column[sorted_column.length - 1][0];
-
-              // If first and last element of the sorted column are the same, we
-              // can assume all elements are the same. Don't sort if the values
-              // are the same.
-              var different_vals = sort_fn(first_val, last_val) !== 0;
-              if (different_vals){
-                console.log("Different vals. Redrawing!");
-              }
-              return different_vals;
-            }
-        });
-        $table.stupidtable();
+        $("table").stupidtable();
     });
   </script>
   <style type="text/css">
@@ -58,7 +42,6 @@
         <th data-sort="int">int</th>
         <th data-sort="float">float</th>
         <th data-sort="string" data-sort-onload="yes">string</th>
-        <th data-sort="int">int (identical)</th>
       </tr>
     </thead>
     <tbody>
@@ -66,31 +49,26 @@
         <td>15</td>
         <td>-.18</td>
         <td>banana</td>
-        <td>99</td>
       </tr>
       <tr class="awesome">
         <td>95</td>
         <td>36</td>
         <td>coke</td>
-        <td>99</td>
       </tr>
       <tr>
         <td>2</td>
         <td>-152.5</td>
         <td>apple</td>
-        <td>99</td>
       </tr>
       <tr>
         <td>-53</td>
         <td>88.5</td>
         <td>zebra</td>
-        <td>99</td>
       </tr>
       <tr>
         <td>195</td>
         <td>-858</td>
         <td>orange</td>
-        <td>99</td>
       </tr>
     </tbody>
   </table>

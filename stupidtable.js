@@ -19,12 +19,6 @@
     });
   };
 
-  $.fn.stupidtable.default_settings = {
-    should_redraw: function(sorted_column, sort_fn){
-      return true;
-    }
-  };
-
   // Allow specification of settings on a per-table basis. Call on a table
   // jquery object.
   $.fn.stupidtable_settings = function(settings) {
@@ -117,8 +111,18 @@
       if (sort_dir != dir.ASC)
         column.reverse();
 
-      if(!$table.stupidtable.settings.should_redraw(column, sortMethod)){
-          return;
+      var sort_info = {
+        column: column,
+        sort_dir: sort_dir,
+        $th: $this_th,
+        th_index: th_index,
+        $table: $table,
+        datatype: datatype,
+        compare_fn: sortMethod
+      }
+
+      if(!$table.stupidtable.settings.should_redraw(sort_info)){
+        return;
       }
 
       // Replace the content of tbody with the sorted rows. Strangely
@@ -154,6 +158,11 @@
   // ------------------------------------------------------------------
   // Default settings
   // ------------------------------------------------------------------
+  $.fn.stupidtable.default_settings = {
+    should_redraw: function(sort_info){
+      return true;
+    }
+  };
   $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
   $.fn.stupidtable.default_sort_fns = {
     "int": function(a, b) {
