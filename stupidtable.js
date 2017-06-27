@@ -20,7 +20,7 @@
   };
 
   $.fn.stupidtable.default_settings = {
-    should_redraw: function(){
+    should_redraw: function(sorted_column, sort_fn){
       return true;
     }
   };
@@ -50,6 +50,13 @@
       return;
     }
 
+    var sortFns = $table.data('sortFns');
+    var sortMethod = sortFns[datatype];
+
+    // =========================================================
+    // End var setup, begin sorting procedures
+    // =========================================================
+
     // Account for colspans
     $this_th.parents("tr").find("th").slice(0, $(this).index()).each(function() {
       var cols = $(this).attr("colspan") || 1;
@@ -78,8 +85,6 @@
     setTimeout(function() {
       // Gather the elements for this column
       var column = [];
-      var sortFns = $table.data('sortFns');
-      var sortMethod = sortFns[datatype];
       var trs = $table.children("tbody").children("tr");
 
       // Extract the data for the column that needs to be sorted and pair it up
@@ -112,7 +117,7 @@
       if (sort_dir != dir.ASC)
         column.reverse();
 
-      if(!$table.stupidtable.settings.should_redraw()){
+      if(!$table.stupidtable.settings.should_redraw(column, sortMethod)){
           return;
       }
 
