@@ -20,7 +20,7 @@
   };
 
   // Allow specification of settings on a per-table basis. Call on a table
-  // jquery object.
+  // jquery object. Call *before* calling .stuidtable();
   $.fn.stupidtable_settings = function(settings) {
     return this.each(function() {
       var $table = $(this);
@@ -38,6 +38,11 @@
     var dir = $.fn.stupidtable.dir;
     var $table = $this_th.closest("table");
     var datatype = $this_th.data("sort") || null;
+
+    // Bring in default settings if none provided
+    if(!$table.stupidtable.settings){
+        $table.stupidtable.settings = $.extend({}, $.fn.stupidtable.default_settings);
+    }
 
     // No datatype? Nothing to do.
     if (datatype === null) {
