@@ -6,7 +6,11 @@
   <script src="../stupidtable.js?dev"></script>
   <script>
     $(function(){
-        $("table").stupidtable();
+        var $table = $("table");
+        $table.stupidtable_settings({
+            should_redraw: function(){ return true; }
+        });
+        $table.stupidtable();
     });
   </script>
   <style type="text/css">
