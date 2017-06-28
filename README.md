@@ -237,6 +237,50 @@ we do the following:
 This extracts the integers from the cell and compares them in the style
 that sort functions use.
 
+StupidTable Settings
+--------------------
+
+As of 1.1.0 settings have been introduced. Settings are defined like so:
+
+    var $table = $("#mytable");
+    $table.stupidtable_settings({
+        // Settings for this table specified here
+    });
+    $table.stupidtable();
+
+### should_redraw
+
+The `should_redraw` setting allows you to specify a function that determines
+whether or not the table should be redrawn after it has been internally sorted.
+
+The `should_redraw` function takes a `sort_info` object as an argument. The
+object keys available are:
+
+*  `column` - An array representing the sorted column. Each element of the array is of the form `[sort_val, $tr, index]`
+*  `sort_dir` - `"asc"` or `"desc"`
+*  `$th` - The jquery object of the `<th>` element that was clicked
+*  `th_index` - The index of the `<th>` element that was cliked
+*  `$table` - The jquery object of the `<table>` that contains the `<th>` that was clicked
+*  `datatype` - The datatype of the column
+*  `compare_fn` - The sort/compare function associated with the `<th>` clicked.
+
+**Example**: If you want to prevent stupidtable from redrawing the table if the
+column sorted has all identical values, you would do the following:
+
+    var $table = $("#mytable");
+    $table.stupidtable_settings({
+        should_redraw: function(sort_info){
+          var sorted_column = sort_info.column;
+          var first_val = sorted_column[0];
+          var last_val = sorted_column[sorted_column.length - 1][0];
+
+          // If first and last element of the sorted column are the same, we
+          // can assume all elements are the same.
+          return sort_info.compare_fn(first_val, last_val) !== 0;
+        }
+    });
+    $table.stupidtable();
+
 License
 -------
 
