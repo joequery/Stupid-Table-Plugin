@@ -248,6 +248,8 @@ As of 1.1.0 settings have been introduced. Settings are defined like so:
     });
     $table.stupidtable();
 
+Listed below are the available settings.
+
 ### should_redraw
 
 The `should_redraw` setting allows you to specify a function that determines
