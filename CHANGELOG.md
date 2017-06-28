@@ -1,3 +1,10 @@
+v1.1.0 (Released 06/28/2017)
+----------------------------
+
+We are introducing an implementation of settings for StupidTable. The first
+setting is `should_redraw`. This setting allows you to specify a function that
+can conditionally prevent the table from redrawing after a sort.
+
 v1.0.7 (Released 06/25/2017)
 ----------------------------
 

@@ -19,6 +19,16 @@
     });
   };
 
+  // Allow specification of settings on a per-table basis. Call on a table
+  // jquery object. Call *before* calling .stuidtable();
+  $.fn.stupidtable_settings = function(settings) {
+    return this.each(function() {
+      var $table = $(this);
+      var final_settings = $.extend({}, $.fn.stupidtable.default_settings, settings);
+      $table.stupidtable.settings = final_settings;
+    });
+  };
+
 
   // Expects $("#mytable").stupidtable() to have already been called.
   // Call on a table header.
@@ -29,10 +39,22 @@
     var $table = $this_th.closest("table");
     var datatype = $this_th.data("sort") || null;
 
+    // Bring in default settings if none provided
+    if(!$table.stupidtable.settings){
+        $table.stupidtable.settings = $.extend({}, $.fn.stupidtable.default_settings);
+    }
+
     // No datatype? Nothing to do.
     if (datatype === null) {
       return;
     }
+
+    var sortFns = $table.data('sortFns');
+    var sortMethod = sortFns[datatype];
+
+    // =========================================================
+    // End var setup, begin sorting procedures
+    // =========================================================
 
     // Account for colspans
     $this_th.parents("tr").find("th").slice(0, $(this).index()).each(function() {
@@ -62,8 +84,6 @@
     setTimeout(function() {
       // Gather the elements for this column
       var column = [];
-      var sortFns = $table.data('sortFns');
-      var sortMethod = sortFns[datatype];
       var trs = $table.children("tbody").children("tr");
 
       // Extract the data for the column that needs to be sorted and pair it up
@@ -95,6 +115,20 @@
       });
       if (sort_dir != dir.ASC)
         column.reverse();
+
+      var sort_info = {
+        column: column,
+        sort_dir: sort_dir,
+        $th: $this_th,
+        th_index: th_index,
+        $table: $table,
+        datatype: datatype,
+        compare_fn: sortMethod
+      }
+
+      if(!$table.stupidtable.settings.should_redraw(sort_info)){
+        return;
+      }
 
       // Replace the content of tbody with the sorted rows. Strangely
       // enough, .append accomplishes this for us.
@@ -129,6 +163,11 @@
   // ------------------------------------------------------------------
   // Default settings
   // ------------------------------------------------------------------
+  $.fn.stupidtable.default_settings = {
+    should_redraw: function(sort_info){
+      return true;
+    }
+  };
   $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
   $.fn.stupidtable.default_sort_fns = {
     "int": function(a, b) {

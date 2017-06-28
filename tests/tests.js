@@ -713,4 +713,26 @@ asyncTest("table sorts column onload when specified (issue #180) ", function(){
     });
 });
 
+asyncTest("test should_redraw setting", function(){
+    var INT_COLUMN = 0;
+    var $table = $("#basic");
+    var $table_cols = $table.find("th");
+
+    $table.stupidtable_settings({
+        should_redraw: function(sort_info){
+            return false;
+        }
+    });
+    $table.stupidtable();
+    $table_cols.eq(INT_COLUMN).click();
+
+    test_table_state(function(){
+        // Redrawing will never occur so we should expect the initial order to
+        // be the current column order.
+        var expected = ["15", "95", "2", "-53", "195"];
+        var vals = get_column_elements($table, INT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
 }); //jQuery

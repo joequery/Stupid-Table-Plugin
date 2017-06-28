@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stupid jQuery table sort</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../stupidtable.js?dev"></script>
+  <script>
+    // ======================================================
+    // Example 1
+    // ======================================================
+    $(function(){
+        var $table = $("#example-1");
+        $table.stupidtable_settings({
+            should_redraw: function(sort_info){
+              var sorted_column = sort_info.column;
+              var first_val = sorted_column[0];
+              var last_val = sorted_column[sorted_column.length - 1][0];
+
+              // If first and last element of the sorted column are the same, we
+              // can assume all elements are the same.
+              return sort_info.compare_fn(first_val, last_val) !== 0;
+            }
+        });
+        $table.stupidtable();
+    });
+
+  </script>
+  <style type="text/css">
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px 10px;
+      border: 1px solid #999;
+    }
+    th {
+      background-color: #eee;
+    }
+    th[data-sort]{
+      cursor:pointer;
+    }
+    tr.awesome{
+      color: red;
+    }
+  </style>
+  </style>
+</head>
+
+<body>
+
+  <h1>StupidTable with settings</h1>
+
+  <p>This page shows how specific behaviors can be introduced by providing
+  settings to StupidTable. View the source of this page to see the settings in
+  use.</p>
+
+  <hr/>
+
+  <h2>Example 1</h2>
+
+  <p> This table does not redraw when attempting to sort a column that has identical values in all rows. </p>
+
+  <table id='example-1'>
+    <thead>
+      <tr>
+        <th data-sort="int">int</th>
+        <th data-sort="float">float</th>
+        <th data-sort="string" data-sort-onload="yes">string</th>
+        <th data-sort="int">int (identical)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>15</td>
+        <td>-.18</td>
+        <td>banana</td>
+        <td>99</td>
+      </tr>
+      <tr class="awesome">
+        <td>95</td>
+        <td>36</td>
+        <td>coke</td>
+        <td>99</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>-152.5</td>
+        <td>apple</td>
+        <td>99</td>
+      </tr>
+      <tr>
+        <td>-53</td>
+        <td>88.5</td>
+        <td>zebra</td>
+        <td>99</td>
+      </tr>
+      <tr>
+        <td>195</td>
+        <td>-858</td>
+        <td>orange</td>
+        <td>99</td>
+      </tr>
+    </tbody>
+  </table>
+
+<pre><code>
+var $table = $("#example-1");
+$table.stupidtable_settings({
+    should_redraw: function(sort_info){
+      var sorted_column = sort_info.column;
+      var first_val = sorted_column[0];
+      var last_val = sorted_column[sorted_column.length - 1][0];
+
+      // If first and last element of the sorted column are the same, we
+      // can assume all elements are the same.
+      return sort_info.compare_fn(first_val, last_val) !== 0;
+    }
+});
+$table.stupidtable();
+</code></pre>
+
+</body>
+</html>
