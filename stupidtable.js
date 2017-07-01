@@ -98,7 +98,8 @@
         // ====================================================================
         var ele = {
             $tr: $(tr),
-            columns: []
+            columns: [],
+            index: index
         };
 
         $(tr).children('td').each(function(idx, td){
@@ -124,6 +125,15 @@
       // Sort by the data-order-by value. Sort by position in the table if
       // values are the same. This enforces a stable sort across all browsers.
       // See https://bugs.chromium.org/p/v8/issues/detail?id=90
+      table_structure.sort(function(e1, e2){
+        var diff = sortMethod(e1.columns[th_index], e2.columns[th_index]);
+        if (diff === 0)
+          return e1.index - e2.index;
+        else
+          return diff;
+
+      });
+
       column.sort(function(a, b) {
         var diff = sortMethod(a[0], b[0]);
         if (diff === 0)
@@ -131,8 +141,11 @@
         else
           return diff;
       });
-      if (sort_dir != dir.ASC)
+
+      if (sort_dir != dir.ASC){
         column.reverse();
+        table_structure.reverse();
+      }
 
       var sort_info = {
         column: column,
@@ -150,7 +163,7 @@
 
       // Replace the content of tbody with the sorted rows. Strangely
       // enough, .append accomplishes this for us.
-      trs = $.map(column, function(kv) { return kv[1]; });
+      trs = $.map(table_structure, function(ele) { return ele.$tr; });
       $table.children("tbody").append(trs);
 
       // Reset siblings
