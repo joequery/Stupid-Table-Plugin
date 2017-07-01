@@ -7,6 +7,7 @@
       sortFns = sortFns || {};
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
       $table.data('sortFns', sortFns);
+      $.fn.stupidtable_buildtable($table);
 
       $table.on("click.stupidtable", "thead th", function() {
           $(this).stupidsort();
@@ -82,39 +83,7 @@
     // Run sorting asynchronously on a timout to force browser redraw after
     // `beforetablesort` callback. Also avoids locking up the browser too much.
     setTimeout(function() {
-      var trs = $table.children("tbody").children("tr");
-
-      var table_structure = [];
-      trs.each(function(index,tr) {
-
-        // ====================================================================
-        // Transfer to using internal table structure
-        // ====================================================================
-        var ele = {
-            $tr: $(tr),
-            columns: [],
-            index: index
-        };
-
-        $(tr).children('td').each(function(idx, td){
-            var sort_val = $(td).data("sort-value");
-
-            // Store and read from the .data cache for display text only sorts
-            // instead of looking through the DOM every time
-            if(typeof(sort_val) === "undefined"){
-              var txt = $(td).text();
-              $(td).data('sort-value', txt);
-              sort_val = txt;
-            }
-            ele.columns.push(sort_val);
-        });
-
-        var $e = $(tr).children().eq(th_index);
-        var sort_val = $e.data("sort-value");
-
-        table_structure.push(ele);
-      });
-
+      var table_structure = $table.data('stupidsort_internaltable');
       // Sort by the data-order-by value. Sort by position in the table if
       // values are the same. This enforces a stable sort across all browsers.
       // See https://bugs.chromium.org/p/v8/issues/detail?id=90
@@ -177,6 +146,8 @@
       $this_td.attr('data-sort-value', new_sort_val);
     }
     $this_td.data("sort-value", new_sort_val);
+    var $table = $this_td.closest("table");
+    $.fn.stupidtable_buildtable($table);
     return $this_td;
   };
 
@@ -205,4 +176,37 @@
       return a.localeCompare(b);
     }
   };
+  $.fn.stupidtable_buildtable = function($table){
+      var table_structure = [];
+      var trs = $table.children("tbody").children("tr");
+      trs.each(function(index,tr) {
+
+        // ====================================================================
+        // Transfer to using internal table structure
+        // ====================================================================
+        var ele = {
+            $tr: $(tr),
+            columns: [],
+            index: index
+        };
+
+        $(tr).children('td').each(function(idx, td){
+            var sort_val = $(td).data("sort-value");
+
+            // Store and read from the .data cache for display text only sorts
+            // instead of looking through the DOM every time
+            if(typeof(sort_val) === "undefined"){
+              var txt = $(td).text();
+              $(td).data('sort-value', txt);
+              sort_val = txt;
+            }
+            ele.columns.push(sort_val);
+        });
+        table_structure.push(ele);
+      });
+
+      $table.data('stupidsort_internaltable', table_structure);
+      return table_structure;
+  };
+
 })(jQuery);
