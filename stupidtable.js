@@ -86,21 +86,39 @@
       var column = [];
       var trs = $table.children("tbody").children("tr");
 
+      var table_structure = [];
+
       // Extract the data for the column that needs to be sorted and pair it up
       // with the TR itself into a tuple. This way sorting the values will
       // incidentally sort the trs.
       trs.each(function(index,tr) {
+
+        // ====================================================================
+        // Transfer to using internal table structure
+        // ====================================================================
+        var ele = {
+            $tr: $(tr),
+            columns: []
+        };
+
+        $(tr).children('td').each(function(idx, td){
+            var sort_val = $(td).data("sort-value");
+
+            // Store and read from the .data cache for display text only sorts
+            // instead of looking through the DOM every time
+            if(typeof(sort_val) === "undefined"){
+              var txt = $(td).text();
+              $(td).data('sort-value', txt);
+              sort_val = txt;
+            }
+            ele.columns.push(sort_val);
+        });
+
         var $e = $(tr).children().eq(th_index);
         var sort_val = $e.data("sort-value");
 
-        // Store and read from the .data cache for display text only sorts
-        // instead of looking through the DOM every time
-        if(typeof(sort_val) === "undefined"){
-          var txt = $e.text();
-          $e.data('sort-value', txt);
-          sort_val = txt;
-        }
-        column.push([sort_val, tr, index]);
+        table_structure.push(ele);
+        column.push([ele.columns[th_index], tr, index]);
       });
 
       // Sort by the data-order-by value. Sort by position in the table if
