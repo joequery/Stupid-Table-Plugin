@@ -82,15 +82,9 @@
     // Run sorting asynchronously on a timout to force browser redraw after
     // `beforetablesort` callback. Also avoids locking up the browser too much.
     setTimeout(function() {
-      // Gather the elements for this column
-      var column = [];
       var trs = $table.children("tbody").children("tr");
 
       var table_structure = [];
-
-      // Extract the data for the column that needs to be sorted and pair it up
-      // with the TR itself into a tuple. This way sorting the values will
-      // incidentally sort the trs.
       trs.each(function(index,tr) {
 
         // ====================================================================
@@ -119,7 +113,6 @@
         var sort_val = $e.data("sort-value");
 
         table_structure.push(ele);
-        column.push([ele.columns[th_index], tr, index]);
       });
 
       // Sort by the data-order-by value. Sort by position in the table if
@@ -134,18 +127,14 @@
 
       });
 
-      column.sort(function(a, b) {
-        var diff = sortMethod(a[0], b[0]);
-        if (diff === 0)
-          return a[2] - b[2];
-        else
-          return diff;
-      });
-
       if (sort_dir != dir.ASC){
-        column.reverse();
         table_structure.reverse();
       }
+
+      // Gather individual column for callbacks
+      var column = $.map(table_structure, function(ele, i){
+          return [[ele.columns[th_index], ele.$tr, i]];
+      });
 
       var sort_info = {
         column: column,
