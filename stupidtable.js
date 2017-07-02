@@ -7,7 +7,7 @@
       sortFns = sortFns || {};
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
       $table.data('sortFns', sortFns);
-      $table.stupidtable_buildtable();
+      $table.stupidtable_build();
 
       $table.on("click.stupidtable", "thead th", function() {
           $(this).stupidsort();
@@ -84,7 +84,7 @@
     // `beforetablesort` callback. Also avoids locking up the browser too much.
     setTimeout(function() {
       if(!$table.stupidtable.settings.will_manually_build_table){
-        $table.stupidtable_buildtable();
+        $table.stupidtable_build();
       }
       var table_structure = $table.data('stupidsort_internaltable');
       // Sort by the data-order-by value. Sort by position in the table if
@@ -179,7 +179,7 @@
     }
   };
 
-  $.fn.stupidtable_buildtable = function(){
+  $.fn.stupidtable_build = function(){
     return this.each(function() {
       var $table = $(this);
       var table_structure = [];
