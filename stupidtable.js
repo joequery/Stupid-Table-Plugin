@@ -87,7 +87,7 @@
         $table.stupidtable_buildtable();
       }
       var table_structure = $table.data('stupidsort_internaltable');
-      // Sort by the data-sort value. Sort by position in the table if
+      // Sort by the data-order-by value. Sort by position in the table if
       // values are the same. This enforces a stable sort across all browsers.
       // See https://bugs.chromium.org/p/v8/issues/detail?id=90
       table_structure.sort(function(e1, e2){
