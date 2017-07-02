@@ -735,4 +735,88 @@ asyncTest("test should_redraw setting", function(){
     });
 });
 
+asyncTest("test will_manually_build_table setting - 1", function(){
+    var INT_COLUMN = 0;
+    var $table = $("#basic");
+    var $table_cols = $table.find("th");
+    var $int_column = $table_cols.eq(INT_COLUMN);
+    var $first_int_td = $table.find("tbody tr td").first();
+
+    $table.stupidtable_settings({
+        will_manually_build_table: true
+    });
+    $table.stupidtable();
+    ok(_.isEqual($first_int_td.text(), "15"));
+
+    $first_int_td.updateSortVal(200);
+    $first_int_td.text("200");
+    $int_column.click();
+
+    test_table_state(function(){
+        // Since we didn't manually build the table after updating the value, we
+        // shouldn't expect the table to sort correctly. 200 will still function
+        // as 15
+        var expected = ["-53", "2", "200", "95", "195"];
+        var vals = get_column_elements($table, INT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("test will_manually_build_table setting - 2", function(){
+    var INT_COLUMN = 0;
+    var $table = $("#basic");
+    var $table_cols = $table.find("th");
+    var $int_column = $table_cols.eq(INT_COLUMN);
+    var $first_int_td = $table.find("tbody tr td").first();
+
+    $table.stupidtable_settings({
+        will_manually_build_table: true
+    });
+    $table.stupidtable();
+    ok(_.isEqual($first_int_td.text(), "15"));
+
+    $first_int_td.updateSortVal(200);
+    $first_int_td.text("200");
+
+    // Rebuild the table
+    $table.stupidtable_build();
+    $int_column.click();
+
+    test_table_state(function(){
+        // Since we didn't manually build the table after updating the value, we
+        // shouldn't expect the table to sort correctly. 200 will still function
+        // as 15
+        var expected = ["-53", "2", "95", "195", "200"];
+        var vals = get_column_elements($table, INT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+asyncTest("test will_manually_build_table setting - 3", function(){
+    var INT_COLUMN = 0;
+    var $table = $("#basic");
+    var $table_cols = $table.find("th");
+    var $int_column = $table_cols.eq(INT_COLUMN);
+    var $first_int_td = $table.find("tbody tr td").first();
+
+    $table.stupidtable_settings({
+        will_manually_build_table: false
+    });
+    $table.stupidtable();
+    ok(_.isEqual($first_int_td.text(), "15"));
+
+    $first_int_td.updateSortVal(200);
+    $first_int_td.text("200");
+    $int_column.click();
+
+    test_table_state(function(){
+        // Since we didn't manually build the table after updating the value, we
+        // shouldn't expect the table to sort correctly. 200 will still function
+        // as 15
+        var expected = ["-53", "2", "95", "195", "200"];
+        var vals = get_column_elements($table, INT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
 }); //jQuery

@@ -7,6 +7,7 @@
       sortFns = sortFns || {};
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
       $table.data('sortFns', sortFns);
+      $table.stupidtable_build();
 
       $table.on("click.stupidtable", "thead th", function() {
           $(this).stupidsort();
@@ -82,39 +83,30 @@
     // Run sorting asynchronously on a timout to force browser redraw after
     // `beforetablesort` callback. Also avoids locking up the browser too much.
     setTimeout(function() {
-      // Gather the elements for this column
-      var column = [];
-      var trs = $table.children("tbody").children("tr");
-
-      // Extract the data for the column that needs to be sorted and pair it up
-      // with the TR itself into a tuple. This way sorting the values will
-      // incidentally sort the trs.
-      trs.each(function(index,tr) {
-        var $e = $(tr).children().eq(th_index);
-        var sort_val = $e.data("sort-value");
-
-        // Store and read from the .data cache for display text only sorts
-        // instead of looking through the DOM every time
-        if(typeof(sort_val) === "undefined"){
-          var txt = $e.text();
-          $e.data('sort-value', txt);
-          sort_val = txt;
-        }
-        column.push([sort_val, tr, index]);
-      });
-
+      if(!$table.stupidtable.settings.will_manually_build_table){
+        $table.stupidtable_build();
+      }
+      var table_structure = $table.data('stupidsort_internaltable');
       // Sort by the data-order-by value. Sort by position in the table if
       // values are the same. This enforces a stable sort across all browsers.
       // See https://bugs.chromium.org/p/v8/issues/detail?id=90
-      column.sort(function(a, b) {
-        var diff = sortMethod(a[0], b[0]);
+      table_structure.sort(function(e1, e2){
+        var diff = sortMethod(e1.columns[th_index], e2.columns[th_index]);
         if (diff === 0)
-          return a[2] - b[2];
+          return e1.index - e2.index;
         else
           return diff;
+
       });
-      if (sort_dir != dir.ASC)
-        column.reverse();
+
+      if (sort_dir != dir.ASC){
+        table_structure.reverse();
+      }
+
+      // Gather individual column for callbacks
+      var column = $.map(table_structure, function(ele, i){
+          return [[ele.columns[th_index], ele.$tr, i]];
+      });
 
       var sort_info = {
         column: column,
@@ -132,7 +124,7 @@
 
       // Replace the content of tbody with the sorted rows. Strangely
       // enough, .append accomplishes this for us.
-      trs = $.map(column, function(kv) { return kv[1]; });
+      trs = $.map(table_structure, function(ele) { return ele.$tr; });
       $table.children("tbody").append(trs);
 
       // Reset siblings
@@ -166,7 +158,8 @@
   $.fn.stupidtable.default_settings = {
     should_redraw: function(sort_info){
       return true;
-    }
+    },
+    will_manually_build_table: false
   };
   $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
   $.fn.stupidtable.default_sort_fns = {
@@ -185,4 +178,39 @@
       return a.localeCompare(b);
     }
   };
+
+  $.fn.stupidtable_build = function(){
+    return this.each(function() {
+      var $table = $(this);
+      var table_structure = [];
+      var trs = $table.children("tbody").children("tr");
+      trs.each(function(index,tr) {
+
+        // ====================================================================
+        // Transfer to using internal table structure
+        // ====================================================================
+        var ele = {
+            $tr: $(tr),
+            columns: [],
+            index: index
+        };
+
+        $(tr).children('td').each(function(idx, td){
+            var sort_val = $(td).data("sort-value");
+
+            // Store and read from the .data cache for display text only sorts
+            // instead of looking through the DOM every time
+            if(typeof(sort_val) === "undefined"){
+              var txt = $(td).text();
+              $(td).data('sort-value', txt);
+              sort_val = txt;
+            }
+            ele.columns.push(sort_val);
+        });
+        table_structure.push(ele);
+      });
+      $table.data('stupidsort_internaltable', table_structure);
+    });
+  };
+
 })(jQuery);
