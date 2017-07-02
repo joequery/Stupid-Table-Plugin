@@ -1,3 +1,9 @@
+v1.1.1 (Released 07/02/2017)
+----------------------------
+
+Updated internal representation of tables.
+Added `will_manually_build_table` setting.
+
 v1.1.0 (Released 06/28/2017)
 ----------------------------
 

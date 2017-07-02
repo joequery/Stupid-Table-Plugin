@@ -250,7 +250,39 @@ As of 1.1.0 settings have been introduced. Settings are defined like so:
 
 Listed below are the available settings.
 
+### will_manually_build_table
+
+(Introduced in verison 1.1.1)
+
+Options:
+
+* `true`
+* `false` (default)
+
+By default, every time a column is sorted, stupidtable reads the DOM to extract
+all the values from the table. For tables that will not change or for very large
+tables, this behavior may be suboptimal.  To modify this behavior, set the
+`will_manually_build_table` setting to `true`. However, you will be responsible
+for informing stupidtable that the table has been modified by calling
+`$table.stupidtable_build()`.
+
+    var $table = $("#mytable");
+    $table.stupidtable_settings({
+        will_manually_build_table: true
+    });
+    $table.stupidtable();
+
+    // Make some modification to the table, such as deleting a row
+    ...
+    ...
+
+    // Since will_manually_build_table is true, we must build the table in order
+    // for future sorts to properly handle our modifications.
+    $table.stupidtable_build();
+
 ### should_redraw
+
+(Introduced in verison 1.1.0)
 
 The `should_redraw` setting allows you to specify a function that determines
 whether or not the table should be redrawn after it has been internally sorted.
