@@ -7,7 +7,7 @@
       sortFns = sortFns || {};
       sortFns = $.extend({}, $.fn.stupidtable.default_sort_fns, sortFns);
       $table.data('sortFns', sortFns);
-      $.fn.stupidtable_buildtable($table);
+      $table.stupidtable_buildtable();
 
       $table.on("click.stupidtable", "thead th", function() {
           $(this).stupidsort();
@@ -84,10 +84,10 @@
     // `beforetablesort` callback. Also avoids locking up the browser too much.
     setTimeout(function() {
       if(!$table.stupidtable.settings.will_manually_build_table){
-        $.fn.stupidtable_buildtable($table);
+        $table.stupidtable_buildtable();
       }
       var table_structure = $table.data('stupidsort_internaltable');
-      // Sort by the data-order-by value. Sort by position in the table if
+      // Sort by the data-sort value. Sort by position in the table if
       // values are the same. This enforces a stable sort across all browsers.
       // See https://bugs.chromium.org/p/v8/issues/detail?id=90
       table_structure.sort(function(e1, e2){
@@ -179,7 +179,9 @@
     }
   };
 
-  $.fn.stupidtable_buildtable = function($table){
+  $.fn.stupidtable_buildtable = function(){
+    return this.each(function() {
+      var $table = $(this);
       var table_structure = [];
       var trs = $table.children("tbody").children("tr");
       trs.each(function(index,tr) {
@@ -207,9 +209,8 @@
         });
         table_structure.push(ele);
       });
-
       $table.data('stupidsort_internaltable', table_structure);
-      return table_structure;
+    });
   };
 
 })(jQuery);
