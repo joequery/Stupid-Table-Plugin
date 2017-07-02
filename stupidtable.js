@@ -83,6 +83,9 @@
     // Run sorting asynchronously on a timout to force browser redraw after
     // `beforetablesort` callback. Also avoids locking up the browser too much.
     setTimeout(function() {
+      if(!$table.stupidtable.settings.will_manually_build_table){
+        $.fn.stupidtable_buildtable($table);
+      }
       var table_structure = $table.data('stupidsort_internaltable');
       // Sort by the data-order-by value. Sort by position in the table if
       // values are the same. This enforces a stable sort across all browsers.
@@ -146,8 +149,6 @@
       $this_td.attr('data-sort-value', new_sort_val);
     }
     $this_td.data("sort-value", new_sort_val);
-    var $table = $this_td.closest("table");
-    $.fn.stupidtable_buildtable($table);
     return $this_td;
   };
 
@@ -157,7 +158,8 @@
   $.fn.stupidtable.default_settings = {
     should_redraw: function(sort_info){
       return true;
-    }
+    },
+    will_manually_build_table: false
   };
   $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
   $.fn.stupidtable.default_sort_fns = {
@@ -176,6 +178,7 @@
       return a.localeCompare(b);
     }
   };
+
   $.fn.stupidtable_buildtable = function($table){
       var table_structure = [];
       var trs = $table.children("tbody").children("tr");
