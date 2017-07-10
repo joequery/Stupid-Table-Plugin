@@ -171,11 +171,32 @@
   var sortTable = function(sort_info){
     var table_structure = sort_info.$table.data('stupidsort_internaltable');
     var th_index = sort_info.th_index;
-    // Sort by the data-order-by value. Sort by position in the table if
-    // values are the same. This enforces a stable sort across all browsers.
-    // See https://bugs.chromium.org/p/v8/issues/detail?id=90
+    var $th = sort_info.$th;
+
+    var multicolumn_target_str = $th.data('sort-multicolumn');
+    var multicolumn_targets;
+    if(multicolumn_target_str){
+        multicolumn_targets = multicolumn_target_str.split(',');
+    }
+    else{
+        multicolumn_targets = [];
+    }
+    var multicolumn_th_targets = $.map(multicolumn_targets, function(identifier, i){
+        return get_th(sort_info.$table, identifier);
+    });
+
     table_structure.sort(function(e1, e2){
+      var multicolumns = multicolumn_th_targets.slice(0); // shallow copy
       var diff = sort_info.compare_fn(e1.columns[th_index], e2.columns[th_index]);
+      while(diff === 0 && multicolumns.length){
+          var multicolumn = multicolumns[0];
+          var datatype = multicolumn.$e.data("sort");
+          var multiCloumnSortMethod = sort_info.$table.data('sortFns')[datatype];
+          diff = multiCloumnSortMethod(e1.columns[multicolumn.index], e2.columns[multicolumn.index]);
+          multicolumns.shift();
+      }
+      // Sort by position in the table if values are the same. This enforces a
+      // stable sort across all browsers. See https://bugs.chromium.org/p/v8/issues/detail?id=90
       if (diff === 0)
         return e1.index - e2.index;
       else
@@ -187,6 +208,21 @@
       table_structure.reverse();
     }
       return table_structure;
+  };
+
+  var get_th = function($table, identifier){
+      // identifier can be a th id or a th index number;
+      var $table_ths = $table.find('th');
+      var index = parseInt(identifier, 10);
+      var $th;
+      if(!index && index !== 0){
+          $th = $table_ths.siblings('#' + identifier);
+          index = $table_ths.index($th);
+      }
+      else{
+          $th = $table_ths.eq(index);
+      }
+      return {index: index, $e: $th};
   };
 
   var getTableRowsFromTableStructure = function(table_structure, sort_info){

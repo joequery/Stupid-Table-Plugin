@@ -41,36 +41,76 @@
   <table>
     <thead>
       <tr>
-        <th data-sort="int">int</th>
-        <th data-sort="float">float</th>
-        <th data-sort="string" data-sort-onload="yes">string</th>
+        <th id="int-column" data-sort="int" data-sort-multicolumn="1,string-column">int</th>
+        <th id="float-column" data-sort="float" data-sort-multicolumn="string-column,int-column">float</th>
+        <th id="string-column" data-sort="string" data-sort-multicolumn="1,0">string</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>15</td>
-        <td>-.18</td>
-        <td>banana</td>
+        <td>1</td>
+        <td>10.0</td>
+        <td>a</td>
       </tr>
-      <tr class="awesome">
-        <td>95</td>
-        <td>36</td>
-        <td>coke</td>
+      <tr>
+        <td>1</td>
+        <td>10.0</td>
+        <td>a</td>
       </tr>
       <tr>
         <td>2</td>
-        <td>-152.5</td>
-        <td>apple</td>
+        <td>10.0</td>
+        <td>b</td>
       </tr>
       <tr>
-        <td>-53</td>
-        <td>88.5</td>
-        <td>zebra</td>
+        <td>0</td>
+        <td>20.0</td>
+        <td>c</td>
       </tr>
       <tr>
-        <td>195</td>
-        <td>-858</td>
-        <td>orange</td>
+        <td>1</td>
+        <td>30.0</td>
+        <td>b</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>30.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>10.0</td>
+        <td>b</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>20.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>10.0</td>
+        <td>c</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>20.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>10.0</td>
+        <td>b</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>30.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>30.0</td>
+        <td>b</td>
       </tr>
     </tbody>
   </table>
