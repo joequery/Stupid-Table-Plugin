@@ -70,6 +70,7 @@ QUnit.done(function(){
     $("#basic-colspan").stupidtable();
     $("#complex-colspan").stupidtable();
     $("#stability-test").stupidtable();
+    $("#multicolumn-sort-test").stupidtable();
     $("#qunit-fixture").removeClass("test-hidden");
 });
 
@@ -815,6 +816,57 @@ asyncTest("test will_manually_build_table setting - 3", function(){
         // as 15
         var expected = ["-53", "2", "95", "195", "200"];
         var vals = get_column_elements($table, INT_COLUMN);
+        ok(_.isEqual(vals, expected));
+    });
+});
+
+test("Multicolumn table initial order", function(){
+    var INT_COLUMN = 0;
+    var FLOAT_COLUMN = 1;
+    var STRING_COLUMN = 2;
+    var expected;
+    var vals;
+
+    var $table = $("#multicolumn-sort-test");
+
+    expected = ["1", "1", "2", "0", "1", "2", "0", "0", "0", "1", "2", "3", "2"];
+    vals = get_column_elements($table, INT_COLUMN);
+    ok(_.isEqual(vals, expected));
+
+    expected = ["10.0", "10.0", "10.0", "20.0", "30.0", "30.0", "10.0", "20.0", "10.0", "20.0", "10.0", "30.0", "30.0"];
+    vals = get_column_elements($table, FLOAT_COLUMN);
+    ok(_.isEqual(vals, expected));
+
+    expected = ["a", "a", "b", "c", "b", "a", "b", "a", "c", "a", "b", "a", "b"];
+    vals = get_column_elements($table, STRING_COLUMN);
+    ok(_.isEqual(vals, expected));
+
+});
+
+asyncTest("Basic multicolumn sort", function(){
+    var INT_COLUMN = 0;
+    var FLOAT_COLUMN = 1;
+    var STRING_COLUMN = 2;
+    var $table = $("#multicolumn-sort-test");
+    var $table_cols = $table.find("th");
+
+    $table.stupidtable();
+    $table_cols.eq(INT_COLUMN).click();
+
+    test_table_state(function(){
+        var expected;
+        var vals;
+
+        expected = ["0", "0", "0", "0", "1", "1", "1", "1", "2", "2", "2", "2", "3"];
+        vals = get_column_elements($table, INT_COLUMN);
+        ok(_.isEqual(vals, expected));
+
+        expected = ["10.0", "10.0", "20.0", "20.0", "10.0", "10.0", "20.0", "30.0", "10.0", "10.0", "30.0", "30.0", "30.0"];
+        vals = get_column_elements($table, FLOAT_COLUMN);
+        ok(_.isEqual(vals, expected));
+
+        expected = ["b", "c", "a", "c", "a", "a", "a", "b", "b", "b", "a", "b", "a"];
+        vals = get_column_elements($table, STRING_COLUMN);
         ok(_.isEqual(vals, expected));
     });
 });

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stupid jQuery table sort</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../stupidtable.js?dev"></script>
+  <script>
+    $(function(){
+        $("table").stupidtable();
+    });
+  </script>
+  <style type="text/css">
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px 10px;
+      border: 1px solid #999;
+    }
+    th {
+      background-color: #eee;
+    }
+    th[data-sort]{
+      cursor:pointer;
+    }
+    tr.awesome{
+      color: red;
+    }
+  </style>
+  </style>
+</head>
+
+<body>
+
+  <h1>Multicolumn sort</h1>
+
+  <p>This example shows how to perform a multicolumn sort. A multicolumn sort
+  allows you to define what column to sort by in the event of a tie with two
+  elements in the initial column sorted.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th id="int-column" data-sort="int" data-sort-multicolumn="1,string-column">int</th>
+        <th id="float-column" data-sort="float" data-sort-multicolumn="string-column,int-column">float</th>
+        <th id="string-column" data-sort="string" data-sort-multicolumn="1,0">string</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>10.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>10.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>10.0</td>
+        <td>b</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>20.0</td>
+        <td>c</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>30.0</td>
+        <td>b</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>30.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>10.0</td>
+        <td>b</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>20.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>10.0</td>
+        <td>c</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>20.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>10.0</td>
+        <td>b</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>30.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>30.0</td>
+        <td>b</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
