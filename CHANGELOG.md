@@ -1,3 +1,8 @@
+v1.1.2 (Released 07/11/2017)
+----------------------------
+
+Added multicolumn sort capabilities. See [examples/multicolumn-sort.html](https://rawgit.com/joequery/Stupid-Table-Plugin/master/examples/multicolumn-sort.html).
+
 v1.1.1 (Released 07/02/2017)
 ----------------------------
 

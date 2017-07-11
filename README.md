@@ -128,6 +128,36 @@ attribute.
       </thead>
     </table>
 
+Multicolumn sorting
+-------------------
+
+A multicolumn sort allows you to define secondary columns to sort by in the
+event of a tie with two elements in the sorted column. See [examples/multicolumn-sort.html](https://rawgit.com/joequery/Stupid-Table-Plugin/master/examples/multicolumn-sort.html).
+Specify a comma-separated list of th identifiers in a `data-sort-multicolumn`
+attribute on a `<th>` element. An identifier can be an integer (which represents
+the index of the th element of the multicolumn target) or a string (which
+represents the id of the th element of the multicolumn target).
+
+  <table>
+    <thead>
+      <tr>
+        <th id="int-column" data-sort="int" data-sort-multicolumn="1,string-column">int</th>
+        <th id="float-column" data-sort="float" data-sort-multicolumn="string-column,int-column">float</th>
+        <th id="string-column" data-sort="string" data-sort-multicolumn="1,0">string</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>10.0</td>
+        <td>a</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>10.0</td>
+        <td>a</td>
+      </tr>
+
 Sorting a column programatically
 --------------------------------
 
