@@ -253,6 +253,88 @@
         </table>
     </div>
 
+    <div class=tablewrap">
+      <h2>Multicolumn sort</h2>
+      <table id='multicolumn-sort-test'>
+        <thead>
+          <tr>
+            <th id="int-column" data-sort="int" data-sort-multicolumn="1,string-column">int</th>
+            <th id="float-column" data-sort="float" data-sort-multicolumn="string-column,int-column">float</th>
+            <th id="string-column" data-sort="string" data-sort-multicolumn="1,0">string</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>10.0</td>
+            <td>a</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>10.0</td>
+            <td>a</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>10.0</td>
+            <td>b</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>20.0</td>
+            <td>c</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>30.0</td>
+            <td>b</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>30.0</td>
+            <td>a</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>10.0</td>
+            <td>b</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>20.0</td>
+            <td>a</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>10.0</td>
+            <td>c</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>20.0</td>
+            <td>a</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>10.0</td>
+            <td>b</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>30.0</td>
+            <td>a</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>30.0</td>
+            <td>b</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
 </div><!--qunit-fixture-->
 </body>
 </html>
