@@ -8,6 +8,11 @@ impressive. Overall, stupidly simple. Requires jQuery 1.7 or newer.
 
 See the examples directory.
 
+Installation via [npm][2]
+-------------------------
+
+    $ npm i stupid-table-plugin
+
 Installation via Bower
 ----------------------
 
@@ -359,3 +364,4 @@ Visit `tests/test.html` in your browser to run the QUnit tests.
 
 [0]: http://joequery.github.io/Stupid-Table-Plugin/
 [1]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort
+[2]: https://www.npmjs.com/package/stupid-table-plugin
