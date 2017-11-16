@@ -1,6 +1,13 @@
 // Stupid jQuery table plugin.
 
-(function($) {
+(function (factory) {
+  if(typeof module === 'object' && typeof module.exports === 'object') {
+    factory(require('jquery'), window, document);
+  } else {
+    factory(jQuery, window, document);
+  }
+}(function($, window, document, undefined) {
+
   $.fn.stupidtable = function(sortFns) {
     return this.each(function() {
       var $table = $(this);
@@ -278,4 +285,4 @@
     return th_index;
   };
 
-})(jQuery);
+}));

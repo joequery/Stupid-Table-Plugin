@@ -18,7 +18,6 @@ Installation via Bower
 
     $ bower install jquery-stupid-table
 
-
 Example Usage
 -------------
 
@@ -52,6 +51,14 @@ Add a `data-sort` attribute of "DATATYPE" to the th elements to make them sortab
 by that data type. If you don't want that column to be sortable, just omit the
 `data-sort` attribute.
 
+Example Usage with Browserify/Webpack
+-------------------------------------
+
+The JS:
+
+    require('stupid-table-plugin');
+
+    $("table").stupidtable();
 
 Predefined data types
 ---------------------
