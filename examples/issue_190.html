@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stupid jQuery table sort</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../stupidtable.js?dev"></script>
+  <script>
+
+      /**
+       *
+       * CHANGE ONLY JUST BELOW
+       *
+       */
+      var currencies = {
+        'bitcoin': 1   // Change 1 to BTC amount you have
+        ,'ethereum': 2 // Change 2 to ETH amount you have
+        ,'wagerr': 3   // etc...
+        ,'golem': 4
+        ,'cardano': 5
+        ,'verge': 6
+        ,'tron': 7
+        ,'ripple': 8
+      };
+      var baseurl = 'https://api.coinmarketcap.com/v1/ticker/';
+      var cmcurl = 'https://coinmarketcap.com/currencies/';
+      var values = [];
+      var total = 0;
+      var done = 0;
+      var loadTime = (new Date()).getTime() / 1000;
+      var currow = '<tr><td class="cent">%RANK%</td><td data-sort-value="%MARKETCAP%" class="cur">%MARKETCAPNICE%</td>' +
+        '<td><a target="_blank" href="' + cmcurl + '%ID%/">%NAME%</a></td><td class="cent">%SYMBOL%</td>' +
+        '<td class="cent">%CHANGE1H%</td><td class="cent">%CHANGE24H%</td><td class="cent">%CHANGE7D%</td>' +
+        '<td data-sort-value="%PRICEUSD%" class="cur b">%PRICEUSDNICE%</td>' +
+        '<td data-sort-value="%HOLD%" class="cur">%HOLDNICE%</td>' +
+        '<td data-sort-value="%VALUE%" class="cur">%VALUENICE%</td>' +
+        '<td class="cur shares" id="%XID%"></td></tr>';
+      var sumrow = '<tr><td colspan="8">Change in %DURATION%</td>' +
+        '<td class="cur bb" id="chper"></td><td class="cur b" id="change"></td><td></td></tr>';
+      var thisurl = window.location.href.split('#').shift().split('?').shift().split('/').pop();
+      $(function(){
+        if (getQueryString('sum'))
+        {
+          var now = (new Date()).getTime() / 1000;
+          var foot = sumrow.replace("%DURATION%", toHMS(now - getQueryString("t")));
+          $("tfoot").append(foot)
+        }
+        Object.keys(currencies).forEach(function(coin){
+          $.get(baseurl+coin+'/', function(data){
+            data = data[0];
+            $("#total").html(numberformat(total,2));
+            data.hold = currencies[coin];
+            data.value = data.hold * data.price_usd;
+            total += data.value;
+            values.push({id: data.id, val: data.value});
+            arow = currow.replace('%NAME%', data.name)
+              .replace('%RANK%', data.rank)
+              .replace('%ID%', data.id)
+              .replace('%XID%', data.id)
+              .replace('%SYMBOL%', data.symbol)
+              .replace('%MARKETCAP%', data.market_cap_usd)
+              .replace('%MARKETCAPNICE%', '<span title="24h volume: '+ numberformat(data['24h_volume_usd']) +'">'+numberformat(data.market_cap_usd,0)+'</span>')
+              .replace('%CHANGE1H%', arr(data.percent_change_1h))
+              .replace('%CH1HNEG%', (data.percent_change_1h < 0 ? ' neg' : ''))
+              .replace('%CHANGE24H%', arr(data.percent_change_24h))
+              .replace('%CH24HNEG%', (data.percent_change_24h < 0 ? ' neg' : ''))
+              .replace('%CHANGE7D%', arr(data.percent_change_7d))
+              .replace('%CH7DNEG%', (data.percent_change_7d < 0 ? ' neg' : ''))
+              .replace('%PRICEUSD%', data.price_usd)
+              .replace('%PRICEUSDNICE%', numberformat(data.price_usd,6))
+              .replace('%HOLD%', data.hold)
+              .replace('%HOLDNICE%', numberformat(data.hold, 6))
+              .replace('%VALUE%', data.value)
+              .replace('%VALUENICE%', numberformat(data.value, 2));
+            $("#rows").append(arow);
+            done++;
+            updateTable();
+          },'json');
+        });
+        tick();
+      });
+      function arr(val)
+      {
+        return val+' <i class="glyphicon glyphicon-chevron-' + ( val > 0 ? 'up' : 'down' ) + '"></i>';
+      }
+      function updateTable()
+      {
+        // Loop through all rows and update share and sharenice
+        if ( done == Object.keys(currencies).length )
+        {
+          $("#total").html(numberformat(total,2));
+          var sum = getQueryString("sum");
+          var chng = total - sum;
+          $("#change").html(numberformat(chng,2));
+          $("#chper").html(numberformat(((total/sum)-1)*100, 2)+"%");
+          if (chng < 0)
+          {
+            $("#change").addClass("neg");
+            $("#chper").addClass("neg");
+          }
+          for (data in values)
+          {
+            var sh = (values[data].val / total) * 100;
+            $("#"+values[data].id).attr("data-sort-value", sh).html(numberformat(sh,2));
+          }
+        }
+        $("#currencytable").stupidtable();
+      }
+      var then = (new Date()).getTime() / 1000;
+      function tick()
+      {
+        $("#time").html(toHMS(((new Date()).getTime()/1000)-then));
+        setTimeout("tick()", 1000);
+      }
+      function toHMS(ts) {
+        var sec_num = parseInt(ts, 10); // don't forget the second param
+        var hours = Math.floor(sec_num / 3600);
+        var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+        var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+        if (hours < 10) {
+          hours = "0" + hours;
+        }
+        if (minutes < 10) {
+          minutes = "0" + minutes;
+        }
+        if (seconds < 10) {
+          seconds = "0" + seconds;
+        }
+        return hours + ':' + minutes + ':' + seconds;
+      }
+      var getQueryString = function ( field, url ) {
+        var href = url ? url : window.location.href;
+        var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+        var string = reg.exec(href);
+        return string ? string[1] : null;
+      };
+      function numberformat(val,decimals)
+      {
+        return number_format(val, decimals, ".", ",");
+      }
+      function number_format (number, decimals, dec_point, thousands_sep) {
+        // Strip all characters but numerical ones.
+        number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+        var n = !isFinite(+number) ? 0 : +number,
+          prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+          sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+          dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+          s = '',
+          toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + Math.round(n * k) / k;
+          };
+        // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+        if (s[0].length > 3) {
+          s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+        }
+        if ((s[1] || '').length < prec) {
+          s[1] = s[1] || '';
+          s[1] += new Array(prec - s[1].length + 1).join('0');
+        }
+        return s.join(dec);
+      }
+
+  </script>
+  <style type="text/css">
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px 10px;
+      border: 1px solid #999;
+    }
+    th {
+      background-color: #eee;
+    }
+    th[data-sort]{
+      cursor:pointer;
+    }
+    tr.awesome{
+      color: red;
+    }
+      .cur { text-align: right; }
+      .cent { text-align: center; }
+      .b { font-weight: bold; }
+      td span, th { cursor:pointer; }
+      .neg { color: red; }
+      .loader {
+        position: absolute;
+        left:0;top:0;right:0;bottom:0;
+        align-items: center;
+        z-index: 999;
+        background-color: #ececec;
+        opacity:0.6;
+        display:none;
+      }
+      .load {
+        margin:auto;
+        border: 16px solid #a3a3a3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        animation: spin 2s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+  </style>
+  </style>
+</head>
+
+<body>
+
+  <h1>Issue 190</h1>
+
+<div class="loader">
+  <div class="load"></div>
+</div>
+<div class="container" role="main">
+  <div class="page-header">
+    <h1>My assets</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table id="currencytable" class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th data-sort="int" data-sort-onload="yes" class="cent">#</th>
+          <th data-sort="int" data-sort-default="desc" class="cur" >Cap</th>
+          <th data-sort="string-ins">Name</th>
+          <th data-sort="string" class="cent">Symbol</th>
+          <th data-sort="float" data-sort-default="desc" class="cent">% 1h</th>
+          <th data-sort="float" data-sort-default="desc" class="cent">% 24h</th>
+          <th data-sort="float" data-sort-default="desc" class="cent">% 7d</th>
+          <th data-sort="float" data-sort-default="desc" class="cur">Price</th>
+          <th data-sort="float" data-sort-default="desc" class="cur">Amount</th>
+          <th data-sort="float" data-sort-default="desc" class="cur">Value (USD)</th>
+          <th data-sort="float" data-sort-default="desc" class="cur">Share</th>
+        </tr>
+        </thead>
+        <tbody id="rows">
+        </tbody>
+        <tfoot>
+        <tr>
+          <td colspan="9">
+            Total value
+          </td>
+          <td class="cur b" id="total">
+          </td>
+          <td>
+          </td>
+        </tr>
+        </tfoot>
+      </table>
+      <button type="button" class="btn" onclick="$('.loader').css('display','flex');window.location.assign(thisurl + '?sum=' + total + '&t=' + loadTime)">Refresh</button>
+      <p><br>Time since last refresh: <span id="time">00:00:00</span></p>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
