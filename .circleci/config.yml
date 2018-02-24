@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+#     - image: selenium/standalone-firefox
+      - image: joequery/qunit-selenium
+
+    steps:
+      - checkout
+      - run:
+          name: Run local http server
+          command: ruby -run -e httpd . -p 8080
+          background: true
+      - run:
+          name: Run virtual frame buffer
+          command: Xvfb :10 -ac
+          background: true
+      - run:
+          name: Sleep 5
+          command: sleep 5
+      - run:
+          name: Run QUnit tests
+          command: |
+              export DISPLAY=:10
+              qunit-selenium --timeout 30 http://localhost:8080/tests/test.html
