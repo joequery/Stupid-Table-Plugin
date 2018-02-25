@@ -265,7 +265,7 @@
         if ($this_th.data("sort-dir"))
            sort_dir = $this_th.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
     }
-    return sort_dir;
+    return dir.ASC;
   };
 
   var calculateTHIndex = function(sort_info){
