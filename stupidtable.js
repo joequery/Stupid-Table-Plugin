@@ -29,7 +29,7 @@
     },
     will_manually_build_table: false
   };
-  $.fn.stupidtable.dir = {ASC: "desc", DESC: "desc"};
+  $.fn.stupidtable.dir = {ASC: "asc", DESC: "desc"};
   $.fn.stupidtable.default_sort_fns = {
     "int": function(a, b) {
       return parseInt(a, 10) - parseInt(b, 10);
