@@ -4,7 +4,7 @@
   "description": "Stupidly simple jquery table sorting plugin",
   "main": "stupidtable.js",
   "scripts": {
-    "build": "node minify stupidtable.js > stupidtable.min.js"
+    "build": "minify stupidtable.js > stupidtable.min.js"
   },
   "directories": {
     "example": "examples",
