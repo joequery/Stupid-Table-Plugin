@@ -12,7 +12,7 @@ window.WAIT_TIME_MS = 200;
 var get_column_elements = function($table, col_index){
     var vals = [];
     $table.find("tbody tr").each(function(){
-        var val = $(this).children("td").eq(col_index).html();
+        var val = $(this).children("td, th").eq(col_index).html();
         vals.push(val);
     });
     return vals;
@@ -427,7 +427,7 @@ asyncTest("Update sort value - same display and sort values - single click", fun
     var $table = $("#basic");
     var $table_cols = $table.find("th");
     var $int_column = $table_cols.eq(INT_COLUMN);
-    var $first_int_td = $table.find("tbody tr td").first();
+    var $first_int_td = $table.find("tbody tr > *").first();
 
     $table.stupidtable();
     ok(_.isEqual($first_int_td.text(), "15"));
@@ -448,7 +448,7 @@ asyncTest("Update sort value - same display and sort values - double click", fun
     var $table = $("#basic");
     var $table_cols = $table.find("th");
     var $int_column = $table_cols.eq(INT_COLUMN);
-    var $first_int_td = $table.find("tbody tr td").first();
+    var $first_int_td = $table.find("tbody tr > *").first();
 
     $table.stupidtable();
     ok(_.isEqual($first_int_td.text(), "15"));
@@ -542,7 +542,7 @@ asyncTest("Update sort value - display value only doesn't add data-sort-value at
     var $table = $("#basic");
     var $table_cols = $table.find("th");
     var $int_column = $table_cols.eq(INT_COLUMN);
-    var $first_int_td = $table.find("tbody tr td").first();
+    var $first_int_td = $table.find("tbody tr > *").first();
 
     $table.stupidtable();
     ok(_.isEqual($first_int_td.text(), "15"));
@@ -552,7 +552,7 @@ asyncTest("Update sort value - display value only doesn't add data-sort-value at
     $int_column.click();
 
     test_table_state(function(){
-        var $first_int_td = $table.find("tbody tr td").first();
+        var $first_int_td = $table.find("tbody tr > *").first();
         var expected = ["-53", "2", "95", "195", "200"];
         var vals = get_column_elements($table, INT_COLUMN);
 
@@ -741,7 +741,7 @@ asyncTest("test will_manually_build_table setting - 1", function(){
     var $table = $("#basic");
     var $table_cols = $table.find("th");
     var $int_column = $table_cols.eq(INT_COLUMN);
-    var $first_int_td = $table.find("tbody tr td").first();
+    var $first_int_td = $table.find("tbody tr > *").first();
 
     $table.stupidtable_settings({
         will_manually_build_table: true
@@ -768,7 +768,7 @@ asyncTest("test will_manually_build_table setting - 2", function(){
     var $table = $("#basic");
     var $table_cols = $table.find("th");
     var $int_column = $table_cols.eq(INT_COLUMN);
-    var $first_int_td = $table.find("tbody tr td").first();
+    var $first_int_td = $table.find("tbody tr > *").first();
 
     $table.stupidtable_settings({
         will_manually_build_table: true
@@ -798,7 +798,7 @@ asyncTest("test will_manually_build_table setting - 3", function(){
     var $table = $("#basic");
     var $table_cols = $table.find("th");
     var $int_column = $table_cols.eq(INT_COLUMN);
-    var $first_int_td = $table.find("tbody tr td").first();
+    var $first_int_td = $table.find("tbody tr > *").first();
 
     $table.stupidtable_settings({
         will_manually_build_table: false
@@ -848,7 +848,7 @@ asyncTest("Basic multicolumn sort", function(){
     var FLOAT_COLUMN = 1;
     var STRING_COLUMN = 2;
     var $table = $("#multicolumn-sort-test");
-    var $table_cols = $table.find("th");
+    var $table_cols = $table.find("thead th");
 
     $table.stupidtable();
     $table_cols.eq(INT_COLUMN).click();

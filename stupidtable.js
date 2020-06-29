@@ -146,7 +146,7 @@
             index: index
         };
 
-        $(tr).children('td').each(function(idx, td){
+        $(tr).children('td, th').each(function(idx, td){
             var sort_val = $(td).data("sort-value");
 
             // Store and read from the .data cache for display text only sorts
