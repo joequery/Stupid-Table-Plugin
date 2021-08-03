@@ -216,7 +216,7 @@
       var $th;
       if(!index && index !== 0){
           $th = $table_ths.siblings('#' + identifier);
-          index = $table_ths.index($th);
+          index = $th.index();
       }
       else{
           $th = $table_ths.eq(index);
